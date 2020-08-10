@@ -2,6 +2,7 @@ from logging import getLogger, Logger
 from telegram.ext import Dispatcher
 from .commands import CommandMixin
 from .conversations import ConversationMixin
+from .errors import error_callback
 
 
 class Handlers(CommandMixin, ConversationMixin):
