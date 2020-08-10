@@ -1,0 +1,1 @@
+from .short_link import shorten_link
