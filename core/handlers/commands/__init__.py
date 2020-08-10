@@ -2,6 +2,7 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CommandHandler
 # Commands
+from .dev import dev
 from .formulir import formulir
 from .link import link
 from .registrasi import registrasi
@@ -16,6 +17,7 @@ class CommandMixin(object):
         CommandHandler('link', link),
         CommandHandler('formulir', formulir),
         CommandHandler('registrasi', registrasi),
+        CommandHandler('dev', dev),
     ]
 
     def register_commands(self, dispatcher: Dispatcher):
