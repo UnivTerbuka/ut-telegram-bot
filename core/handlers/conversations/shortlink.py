@@ -13,11 +13,9 @@ def valid_link(link: str = ''):
 
 def short(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
-        '''
-        Kirimkan link yang akan dipendekkan...
-        Disertai dengan https://... atau http://
-        /cancel untuk membatalkan perintah
-        '''
+        'Kirimkan link yang akan dipendekkan...\n'
+        'Diawali dengan https://... atau http://...\n'
+        '/cancel untuk membatalkan perintah'
     )
     return CREATE
 
@@ -30,8 +28,7 @@ def create(update: Update, context: CallbackContext):
         new_link = shorten_link(link)
         if new_link:
             update.effective_message.reply_text(
-                f'''Sukses memendekan link <code>{link}</code> ,
-                menjadi {new_link}'''
+                f'''Sukses memendekan link {link}, menjadi {new_link}'''
             )
         else:
             update.effective_message.reply_text('Gagal memendekkan link')
@@ -41,8 +38,9 @@ def create(update: Update, context: CallbackContext):
 def invalid(update: Update, context: CallbackContext):
     update.effective_message.reply_text('Link tidak valid. :<')
     update.effective_message.reply_text(
-        'Link tidak valid. :<\nKirimkan link yang akan dipendekkan...'
-        'Diawali dengan https://... atau http://...'
+        'Link tidak valid. :<\n'
+        'Kirimkan link yang akan dipendekkan...\n'
+        'Diawali dengan https://... atau http://...\n'
         '/cancel untuk membatalkan perintah'
     )
 
