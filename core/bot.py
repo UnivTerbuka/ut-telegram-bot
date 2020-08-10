@@ -32,14 +32,13 @@ class UniversitasTerbukaBot(object):
         self.defaults = Defaults(
             parse_mode=ParseMode.HTML, disable_web_page_preview=True
         )
-        self.bot = Bot(self.TOKEN, defaults=self.defaults)
-        self.update_queue = Queue()
         # Register handlers
-        self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
-        self.dp.add_error_handler(error_callback)
+        self.dp: Dispatcher = None
         self.handlers = Handlers()
-        self.handlers.register(self.dp)
         if NAME:
+            self.bot = Bot(self.TOKEN, defaults=self.defaults)
+            self.update_queue = Queue()
+            self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
             try:
                 self.bot.setWebhook(
                     "https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
@@ -47,8 +46,11 @@ class UniversitasTerbukaBot(object):
                 raise RuntimeError("Failed to set the webhook")
         else:
             self.updater = Updater(
-                TOKEN, bot=self.bot, dispatcher=True, use_context=True, defaults=self.defaults
+                TOKEN, use_context=True, defaults=self.defaults
             )
+            self.dp = self.updater.dispatcher
+        self.dp.add_error_handler(error_callback)
+        self.handlers.register(self.dp)
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
