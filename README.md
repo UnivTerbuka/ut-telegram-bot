@@ -2,9 +2,10 @@
 
 [![Group Telegram](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://t.me/UniversitasTerbuka)
 [![Donasi DANA](https://img.shields.io/badge/Donasi-DANA-blue)](https://link.dana.id/qr/1lw2r12r)
-[![LISENSI](https://img.shields.io/github/license/hexatester/dapodik)](https://github.com/hexatester/ut-telegram-bot/blob/master/LISENSI)
+[![LISENSI](https://img.shields.io/github/license/hexatester/ut-telegram-bot)](https://github.com/hexatester/ut-telegram-bot/blob/master/LISENSI)
 
 Source code dari @UniversitasTerbukaBot
+Bot ini dibuat untuk memudahkan mahasiswa Universitas Terbuka mengakses layanan Universitas Terbuka melalui aplikasi Telegram.
 
 ## Fitur yang akan datang
 
