@@ -7,10 +7,13 @@
 Source code dari @UniversitasTerbukaBot
 Bot ini dibuat untuk memudahkan mahasiswa Universitas Terbuka mengakses layanan Universitas Terbuka melalui aplikasi Telegram.
 
+## Fitur
+
+- Shortlink UT
+
 ## Fitur yang akan datang
 
 - Elearning UT
-- Shortlink UT
 - QnA & FAQ
 - RBV (Ruang Baca Virtual)
 
