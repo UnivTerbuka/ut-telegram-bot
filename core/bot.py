@@ -6,17 +6,18 @@ import cherrypy
 from telegram import Bot, Update, ParseMode
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher, Defaults
 
-from .handlers import Handlers
+from .handlers import Handlers, error_callback
 
-
-def error(error):
-    cherrypy.log("Error occurred - {}".format(error))
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
 
 class SimpleWebsite(object):
     @cherrypy.expose
     def index(self):
-        return """<H1>Welcome!</H1>"""
+        raise cherrypy.HTTPRedirect('https://t.me/UniversitasTerbukaBot')
 
 
 class UniversitasTerbukaBot(object):
@@ -35,7 +36,7 @@ class UniversitasTerbukaBot(object):
         self.update_queue = Queue()
         # Register handlers
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
-        self.dp.add_error_handler(error)
+        self.dp.add_error_handler(error_callback)
         self.handlers = Handlers()
         self.handlers.register(self.dp)
         if NAME:
