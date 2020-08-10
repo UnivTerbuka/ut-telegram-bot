@@ -1,4 +1,4 @@
-from telegram import Update
+from telegram import Update, MessageEntity
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from libs import shorten_link
 
@@ -38,6 +38,15 @@ def create(update: Update, context: CallbackContext):
     return -1
 
 
+def invalid(update: Update, context: CallbackContext):
+    update.effective_message.reply_text('Link tidak valid. :<')
+    update.effective_message.reply_text(
+        'Link tidak valid. :<\nKirimkan link yang akan dipendekkan...'
+        'Diawali dengan https://... atau http://...'
+        '/cancel untuk membatalkan perintah'
+    )
+
+
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
 
@@ -45,7 +54,10 @@ def cancel(update: Update, context: CallbackContext):
 SHORTLINK = {
     'entry_points': [CommandHandler(COMMAND, short)],
     'states': {
-        CREATE: [MessageHandler]
+        CREATE: [
+            MessageHandler(Filters.text & Filters.entity(
+                MessageEntity.URL), create)
+        ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)]
 }
