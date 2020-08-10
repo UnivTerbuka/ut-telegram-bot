@@ -25,7 +25,7 @@ class CommandMixin(object):
                     dispatcher.add_handler(
                         conversation, group=self.COMMANDS_GROUP
                     )
-            self.logger.info('Commands added!')
+                self.logger.info('Commands added!')
             return True
         except Exception as e:
             self.logger.exception(e)
