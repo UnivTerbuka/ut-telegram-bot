@@ -1,12 +1,16 @@
 from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, ConversationHandler
+# Conversations
+from .shortlink import SHORTLINK
 
 
 class ConversationMixin(object):
     logger: Logger = None
     CONVERSATIONS_GROUP: int = 0
-    CONVERSATIONS: List[ConversationHandler] = []
+    CONVERSATIONS: List[ConversationHandler] = [
+        ConversationHandler(**SHORTLINK)
+    ]
 
     def register_conversations(self, dispatcher: Dispatcher):
         try:
@@ -15,7 +19,7 @@ class ConversationMixin(object):
                     dispatcher.add_handler(
                         conversation, group=self.CONVERSATIONS_GROUP
                     )
-            self.logger.info('Conversations added!')
+                self.logger.info('Conversations added!')
             return True
         except Exception as e:
             self.logger.exception(e)
