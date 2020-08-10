@@ -6,6 +6,7 @@ authors = ["Habib Rohman <habibrohman@protonmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+python-telegram-bot = "^12.8"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
