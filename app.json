@@ -1,0 +1,34 @@
+{
+    "name": "Universitas Terbuka Bot",
+    "description": "Memberi informasi & layanan dari Universitas Terbuka.",
+    "keywords": [
+        "telegram",
+        "universitas terbuka",
+        "bot"
+    ],
+    "website": "https://github.com/hexatester/ut-telegram-bot",
+    "repository": "https://github.com/hexatester/ut-telegram-bot",
+    "env": {
+        "NAME": {
+            "description": "Nama aplikasi di heroku",
+            "value": "universitas-terbuka-bot"
+        },
+        "TOKEN": {
+            "description": "Token dari bot",
+            "value": "TOKEN!"
+        },
+        "TESSDATA_PREFIX": {
+            "description": "Jangan dirubah :D",
+            "value": "./.apt/usr/share/tesseract-ocr/4.00/tessdata"
+        },
+        "TESSERACT_CMD": {
+            "description": "Jangan dirubah :D",
+            "value": "/app/.apt/usr/bin/tesseract"
+        }
+    },
+    "buildpacks": [
+        {
+            "url": "https://github.com/heroku/heroku-buildpack-apt"
+        }
+    ]
+}
