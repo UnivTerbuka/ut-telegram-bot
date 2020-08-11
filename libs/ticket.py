@@ -1,11 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
+from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass, asdict
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from threading import RLock
 from typing import Union,  Optional
-from .config import HEADERS
+from .config import HEADERS, CALLBACK_SEPARATOR
 from .utils import format_html
 
+
+CACHE = TTLCache(25, 60)
+LOCK = RLock()
 URL = 'http://hallo-ut.ut.ac.id/status'
 
 
@@ -13,19 +19,24 @@ URL = 'http://hallo-ut.ut.ac.id/status'
 class Ticket:
     nomor: str
     status: Optional[str]
-    nama: Optional[str]
-    judul: Optional[str]
-    dibalas: Optional[str]
-    email: Optional[str]
-    topik: Optional[str]
-    pesan: Optional[str]
-    balasan: Optional[str]
     warning: Optional[str]
+    nama: str = '-'
+    judul: str = '-'
+    dibalas: str = '-'
+    email: str = '-'
+    topik: str = '-'
+    pesan: str = '-'
+    balasan: str = '-'
+
+    def __post_init__(self):
+        self.callback_data = CALLBACK_SEPARATOR.join(['TICKET', self.nomor])
+        self.url = f'http://hallo-ut.ut.ac.id/status?noticket={self.nomor}'
 
     def __dict__(self):
         return dict(self)
 
     @classmethod
+    @cached(CACHE, lock=LOCK)
     def from_nomor(cls, noticket: str):
         if not cls.is_nomor_valid:
             return cls(noticket)
@@ -59,8 +70,6 @@ class Ticket:
         elif status == 'OPEN':
             data['nomor'] = td[10].text
             data['pesan'] = td[14].text
-            data['dibalas'] = '-'
-            data['balasan'] = '-'
         else:
             data['warning'] = f"status = {status} tidak dikenali, mohon hubugi @hexatester untuk mengimplementisakannya."
         return from_dict(cls, data)
@@ -73,24 +82,31 @@ class Ticket:
         if not self.status:
             return 'Nomor tiket tidak valid'
         strs = [
-            'Nama : ' + format_html.code(self.nama),
-            'Email : ' + self.email,
+            f'Nomor : {format_html.href(self.nomor, self.url)}',
+            f'Status : {format_html.code(self.status)}',
+            f'Dibalas : {format_html.code(self.dibalas)}',
             '',
-            'Nomor : ' + format_html.code(self.nomor),
-            'Status : ' + format_html.code(self.status),
-            'Dibalas : ' + format_html.code(self.dibalas),
+            f'Oleh : {format_html.code(self.nama)} [{self.email}]',
             '',
-            'Topik : ' + format_html.code(self.topik),
-            'Judul : ' + format_html.code(self.judul),
+            f'Judul : {format_html.code(self.judul)}',
+            f'Topik : {format_html.code(self.topik)}',
             '',
-            'Pesan : ',
-            format_html.code(self.pesan),
-            'Balasan : ',
-            format_html.code(self.balasan),
+            f'Pesan : {format_html.code(self.pesan)}',
+            f'Balasan : {format_html.code(self.balasan)}',
         ]
         if self.warning:
-            strs.append('Warning : ' + self.warning)
+            strs.append(f'Warning : {self.warning}')
         return '\n'.join(strs)
+
+    @property
+    def reply_markup(self):
+        keyboard = [
+            [InlineKeyboardButton('Detail', url=self.url)]
+        ]
+        if self.status == 'OPEN':
+            keyboard[0].append(InlineKeyboardButton(
+                'Refresh', callback_data=self.callback_data))
+        return InlineKeyboardMarkup(keyboard)
 
     @staticmethod
     def is_nomor_valid(ticket: str = ''):

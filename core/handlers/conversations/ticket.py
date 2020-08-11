@@ -1,4 +1,4 @@
-from telegram import Update, MessageEntity
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from libs.ticket import Ticket
 
@@ -7,8 +7,9 @@ COMMAND = 'tiket'
 GET_TICKET = range(1)
 
 
-def valid_ticket(ticket: str = ''):
-    return len(ticket) == 20 and not ' ' in ticket
+def answer(update: Update, tiket: Ticket):
+    update.effective_message.reply_text(
+        str(tiket), reply_markup=tiket.reply_markup)
 
 
 def ticket(update: Update, context: CallbackContext):
@@ -16,7 +17,7 @@ def ticket(update: Update, context: CallbackContext):
     noticket = msg.split(' ')[1] if len(msg) == 27 else ''
     if Ticket.is_nomor_valid(noticket):
         ticket_ = Ticket.from_nomor(noticket)
-        update.effective_message.reply_text(str(ticket_))
+        answer(update, ticket_)
         return -1
     update.effective_message.reply_text(
         'Kirimkan nomor tiket yang akan dicek...'
@@ -28,7 +29,7 @@ def get_ticket(update: Update, context: CallbackContext):
     noticket: str = update.effective_message.text
     noticket = noticket.upper()
     ticket_ = Ticket.from_nomor(noticket)
-    update.effective_message.reply_text(str(ticket_))
+    answer(update, ticket_)
     return -1
 
 
@@ -37,11 +38,13 @@ def cancel(update: Update, context: CallbackContext):
 
 
 TICKET = {
+    'name': COMMAND,
     'entry_points': [CommandHandler(COMMAND, ticket)],
     'states': {
         GET_TICKET: [
             MessageHandler(Filters.text, get_ticket)
         ]
     },
-    'fallbacks': [CommandHandler('cancel', cancel)]
+    'fallbacks': [CommandHandler('cancel', cancel)],
+    'conversation_timeout': 180,
 }

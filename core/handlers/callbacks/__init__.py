@@ -3,11 +3,14 @@ from logging import Logger
 from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
 from .rbv import CallbackRbv
+from .ticket import ticket
+
 
 class CallbackMixin(object):
     logger: Logger = None
     CALLBACKS_GROUP: int = 0
     CALLBACKS: List[CallbackQueryHandler] = [
+        CallbackQueryHandler(ticket, pattern=r'^TICKET\|[A-Z]\d{10}-\d{8}$')
     ]
 
     def register_callbacks(self, dispatcher: Dispatcher):
