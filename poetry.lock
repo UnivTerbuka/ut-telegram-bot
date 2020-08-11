@@ -67,6 +67,14 @@ lxml = ["lxml"]
 
 [[package]]
 category = "main"
+description = "Extensible memoizing collections and decorators"
+name = "cachetools"
+optional = false
+python-versions = "~=3.5"
+version = "4.1.1"
+
+[[package]]
+category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
 optional = false
@@ -162,6 +170,17 @@ idna = ["idna (>=2.1)"]
 pep8test = ["black", "flake8", "flake8-import-order", "pep8-naming"]
 ssh = ["bcrypt (>=3.1.5)"]
 test = ["pytest (>=3.6.0,<3.9.0 || >3.9.0,<3.9.1 || >3.9.1,<3.9.2 || >3.9.2)", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,<3.79.2 || >3.79.2)"]
+
+[[package]]
+category = "main"
+description = "Simple creation of data classes from dictionaries."
+name = "dacite"
+optional = false
+python-versions = ">=3.6"
+version = "1.5.1"
+
+[package.extras]
+dev = ["pytest (>=5)", "pytest-cov", "coveralls", "black", "mypy", "pylint"]
 
 [[package]]
 category = "main"
@@ -623,7 +642,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "0de48283abc0b15764248379b8711facc6c014f55b5892f2edd926a858218993"
+content-hash = "a8396b3f3d918eff4c9c5daa5604fca2fd3dde3277214bb6e820ac6dbfde5afe"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -647,6 +666,10 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.1-py2-none-any.whl", hash = "sha256:e718f2342e2e099b640a34ab782407b7b676f47ee272d6739e60b8ea23829f2c"},
     {file = "beautifulsoup4-4.9.1-py3-none-any.whl", hash = "sha256:a6237df3c32ccfaee4fd201c8f5f9d9df619b93121d01353a64a73ce8c6ef9a8"},
     {file = "beautifulsoup4-4.9.1.tar.gz", hash = "sha256:73cc4d115b96f79c7d77c1c7f7a0a8d4c57860d1041df407dd1aae7f07a77fd7"},
+]
+cachetools = [
+    {file = "cachetools-4.1.1-py3-none-any.whl", hash = "sha256:513d4ff98dd27f85743a8dc0e92f55ddb1b49e060c2d5961512855cda2c01a98"},
+    {file = "cachetools-4.1.1.tar.gz", hash = "sha256:bbaa39c3dede00175df2dc2b03d0cf18dd2d32a7de7beb68072d13043c9edb20"},
 ]
 certifi = [
     {file = "certifi-2020.6.20-py2.py3-none-any.whl", hash = "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"},
@@ -718,6 +741,10 @@ cryptography = [
     {file = "cryptography-3.0-cp38-cp38-win32.whl", hash = "sha256:8713ddb888119b0d2a1462357d5946b8911be01ddbf31451e1d07eaa5077a261"},
     {file = "cryptography-3.0-cp38-cp38-win_amd64.whl", hash = "sha256:bea0b0468f89cdea625bb3f692cd7a4222d80a6bdafd6fb923963f2b9da0e15f"},
     {file = "cryptography-3.0.tar.gz", hash = "sha256:8e924dbc025206e97756e8903039662aa58aa9ba357d8e1d8fc29e3092322053"},
+]
+dacite = [
+    {file = "dacite-1.5.1-py3-none-any.whl", hash = "sha256:f7f269647ede90f8702728eb7dcb972051511c81b853a93c962fbd31f1753b9f"},
+    {file = "dacite-1.5.1.tar.gz", hash = "sha256:764c96e0304cb189628686689a163a6a3a8ce7bf3465f0a2d882a8b42f88108f"},
 ]
 decorator = [
     {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
