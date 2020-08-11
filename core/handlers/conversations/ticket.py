@@ -8,13 +8,13 @@ GET_TICKET = range(1)
 
 
 def valid_ticket(ticket: str = ''):
-    return len(ticket) == 20 or not ' ' in ticket
+    return len(ticket) == 20 and not ' ' in ticket
 
 
 def ticket(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     noticket = msg.split(' ')[1] if len(msg) == 27 else ''
-    if valid_ticket(noticket):
+    if Ticket.is_nomor_valid(noticket):
         ticket_ = Ticket.from_nomor(noticket)
         update.effective_message.reply_text(str(ticket_))
         return -1
@@ -27,8 +27,6 @@ def ticket(update: Update, context: CallbackContext):
 def get_ticket(update: Update, context: CallbackContext):
     noticket: str = update.effective_message.text
     noticket = noticket.upper()
-    if not valid_ticket(noticket):
-        update.effective_message.reply_text('Nomor tiket tidak valid')
     ticket_ = Ticket.from_nomor(noticket)
     update.effective_message.reply_text(str(ticket_))
     return -1

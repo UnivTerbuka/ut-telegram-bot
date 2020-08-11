@@ -20,18 +20,21 @@ class Ticket:
     topik: Optional[str]
     pesan: Optional[str]
     balasan: Optional[str]
+    warning: Optional[str]
 
     def __dict__(self):
         return dict(self)
 
     @classmethod
     def from_nomor(cls, noticket: str):
+        if not cls.is_nomor_valid:
+            return cls(noticket)
         params = {
             'noticket': noticket
         }
         res = requests.get(URL, params=params, headers=HEADERS)
         if not res.ok or 'Tiket Tidak Ditemukan, silakan Lakukan Pencarian Ulang' in res.text:
-            return
+            return cls(noticket)
         soup: BeautifulSoup = BeautifulSoup(res.text, 'lxml')
         table = soup.find('table', class_='table')
         th = table.findAll('th')
@@ -58,6 +61,8 @@ class Ticket:
             data['pesan'] = td[14].text
             data['dibalas'] = '-'
             data['balasan'] = '-'
+        else:
+            data['warning'] = f"status = {status} tidak dikenali, mohon hubugi @hexatester untuk mengimplementisakannya."
         return from_dict(cls, data)
 
     def __str__(self):
@@ -65,6 +70,8 @@ class Ticket:
 
     @property
     def string(self):
+        if not self.status:
+            return 'Nomor tiket tidak valid'
         strs = [
             'Nama : ' + format_html.code(self.nama),
             'Email : ' + self.email,
@@ -81,6 +88,10 @@ class Ticket:
             'Balasan : ',
             format_html.code(self.balasan),
         ]
-        if self.status is 'CLOSED':
-            pass
+        if self.warning:
+            strs.append('Warning : ' + self.warning)
         return '\n'.join(strs)
+
+    @staticmethod
+    def is_nomor_valid(ticket: str = ''):
+        return len(ticket) == 20 and not ' ' in ticket
