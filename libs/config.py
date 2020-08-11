@@ -6,6 +6,7 @@ def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 
+HTML_PARSER = 'lxml'
 ROOT_PATH = get_script_path()
 STATIC_PATH = os.path.join(ROOT_PATH, 'static')
 IMG_PATH = os.path.join(STATIC_PATH, 'images')
