@@ -10,6 +10,7 @@ URL = 'http://hallo-ut.ut.ac.id/status'
 @dataclass
 class Ticket:
     nomor: str
+    status: Optional[str]
     nama: Optional[str]
     judul: Optional[str]
     dibalas: Optional[str]
@@ -35,6 +36,9 @@ class Ticket:
         td = table.findAll('td')
         return cls(
             nomor=td[11].text,
+            status=soup.find(
+                'div', class_=['col-md-4', 'col-sm-4']
+            ).find('span').text,
             nama=th[2].text,
             judul=th[6].text,
             dibalas=td[8].contents[1].text,
@@ -53,6 +57,7 @@ class Ticket:
             'Nama : ' + self.nama,
             'Judul : ' + self.judul,
             'Email : ' + self.email,
+            'Status : ' + self.status,
             'Topik : ' + self.topik,
             'Nomor : ' + self.nomor,
             'Pesan : ',
