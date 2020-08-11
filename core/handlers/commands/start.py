@@ -8,6 +8,7 @@ def start(update: Update, context: CallbackContext):
         f'Selamat datang {user.full_name}\n\n'
         'Daftar Perintah\n'
         '/start - Memulai bot\n'
+        '/tiket - Mengecek tiket halo-ut\n'
         '/shortlink - Memendekan url dengan https://sl.ut.ac.id/\n'
         '/link - Daftar link UT\n'
         '/formulir - Daftar Formulir\n'

@@ -3,13 +3,15 @@ from logging import Logger
 from telegram.ext import Dispatcher, ConversationHandler
 # Conversations
 from .shortlink import SHORTLINK
+from .ticket import TICKET
 
 
 class ConversationMixin(object):
     logger: Logger = None
     CONVERSATIONS_GROUP: int = 0
     CONVERSATIONS: List[ConversationHandler] = [
-        ConversationHandler(**SHORTLINK)
+        ConversationHandler(**SHORTLINK),
+        ConversationHandler(**TICKET),
     ]
 
     def register_conversations(self, dispatcher: Dispatcher):
