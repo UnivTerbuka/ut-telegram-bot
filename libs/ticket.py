@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Union,  Optional
 from .config import HEADERS
 
@@ -17,6 +17,9 @@ class Ticket:
     topik: Optional[str]
     pesan: Optional[str]
     balasan: Optional[str]
+
+    def __dict__(self):
+        return dict(self)
 
     @classmethod
     def from_nomor(cls, noticket: str):
