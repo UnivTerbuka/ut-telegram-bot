@@ -12,6 +12,12 @@ def valid_ticket(ticket: str = ''):
 
 
 def ticket(update: Update, context: CallbackContext):
+    msg: str = update.effective_message.text
+    noticket = msg.split(' ')[1] if len(msg) == 27 else ''
+    if valid_ticket(noticket):
+        ticket_ = Ticket.from_nomor(noticket)
+        update.effective_message.reply_text(str(ticket_))
+        return -1
     update.effective_message.reply_text(
         'Kirimkan nomor tiket yang akan dicek...'
     )
