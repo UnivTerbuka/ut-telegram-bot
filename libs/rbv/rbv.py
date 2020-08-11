@@ -11,13 +11,14 @@ from PIL import Image
 from requests import Session, Response
 from threading import RLock
 from typing import Optional, Union, List
-from urllib.parse import urlencode
-from core.config import HEADERS, IMG_URL, IMG_PATH
+from urllib.parse import urlencode, urlsplit, parse_qs
 try:
     from PIL import Image
 except ImportError:
     import Image
 from ..base import BaseRequests
+from ..config import HEADERS, IMG_URL, IMG_PATH
+from ..parser import query_to_dict
 
 # https://www.pustaka.ut.ac.id/lib/adbi4130-pengantar-administrasi-niaga/
 
@@ -44,7 +45,7 @@ def hash_key(data: dict):
 
 def login(modul, retry=0, username: str = 'mahasiswa', password: str = 'utpeduli') -> Union[Response, None]:
     params = modul.params
-    res = session.get(INDEX, params=params)
+    res = session.get(modul.url, params=params)
     if not res.ok:
         if retry > 0:
             retry -= 1
@@ -69,7 +70,7 @@ def login(modul, retry=0, username: str = 'mahasiswa', password: str = 'utpeduli
         'ccaptcha': captcha,
         'submit': 'Submit'
     }
-    res = session.post(INDEX, params=params, data=data)
+    res = session.post(modul.url, params=params, data=data)
     if not res.ok or 'Perhatian: Kode Captcha tidak sesuai!' in res.text:
         if retry > 0:
             retry -= 1
@@ -83,19 +84,25 @@ class Modul:
     modul: str
     name: Optional[str]
     doc: Optional[str]
-    start: Optional[int]
     end: Optional[int]
+    start: Optional[int] = 1
+    fetch: bool = True
 
     def __post_init__(self):
         self.subfolder = self.modul + '/'
+        self.from_data = get_modul
+        if not (self.start or self.end) and self.fetch:
+            res: Response = login(self, 10)
+            if res:
+                pass
 
-    def __call__(self, page: int) -> Union[str, None]:
+    def __call__(self, page: int = 1) -> Union[str, None]:
         return self.get_page(page)
 
-    def __getitem__(self, page: int) -> Union[str, None]:
+    def __getitem__(self, page: int = 1) -> Union[str, None]:
         return self.get_page(page)
 
-    def get_page(self, page: int) -> Union[str, None]:
+    def get_page(self, page: int = 1) -> Union[str, None]:
         # Cek apa file sudah terdownload
         if os.path.isfile(self.abspath(page)):
             return self.url_path
@@ -112,11 +119,6 @@ class Modul:
                 return
         if os.path.isfile(self.abspath(page)) or download(self, page):
             return self.url_path
-
-    @classmethod
-    @cached(CACHE, key=hash_key, lock=LOCK)
-    def from_data(cls, data: dict):
-        return from_dict(cls, data)
 
     @property
     def params(self):
@@ -158,6 +160,11 @@ class Modul:
         return "".join(urls)
 
 
+@cached(CACHE, key=hash_key, lock=LOCK)
+def get_modul(data: dict):
+    return from_dict(Modul, data)
+
+
 def download(modul: Modul, page: int, filepath: str = None, rewrite: bool = False) -> bool:
     if os.path.isfile(modul.abspath(page)) and not rewrite:
         return True
@@ -175,18 +182,38 @@ def download(modul: Modul, page: int, filepath: str = None, rewrite: bool = Fals
         return False
 
 
-class Rbv(BaseRequests):
+class Rbv:
     def __init__(self, username: str = 'mahasiswa', password: str = 'utpeduli'):
         self.username = username
         self.password = password
         self.auth = False
         self.pages = {}
 
-    def __call__(self, modul: Modul, page: int, url: bool = False):
-        return modul.url_path(page) if url else modul.abspath(page)
+    def page_from_data(self, data: dict, page: int, url: bool = False):
+        modul: Modul = get_modul(data)
+        if modul(page):
+            return modul.url_path(page) if url else modul.abspath(page)
 
-    def parse_page(self, soup: BeautifulSoup, doc: str):
-        pass
+    def get(self, modul: Union(Modul, str), datas=None) -> List[Modul]:
+        datas = datas if datas else []
+        modul = modul if isinstance(modul, Modul) else Modul(modul)
+        res = login(modul, 10)
+        if not res:
+            return
+        soup: BeautifulSoup = BeautifulSoup(res.text, 'lxml')
+
+        def parse_th(tr: List[BeautifulSoup]) -> List[Modul]:
+            for th in tr:
+                a: BeautifulSoup = th.find('a')
+                query: dict = query_to_dict(a['href'], False)
+                datas.append(
+                    Modul(
+                        modul=modul.modul,
+                        name=a.text,
+                        doc=query.get('doc')
+                    )
+                )
+        return parse_th(soup)
 
     def search(self, query: str):
         pass
