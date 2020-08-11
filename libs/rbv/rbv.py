@@ -194,7 +194,7 @@ class Rbv:
         if modul(page):
             return modul.url_path(page) if url else modul.abspath(page)
 
-    def get(self, modul: Union(Modul, str), datas=None) -> List[Modul]:
+    def get(self, modul: Union[Modul, str], datas=None) -> List[Modul]:
         datas = datas if datas else []
         modul = modul if isinstance(modul, Modul) else Modul(modul)
         res = login(modul, 10)
