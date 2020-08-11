@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+from dacite import from_dict
 from dataclasses import dataclass, asdict
 from typing import Union,  Optional
 from .config import HEADERS
+from .utils import format_html
 
 URL = 'http://hallo-ut.ut.ac.id/status'
 
@@ -34,19 +36,29 @@ class Ticket:
         table = soup.find('table', class_='table')
         th = table.findAll('th')
         td = table.findAll('td')
-        return cls(
-            nomor=td[11].text,
-            status=soup.find(
-                'div', class_=['col-md-4', 'col-sm-4']
-            ).find('span').text,
-            nama=th[2].text,
-            judul=th[6].text,
-            dibalas=td[8].contents[1].text,
-            email=td[2].text,
-            topik=td[6].text,
-            pesan=td[15].text,
-            balasan=td[8].text,
-        )
+        # data,
+        status = soup.find(
+            'div', class_=['col-md-4', 'col-sm-4']
+        ).find('span').text
+        data = ''
+        data = {}
+        data['status'] = status
+        data['nomor'] = noticket
+        data['nama'] = th[2].text
+        data['judul'] = th[6].text
+        data['email'] = td[2].text
+        data['topik'] = td[6].text
+        if status == 'CLOSE':
+            data['nomor'] = td[11].text
+            data['pesan'] = td[15].text
+            data['dibalas'] = td[8].contents[1].text
+            data['balasan'] = td[8].text
+        elif status == 'OPEN':
+            data['nomor'] = td[10].text
+            data['pesan'] = td[14].text
+            data['dibalas'] = '-'
+            data['balasan'] = '-'
+        return from_dict(cls, data)
 
     def __str__(self):
         return self.string
@@ -54,15 +66,21 @@ class Ticket:
     @property
     def string(self):
         strs = [
-            'Nama : ' + self.nama,
-            'Judul : ' + self.judul,
+            'Nama : ' + format_html.code(self.nama),
             'Email : ' + self.email,
-            'Status : ' + self.status,
-            'Topik : ' + self.topik,
-            'Nomor : ' + self.nomor,
+            '',
+            'Nomor : ' + format_html.code(self.nomor),
+            'Status : ' + format_html.code(self.status),
+            'Dibalas : ' + format_html.code(self.dibalas),
+            '',
+            'Topik : ' + format_html.code(self.topik),
+            'Judul : ' + format_html.code(self.judul),
+            '',
             'Pesan : ',
-            self.pesan,
+            format_html.code(self.pesan),
             'Balasan : ',
-            self.balasan,
+            format_html.code(self.balasan),
         ]
+        if self.status is 'CLOSED':
+            pass
         return '\n'.join(strs)
