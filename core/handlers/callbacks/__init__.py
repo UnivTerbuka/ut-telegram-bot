@@ -2,7 +2,6 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
-from .rbv import CallbackRbv
 from .ticket import ticket
 
 
