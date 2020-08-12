@@ -4,9 +4,10 @@ from .callbacks import CallbackMixin
 from .commands import CommandMixin
 from .conversations import ConversationMixin
 from .errors import error_callback
+from .inlines import InlineMixin
 
 
-class Handlers(CommandMixin, ConversationMixin, CallbackMixin):
+class Handlers(CommandMixin, ConversationMixin, CallbackMixin, InlineMixin):
     logger: Logger = None
 
     def __init__(self, dispacther: Dispatcher = None):
@@ -18,3 +19,4 @@ class Handlers(CommandMixin, ConversationMixin, CallbackMixin):
         self.register_commands(dispacther)
         self.register_conversations(dispacther)
         self.register_callbacks(dispacther)
+        self.register_inline(dispacther)
