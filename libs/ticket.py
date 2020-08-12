@@ -4,8 +4,10 @@ from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass, asdict
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineQueryResultArticle, InputTextMessageContent, ParseMode, Update
 from threading import RLock
 from typing import Union,  Optional
+from uuid import uuid4
 from .config import HEADERS, CALLBACK_SEPARATOR
 from .utils import format_html
 
@@ -20,8 +22,8 @@ class Ticket:
     nomor: str
     status: Optional[str]
     warning: Optional[str]
-    nama: str = '-'
-    judul: str = '-'
+    nama: str = 'Tidak ditemukan'
+    judul: str = 'Tidak ditemukan'
     dibalas: str = '-'
     email: str = '-'
     topik: str = '-'
@@ -107,6 +109,21 @@ class Ticket:
             keyboard[0].append(InlineKeyboardButton(
                 'Refresh', callback_data=self.callback_data))
         return InlineKeyboardMarkup(keyboard)
+
+    @property
+    def inline_query_article(self):
+        return InlineQueryResultArticle(
+            id=self.nomor,
+            title=self.judul,
+            description=f"Status : {self.status}; Oleh :{self.nama}",
+            input_message_content=InputTextMessageContent(
+                message_text=self.string
+            ),
+            reply_markup=self.reply_markup,
+            thumb_url='http://hallo-ut.ut.ac.id/assets/images/image01.jpg',
+            thumb_width=800,
+            thumb_height=600,
+        )
 
     @staticmethod
     def is_nomor_valid(ticket: str = ''):
