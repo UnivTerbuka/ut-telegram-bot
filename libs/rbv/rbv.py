@@ -117,6 +117,11 @@ class Modul:
             logged_in = login(self, 10)
             if not logged_in:
                 return
+        page = (page//10+1)*10
+        jsonp = self.doc_url(page=page, format='jsonp')
+        res = session.get(jsonp)
+        if not res.ok:
+            return
         if os.path.isfile(self.abspath(page)) or download(self, page):
             return self.url_path
 
@@ -182,6 +187,20 @@ def download(modul: Modul, page: int, filepath: str = None, rewrite: bool = Fals
         return False
 
 
+def parse_th(tr: List[BeautifulSoup], modul: str, datas: List[Modul] = None) -> List[Modul]:
+    datas: list = datas if datas else []
+    for th in tr:
+        a: BeautifulSoup = th.find('a')
+        query: dict = query_to_dict(a['href'], False)
+        datas.append(
+            Modul(
+                modul=modul,
+                name=a.text,
+                doc=query.get('doc')
+            )
+        )
+
+
 class Rbv:
     def __init__(self, username: str = 'mahasiswa', password: str = 'utpeduli'):
         self.username = username
@@ -189,31 +208,21 @@ class Rbv:
         self.auth = False
         self.pages = {}
 
-    def page_from_data(self, data: dict, page: int, url: bool = False):
+    @staticmethod
+    def page_from_data(data: dict, page: int, url: bool = False):
         modul: Modul = get_modul(data)
         if modul(page):
             return modul.url_path(page) if url else modul.abspath(page)
 
-    def get(self, modul: Union[Modul, str], datas=None) -> List[Modul]:
+    @staticmethod
+    def get(modul: Union[Modul, str], datas=None) -> List[Modul]:
         datas = datas if datas else []
         modul = modul if isinstance(modul, Modul) else Modul(modul)
         res = login(modul, 10)
         if not res:
             return
         soup: BeautifulSoup = BeautifulSoup(res.text, 'lxml')
-
-        def parse_th(tr: List[BeautifulSoup]) -> List[Modul]:
-            for th in tr:
-                a: BeautifulSoup = th.find('a')
-                query: dict = query_to_dict(a['href'], False)
-                datas.append(
-                    Modul(
-                        modul=modul.modul,
-                        name=a.text,
-                        doc=query.get('doc')
-                    )
-                )
-        return parse_th(soup)
+        return parse_th(soup, datas)
 
     def search(self, query: str):
         pass
