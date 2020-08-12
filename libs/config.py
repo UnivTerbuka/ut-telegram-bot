@@ -21,3 +21,4 @@ TOKEN = os.environ.get('TOKEN')
 BASE_URL = "https://{}.herokuapp.com/".format(NAME)
 IMG_URL = BASE_URL + 'images/'
 WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
+URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'
