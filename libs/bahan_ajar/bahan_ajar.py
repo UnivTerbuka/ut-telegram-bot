@@ -60,7 +60,8 @@ class Book:
             f"Judul : {format_html.code(self.title)}",
             f"Penulis : {format_html.code(self.author)}",
             f"Modul : {format_html.code(self.modul)}",
-            format_html.href('\u200c', self.bookimages_url)
+            format_html.href('\u200c', self.bookimages_url),
+            format_html.href('Ruang baca virtual', self.rbv_url),
         ]
         return '\n'.join(texts)
 
