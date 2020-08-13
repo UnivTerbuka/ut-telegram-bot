@@ -126,7 +126,12 @@ class Modul:
             return self.url_path
 
     @property
-    def params(self):
+    def params(self) -> dict:
+        """Menentukan query url terbaik
+
+        Returns:
+            dict: Query
+        """        
         if self.doc:
             return {
                 'subfolder': self.subfolder,
@@ -142,6 +147,15 @@ class Modul:
         return BASE_URL + '?' + urlencode(self.params)
 
     def doc_url(self, page: int, format: str = 'jpg') -> str:
+        """Query untuk mendownload dokumen (gambar / json)
+
+        Args:
+            page (int): Nomor halaman
+            format (str, optional): Format dokumen (mendukung jsonp dan jpg). Defaults to 'jpg'.
+
+        Returns:
+            str: [description]
+        """        
         # http://www.pustaka.ut.ac.id/reader/services/view.php?doc=M9&format=jsonp&subfolder=MSIM4103/&page=30&callback=jQuery19108331928047621886_1597119542031
         # return ?doc=DAFIS&format=text&subfolder=MSIM4103/&page=5
         params = {
