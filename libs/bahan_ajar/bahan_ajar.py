@@ -36,6 +36,10 @@ class Book:
         self.epub_url = self.epub_url if self.epub_url else f"http://bahanajar.ut.ac.id/epub/cbc_files/{self.id}.epub"
         self.bookimages_url = self.bookimages_url if self.bookimages_url else f"http://bahanajar.ut.ac.id/bookimages/{self.id}.jpg"
         self.bookdetail_url = self.bookdetail_url if self.bookdetail_url else f"http://bahanajar.ut.ac.id/books/bookdetail/{self.id}"
+        try:
+            self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ-{self.modul}")
+        except:
+            self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ")
 
     @classmethod
     def from_bkthumb(cls, bkthumb: BeautifulSoup):
@@ -63,8 +67,7 @@ class Book:
             f"Modul : {format_html.code(self.modul)}",
             format_html.href('\u200c', self.bookimages_url),
             format_html.href('Baca di rbv', self.rbv_url),
-            format_html.href('Baca di telegram', create_deep_linked_url(
-                BOT_USERNAME, f"READ-{self.modul}")),
+            format_html.href('Baca di telegram', self.depp_link_url),
         ]
         return '\n'.join(texts)
 
