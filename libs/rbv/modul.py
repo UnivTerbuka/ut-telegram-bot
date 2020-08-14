@@ -28,6 +28,8 @@ class Modul:
             self.subfolder = data.get('subfolder', 'DUMP')
         if not self.doc:
             self.doc = data.get('doc', 'DUMP')
+        if self.doc.endswith('.pdf'):
+            self.doc = self.doc.rstrip('.pdf')
         self.filepath = os.path.join(IMG_PATH, self.subfolder)
         if not self.end:
             self.fetch()
@@ -56,7 +58,7 @@ class Modul:
 
     def absurl(self, page: int) -> str:
         urls = [IMG_URL, self.subfolder, f"{self.doc}-{page}.jpg"]
-        return "".join(urls)
+        return "/".join(urls)
 
     @classmethod
     def from_data(cls, data: str):
@@ -71,12 +73,13 @@ class Modul:
     def message_page(self, page: int):
         nama = self.nama if self.nama else self.subfolder
         texts = [
-            format_html.code(nama),
+            f"Buku : {format_html.code(nama)}",
+            f"Modul : {format_html.code(self.doc)}",
             format_html.href('\u200c', self.get_page(page)),
             f"Halaman {page} dari {self.end} halaman.",
         ]
         return '\n'.join(texts)
 
     def callback_data(self, page: int = 1):
-        datas = ['MODUL', self.subfolder, self.doc, self.end, page]
+        datas = ['MODUL', self.subfolder, self.doc, str(self.end), str(page)]
         return CALLBACK_SEPARATOR.join(datas)

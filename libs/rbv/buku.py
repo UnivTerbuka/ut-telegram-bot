@@ -3,13 +3,15 @@ import os
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
 from dataclasses import dataclass, asdict
+from pathlib import Path
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.utils.helpers import create_deep_linked_url
-from typing import List
+from typing import List, Optional
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page
 from ..config import IMG_PATH, IMG_URL, BOT_USERNAME
+from ..utils import helpers
 
 
 def parse_th(th: Tag):
@@ -23,11 +25,12 @@ def parse_th(th: Tag):
 @dataclass
 class Buku:
     id: str
-    modul: List[Modul] = []
+    modul: Optional[List[Modul]]
 
     def __post_init__(self):
+        self.modul = self.modul if self.modul else []
         self.path = os.path.join(IMG_PATH, self.id)
-        self.config_path = os.path.join(self.path, 'MODULS.json')
+        self.config_path = os.path.join(IMG_PATH, f'{self.id}.json')
         if os.path.isfile(self.config_path):
             with open(self.config_path, 'r') as f:
                 datas: dict = json.load(f)
@@ -38,7 +41,7 @@ class Buku:
         elif self.fetch() and self.modul:
             datas = {}
             for modul in self.modul:
-                datas[modul.subfolder] = asdict(modul)
+                datas[modul.doc] = asdict(modul)
             with open(self.config_path, 'w') as f:
                 json.dump(datas, f)
 
@@ -58,7 +61,7 @@ class Buku:
         keyboard = [
             [
                 InlineKeyboardButton('Baca di telegram', url=create_deep_linked_url(
-                    BOT_USERNAME, f"READ|{self.id}")
+                    BOT_USERNAME, f"READ-{self.id}")
                 )
             ],
             [
@@ -74,16 +77,15 @@ class Buku:
         for modul in self.modul:
             nama = modul.nama if modul.nama else modul.doc
             keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        nama, callback_data=modul.callback_data()
-                    )
-                ]
+                InlineKeyboardButton(
+                    nama, callback_data=modul.callback_data()
+                )
             )
-        keyboard.append(
-            [InlineKeyboardButton('Tutup', callback_data='CLOSE')]
+        menu = helpers.build_menu(
+            buttons=keyboard, n_cols=2,
+            footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE')
         )
-        return InlineKeyboardMarkup(keyboard)
+        return InlineKeyboardMarkup(menu)
 
     @property
     def text(self) -> str:
