@@ -40,14 +40,18 @@ class Ticket:
     @classmethod
     @cached(CACHE, lock=LOCK)
     def from_nomor(cls, noticket: str):
+        noticket = noticket.upper()
+        data = {
+            'nomor': noticket
+        }
         if not cls.is_nomor_valid:
-            return cls(noticket)
+            return from_dict(cls, data)
         params = {
             'noticket': noticket
         }
         res = requests.get(URL, params=params, headers=HEADERS)
         if not res.ok or 'Tiket Tidak Ditemukan, silakan Lakukan Pencarian Ulang' in res.text:
-            return cls(noticket)
+            return from_dict(cls, data)
         soup: BeautifulSoup = BeautifulSoup(res.text, 'lxml')
         table = soup.find('table', class_='table')
         th = table.findAll('th')
@@ -56,10 +60,7 @@ class Ticket:
         status = soup.find(
             'div', class_=['col-md-4', 'col-sm-4']
         ).find('span').text
-        data = ''
-        data = {}
         data['status'] = status
-        data['nomor'] = noticket
         data['nama'] = th[2].text
         data['judul'] = th[6].text
         data['email'] = td[2].text
