@@ -2,10 +2,12 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CommandHandler
 # Commands
-from .about import about
-from .formulir import formulir
-from .link import link
 from .registrasi import registrasi
+from .link import link
+from .formulir import formulir
+from .donasi import donasi
+from .about import about
+from .cancel import cancel
 from .start import start
 
 
@@ -13,11 +15,13 @@ class CommandMixin(object):
     logger: Logger = None
     COMMANDS_GROUP: int = 0
     COMMANDS: List[CommandHandler] = [
-        CommandHandler('start', start),
         CommandHandler('link', link),
         CommandHandler('formulir', formulir),
         CommandHandler('registrasi', registrasi),
         CommandHandler('about', about),
+        CommandHandler('donasi', donasi),
+        CommandHandler('cancel', cancel),
+        CommandHandler('start', start),
     ]
 
     def register_commands(self, dispatcher: Dispatcher):
