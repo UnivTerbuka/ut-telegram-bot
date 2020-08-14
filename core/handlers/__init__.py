@@ -16,7 +16,7 @@ class Handlers(CommandMixin, ConversationMixin, CallbackMixin, InlineMixin):
 
     def register(self, dispacther: Dispatcher = None):
         dispacther = dispacther if dispacther else self.dispacther
-        self.register_commands(dispacther)
         self.register_conversations(dispacther)
         self.register_callbacks(dispacther)
         self.register_inline(dispacther)
+        self.register_commands(dispacther)
