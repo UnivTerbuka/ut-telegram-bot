@@ -4,18 +4,19 @@
 [![Donasi DANA](https://img.shields.io/badge/Donasi-DANA-blue)](https://link.dana.id/qr/1lw2r12r)
 [![LISENSI](https://img.shields.io/github/license/hexatester/ut-telegram-bot)](https://github.com/hexatester/ut-telegram-bot/blob/master/LISENSI)
 
-Source code dari @UniversitasTerbukaBot
-Bot ini dibuat untuk memudahkan mahasiswa Universitas Terbuka mengakses layanan Universitas Terbuka melalui aplikasi Telegram.
+Source code dari @UniversitasTerbukaBot dibuat untuk memudahkan mahasiswa Universitas Terbuka mengakses layanan Universitas Terbuka melalui aplikasi Telegram.
 
 ## Fitur
 
+- RBV (Ruang Baca Virtual)
+- Cek tiket
 - Shortlink UT
+- Cari buku
 
 ## Fitur yang akan datang
 
 - Elearning UT
 - QnA & FAQ
-- RBV (Ruang Baca Virtual)
 
 ## Legal / Hukum
 
