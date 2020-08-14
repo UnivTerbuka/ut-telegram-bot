@@ -64,7 +64,7 @@ class Book:
             format_html.href('\u200c', self.bookimages_url),
             format_html.href('Baca di rbv', self.rbv_url),
             format_html.href('Baca di telegram', create_deep_linked_url(
-                BOT_USERNAME, f"READ|{self.modul}")),
+                BOT_USERNAME, f"READ-{self.modul}")),
         ]
         return '\n'.join(texts)
 
