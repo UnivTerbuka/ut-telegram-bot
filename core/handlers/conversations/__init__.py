@@ -4,6 +4,7 @@ from telegram.ext import Dispatcher, ConversationHandler
 # Conversations
 from .baca import BACA
 from .buku import BUKU
+from .halaman import HALAMAN
 from .shortlink import SHORTLINK
 from .ticket import TICKET
 
@@ -14,6 +15,7 @@ class ConversationMixin(object):
     CONVERSATIONS: List[ConversationHandler] = [
         ConversationHandler(**BACA),
         ConversationHandler(**BUKU),
+        ConversationHandler(**HALAMAN),
         ConversationHandler(**SHORTLINK),
         ConversationHandler(**TICKET),
     ]

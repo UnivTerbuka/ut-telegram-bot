@@ -11,11 +11,13 @@ from libs.utils import helpers
 # Data : MODUL|MNAU1234|M1|12|1
 
 
-def answer(send: Callable, data: Union[Modul, str]):
+def answer(send: Callable, data: Union[Modul, str], page_: int = None):
     if isinstance(data, Modul):
         modul_ = data
     else:
         modul_, page = Modul.from_data(data)
+    if page_:
+        page = page_
     keyboard = []
     if page > 1:
         keyboard.append(
@@ -31,16 +33,23 @@ def answer(send: Callable, data: Union[Modul, str]):
                 callback_data=modul_.callback_data(page+1)
             )
         )
-    keyboard.append(
+    footer = []
+    footer.append(
         InlineKeyboardButton(
             'Kembali',
             callback_data=f"BUKU|{modul_.subfolder}"
         )
     )
+    footer.append(
+        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+    )
+    halaman = InlineKeyboardButton(
+        'Ke Halaman?', callback_data=modul_.callback_data(page, 'HALAMAN'))
     menu = helpers.build_menu(
         buttons=keyboard,
         n_cols=2,
-        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        header_buttons=halaman,
+        footer_buttons=footer,
     )
     send(
         modul_.message_page(page),
