@@ -34,8 +34,14 @@ class Ticket:
         self.callback_data = CALLBACK_SEPARATOR.join(['TICKET', self.nomor])
         self.url = f'http://hallo-ut.ut.ac.id/status?noticket={self.nomor}'
 
+    def __bool__(self):
+        return bool(self.status)
+
     def __dict__(self):
         return dict(self)
+
+    def __str__(self):
+        return self.string
 
     @classmethod
     @cached(CACHE, lock=LOCK)
@@ -77,13 +83,10 @@ class Ticket:
             data['warning'] = f"status = {status} tidak dikenali, mohon hubugi @hexatester untuk mengimplementisakannya."
         return from_dict(cls, data)
 
-    def __str__(self):
-        return self.string
-
     @property
     def string(self):
         if not self.status:
-            return 'Nomor tiket tidak valid'
+            return 'Nomor tiket tidak valid\nSilahkan hubungi @hexatester jika nomor tiket benar...'
         strs = [
             f'Nomor : {format_html.href(self.nomor, self.url)}',
             f'Status : {format_html.code(self.status)}',
