@@ -26,10 +26,12 @@ class Modul:
         data = dict(parse_qsl(query))
         if not self.subfolder:
             self.subfolder = data.get('subfolder', 'DUMP')
+        self.subfolder = self.subfolder.upper()
         if not self.doc:
             self.doc = data.get('doc', 'DUMP')
         if self.doc.endswith('.pdf'):
             self.doc = self.doc.rstrip('.pdf')
+        self.doc = self.doc.upper()
         self.filepath = os.path.join(IMG_PATH, self.subfolder)
         if not self.end:
             self.fetch()

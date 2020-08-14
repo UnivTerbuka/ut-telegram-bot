@@ -28,6 +28,7 @@ class Buku:
     modul: Optional[List[Modul]]
 
     def __post_init__(self):
+        self.id = self.id.upper()
         self.modul = self.modul if self.modul else []
         self.path = os.path.join(IMG_PATH, self.id)
         self.config_path = os.path.join(IMG_PATH, f'{self.id}.json')
