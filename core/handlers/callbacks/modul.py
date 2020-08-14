@@ -37,6 +37,7 @@ def modul(update: Update, context: CallbackContext):
     )
     callback_query.edit_message_text(
         modul_.message_page(page),
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        reply_markup=InlineKeyboardMarkup(keyboard),
+        disable_web_page_preview=False,
     )
     return -1
