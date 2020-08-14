@@ -1,15 +1,21 @@
 import os
 from bs4 import BeautifulSoup
+from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass
 from pathlib import Path
 from telegram import Update, CallbackQuery
+from threading import RLock
 from typing import List, Optional, Union
 from urllib.parse import urlparse, parse_qsl
 from .base import INDEX_URL
 from .utils import download, fetch_page
 from ..config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
 from ..utils import format_html
+
+
+LOCK = RLock()
+CACHE = TTLCache(50, 10*60)
 
 
 @dataclass
@@ -65,12 +71,19 @@ class Modul:
     @classmethod
     def from_data(cls, data: str):
         datas = data.split(CALLBACK_SEPARATOR)
-        data = {
-            'subfolder': datas[1],
-            'doc': datas[2],
-            'end': int(datas[3])
-        }
-        return (from_dict(cls, data), int(datas[4]))
+        @cached(CACHE, lock=LOCK)
+        def get(subfolder, doc, end):
+            data = {
+                'subfolder': subfolder,
+                'doc': doc,
+                'end': end,
+            }
+            return from_dict(cls, data)
+        return (get(
+                subfolder=datas[1],
+                doc=datas[2],
+                end=int(datas[3])
+                ), int(datas[4]))
 
     def message_page(self, page: int):
         nama = self.nama if self.nama else self.subfolder
