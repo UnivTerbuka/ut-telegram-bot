@@ -4,11 +4,13 @@ import pytesseract
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
 from dataclasses import dataclass, asdict
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.utils.helpers import create_deep_linked_url
 from typing import List, Optional
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page
-from ..config import IMG_PATH, IMG_URL
+from ..config import IMG_PATH, IMG_URL, BOT_USERNAME
 
 
 TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
@@ -44,8 +46,6 @@ class Buku:
                 datas[modul.subfolder] = asdict(modul)
             with open(self.config_path, 'w') as f:
                 json.dump(datas, f)
-        else:
-            raise NotImplementedError('Modul tidak dapat ditemukan')
 
     def fetch(self) -> bool:
         res = fetch_page(self.url, RETRY)
@@ -59,11 +59,44 @@ class Buku:
         return True
 
     @property
-    def url(self):
+    def baca_reply_markup(self) -> InlineKeyboardMarkup:
+        keyboard = [
+            [
+                InlineKeyboardButton('Baca di telegram', url=create_deep_linked_url(
+                    BOT_USERNAME, f"READ|{self.id}")
+                )
+            ],
+            [
+                InlineKeyboardButton('Baca di rbv', url=self.url)
+            ]
+        ]
+        return InlineKeyboardMarkup(keyboard)
+
+    @property
+    def reply_markup(self) -> InlineKeyboardMarkup:
+        keyboard = [
+        ]
+        for modul in self.modul:
+            nama = modul.nama if modul.nama else modul.doc
+            keyboard.append(
+                [
+                    InlineKeyboardButton(
+                        nama, callback_data=modul.callback_data()
+                    )
+                ]
+            )
+        return InlineKeyboardMarkup(keyboard)
+
+    @property
+    def text(self) -> str:
+        return f"Buku {self.id}"
+
+    @property
+    def url(self) -> str:
         return f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.id}"
 
     def __iter__(self):
         return iter(self.modul)
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool(self.modul)

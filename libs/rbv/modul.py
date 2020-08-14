@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 from dacite import from_dict
 from dataclasses import dataclass
 from pathlib import Path
+from telegram import Update, CallbackQuery
 from typing import List, Optional, Union
 from urllib.parse import urlparse, parse_qsl
 from .base import INDEX_URL
 from .utils import download, fetch_page
 from ..config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
+from ..utils import format_html
 
 
 @dataclass
@@ -56,10 +58,6 @@ class Modul:
         urls = [IMG_URL, self.subfolder, f"{self.doc}-{page}.jpg"]
         return "".join(urls)
 
-    def callback_data(self, page: int = 1):
-        datas = ['MODUL', self.subfolder, self.doc, self.end, page]
-        return CALLBACK_SEPARATOR.join(datas)
-
     @classmethod
     def from_data(cls, data: str):
         datas = data.split(CALLBACK_SEPARATOR)
@@ -68,4 +66,17 @@ class Modul:
             'doc': datas[2],
             'end': int(datas[3])
         }
-        return from_dict(cls, data)
+        return (from_dict(cls, data), int(datas[4]))
+
+    def message_page(self, page: int):
+        nama = self.nama if self.nama else self.subfolder
+        texts = [
+            format_html.code(nama),
+            format_html.href('\u200c', self.get_page(page)),
+            f"Halaman {page} dari {self.end} halaman.",
+        ]
+        return '\n'.join(texts)
+
+    def callback_data(self, page: int = 1):
+        datas = ['MODUL', self.subfolder, self.doc, self.end, page]
+        return CALLBACK_SEPARATOR.join(datas)
