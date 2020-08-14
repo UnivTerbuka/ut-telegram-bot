@@ -11,10 +11,10 @@ def error_callback(update, context):
     # we want to notify the user of this problem. This will always work, but not notify users if the update is an
     # callback or inline query, or a poll update. In case you want this, keep in mind that sending the message
     # could fail
-    if update.effective_message:
-        text = "Hei. Maaf terjadi error / kesalahan ketika memproses permintaan anda. Mohon bersabar..." \
-               "Saya akan memberitahu @hexatester tentang error ini. Terimakasih..."
-        update.effective_message.reply_text(text)
+    # if update.effective_message:
+    #     text = f"Hei. Maaf terjadi error / kesalahan <code>{context.error}</code> ketika memproses permintaan anda. Mohon bersabar...\n" \
+    #            "Saya akan memberitahu @hexatester tentang error ini. Terimakasih..."
+    #     update.effective_message.reply_text(text)
     # This traceback is created with accessing the traceback object from the sys.exc_info, which is returned as the
     # third value of the returned tuple. Then we use the traceback.format_tb to get the traceback as a string, which
     # for a weird reason separates the line breaks in a list, but keeps the linebreaks itself. So just joining an
