@@ -6,11 +6,12 @@ from requests import Session
 from typing import Optional, List
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import InlineQueryResultArticle, InputTextMessageContent, ParseMode, Update
+from telegram.utils.helpers import create_deep_linked_url
 from urllib.parse import quote_plus
 from uuid import uuid4
 from ..rbv import Modul
 from ..base import HEADERS
-from ..config import URL_LOGO
+from ..config import URL_LOGO, BOT_USERNAME
 from ..utils import format_html
 
 
@@ -61,7 +62,9 @@ class Book:
             f"Penulis : {format_html.code(self.author)}",
             f"Modul : {format_html.code(self.modul)}",
             format_html.href('\u200c', self.bookimages_url),
-            format_html.href('Ruang baca virtual', self.rbv_url),
+            format_html.href('Baca di rbv', self.rbv_url),
+            format_html.href('Baca di telegram', create_deep_linked_url(
+                BOT_USERNAME, f"READ|{self.modul}")),
         ]
         return '\n'.join(texts)
 
