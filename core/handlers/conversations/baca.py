@@ -2,6 +2,7 @@ from dacite import from_dict
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from libs.rbv import Buku
+from libs.utils import format_html
 
 COMMAND = 'baca'
 
@@ -29,7 +30,7 @@ def baca(update: Update, context: CallbackContext):
         answer(update, msg.lstrip('/baca '))
         return -1
     update.effective_message.reply_text(
-        'Kode buku yang aka dibaca?'
+        'Kode buku yang aka dibaca?\n<i>Maaf jika lambat..</i>'
     )
     return GET_BOOK
 
