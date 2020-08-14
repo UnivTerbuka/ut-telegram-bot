@@ -18,7 +18,14 @@ def fetch_page(url: str, retry: int = 0, res: Tag = None, username: str = USERNA
     soup: Tag = BeautifulSoup(res.text, features="lxml")
     captcha_image_url = soup.find('img')['src']
     res = SESSION.get(DOMAIN + captcha_image_url)
-    with BytesIO(res.content) as img_bytes:
+    if not res.ok:
+        if retry > 0:
+            retry -= 1
+            return fetch_page(url, retry)
+        return
+    with BytesIO() as img_bytes:
+        for chunk in res.iter_content(1024):
+            img_bytes.write(chunk)
         img = Image.open(img_bytes)
         captcha: str = pytesseract.image_to_string(img)
     if captcha:
@@ -47,9 +54,9 @@ def get_file(url, filepath, headers=None):
     res: Response = SESSION.get(url, headers=headers)
     if not res.ok or res.encoding == 'UTF-8':
         return False
-    with BytesIO(res.content) as img:
-        image = Image.open(img)
-        image.save(filepath)
+    with open(filepath, 'wb') as f:
+        for chunk in res.iter_content(1024):
+            f.write(chunk)
     return True
 
 

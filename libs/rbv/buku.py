@@ -1,14 +1,15 @@
+import json
 import os
 import pytesseract
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
-from dataclasses import dataclass
-from io import BytesIO
-from PIL import Image
+from dataclasses import dataclass, asdict
 from typing import List, Optional
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page
+from ..config import IMG_PATH, IMG_URL
+
 
 TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -28,10 +29,23 @@ class Buku:
     modul: List[Modul] = []
 
     def __post_init__(self):
-        if self.modul:
-            pass
+        self.path = os.path.join(IMG_PATH, self.id)
+        self.config_path = os.path.join(self.path, 'MODULS.json')
+        if os.path.isfile(self.config_path):
+            with open(self.config_path, 'r') as f:
+                datas: dict = json.load(f)
+            for data in datas:
+                self.modul.append(
+                    from_dict(Modul, datas[data])
+                )
+        elif self.fetch() and self.modul:
+            datas = {}
+            for modul in self.modul:
+                datas[modul.subfolder] = asdict(modul)
+            with open(self.config_path, 'w') as f:
+                json.dump(datas, f)
         else:
-            self.fetch()
+            raise NotImplementedError('Modul tidak dapat ditemukan')
 
     def fetch(self) -> bool:
         res = fetch_page(self.url, RETRY)
