@@ -2,6 +2,7 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, ConversationHandler
 # Conversations
+from .baca import BACA
 from .buku import BUKU
 from .shortlink import SHORTLINK
 from .ticket import TICKET
@@ -11,6 +12,7 @@ class ConversationMixin(object):
     logger: Logger = None
     CONVERSATIONS_GROUP: int = 0
     CONVERSATIONS: List[ConversationHandler] = [
+        ConversationHandler(**BACA),
         ConversationHandler(**BUKU),
         ConversationHandler(**SHORTLINK),
         ConversationHandler(**TICKET),
