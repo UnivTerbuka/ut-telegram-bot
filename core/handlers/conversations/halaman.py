@@ -1,6 +1,6 @@
 from dacite import from_dict
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from telegram.ext import CallbackContext, ConversationHandler, Filters, CallbackQueryHandler, CommandHandler, MessageHandler
 from core.config import CALLBACK_SEPARATOR
 from core.handlers.callbacks.modul import answer
 from libs.rbv import Modul
@@ -10,7 +10,7 @@ from libs.rbv import Modul
 COMMAND = 'halaman'
 
 
-HALAMAN = range(1)
+GET_HALAMAN = range(1)
 
 
 def halaman(update: Update, context: CallbackContext):
@@ -20,7 +20,7 @@ def halaman(update: Update, context: CallbackContext):
         'Nomor halaman yang dituju?'
     )
     context.user_data['halaman'] = callback_query.data
-    return HALAMAN
+    return GET_HALAMAN
 
 
 def get_halaman(update: Update, context: CallbackContext):
@@ -30,34 +30,42 @@ def get_halaman(update: Update, context: CallbackContext):
         if page < 1:
             update.effective_message.reply_text('Halaman tidak ditemukan')
             return
-        data = context.user_data['halaman'].split(CALLBACK_SEPARATOR)
-        data = {
-            'subfolder': data[1],
-            'doc': data[2],
-            'end': data[3],
-        }
-        modul: Modul = from_dict(Modul, data)
+        data = context.user_data['halaman']
+        modul, _ = Modul.from_data(data)
         if not modul:
             update.effective_message.reply_text('Data tidak ditemukan')
             return -1
         if page > modul.end:
             update.effective_message.reply_text('Halaman tidak ditemukan')
             return
-        answer(update.effective_message.reply_text, modul)
+        answer(update.effective_message.reply_text, modul, page)
+        return -1
+    update.effective_message.reply_text('Nomor halaman tidak valid')
     return -1
 
 
 def cancel(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
+    update.effective_message.reply_text(f'Ke {COMMAND} telah dibatalkan')
+    data = context.user_data['halaman']
+    modul, page = Modul.from_data(data)
+    if not modul:
+        update.effective_message.reply_text('Data tidak ditemukan')
+        return -1
+    if page > modul.end:
+        update.effective_message.reply_text('Halaman tidak ditemukan')
+        return -1
+    answer(update.effective_message.reply_text, modul, page)
+    return -1
 
 
-BACA = {
+HALAMAN = {
     'name': COMMAND,
     'entry_points': [
-        CommandHandler(COMMAND, halaman),
+        CallbackQueryHandler(
+            halaman, pattern=r'^HALAMAN\|[A-Z]{4}\d+\|\S+\|\d+$'),
     ],
     'states': {
-        HALAMAN: [
+        GET_HALAMAN: [
             MessageHandler(Filters.text & Filters.regex(
                 r'^\d+$'), get_halaman)
         ]
