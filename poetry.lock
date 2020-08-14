@@ -192,6 +192,17 @@ version = "4.4.2"
 
 [[package]]
 category = "main"
+description = "Fuzzy string matching in python"
+name = "fuzzywuzzy"
+optional = false
+python-versions = "*"
+version = "0.18.0"
+
+[package.extras]
+speedup = ["python-levenshtein (>=0.12)"]
+
+[[package]]
+category = "main"
 description = "Internationalized Domain Names in Applications (IDNA)"
 name = "idna"
 optional = false
@@ -642,7 +653,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "a8396b3f3d918eff4c9c5daa5604fca2fd3dde3277214bb6e820ac6dbfde5afe"
+content-hash = "6aa8b55e50297a1278f1fe0b9546694e2bf9969d7c41eba4b3d09ad5f1be948d"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -749,6 +760,10 @@ dacite = [
 decorator = [
     {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
     {file = "decorator-4.4.2.tar.gz", hash = "sha256:e3a62f0520172440ca0dcc823749319382e377f37f140a0b99ef45fecb84bfe7"},
+]
+fuzzywuzzy = [
+    {file = "fuzzywuzzy-0.18.0-py2.py3-none-any.whl", hash = "sha256:928244b28db720d1e0ee7587acf660ea49d7e4c632569cad4f1cd7e68a5f0993"},
+    {file = "fuzzywuzzy-0.18.0.tar.gz", hash = "sha256:45016e92264780e58972dca1b3d939ac864b78437422beecebb3095f8efd00e8"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
