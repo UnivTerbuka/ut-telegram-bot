@@ -7,6 +7,10 @@ from requests import Response
 from .base import SESSION, USERNAME, PASSWORD, DOMAIN
 
 
+TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
+pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+
 def fetch_page(url: str, retry: int = 0, res: Tag = None, username: str = USERNAME, password: str = PASSWORD) -> Response:
     if not res:
         res = SESSION.get(url)

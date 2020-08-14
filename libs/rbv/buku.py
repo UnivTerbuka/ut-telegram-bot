@@ -1,20 +1,15 @@
 import json
 import os
-import pytesseract
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
 from dataclasses import dataclass, asdict
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.utils.helpers import create_deep_linked_url
-from typing import List, Optional
+from typing import List
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page
 from ..config import IMG_PATH, IMG_URL, BOT_USERNAME
-
-
-TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
-pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def parse_th(th: Tag):
@@ -85,6 +80,9 @@ class Buku:
                     )
                 ]
             )
+        keyboard.append(
+            [InlineKeyboardButton('Tutup', callback_data='CLOSE')]
+        )
         return InlineKeyboardMarkup(keyboard)
 
     @property
