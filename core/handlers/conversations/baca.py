@@ -1,7 +1,6 @@
 from dacite import from_dict
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
-from core.config import CALLBACK_SEPARATOR
 from libs.rbv import Buku
 
 COMMAND = 'baca'
@@ -43,8 +42,8 @@ def get_buku(update: Update, context: CallbackContext):
 
 def start(update: Update, context: CallbackContext):
     text: str = update.effective_message.text
-    # /start BACA|code
-    code: str = text.split(CALLBACK_SEPARATOR)[-1]
+    # /start BACA-code
+    code: str = text.split('-')[-1]
     answer(update, code)
     return -1
 
@@ -60,12 +59,12 @@ BACA = {
                        baca),
         CommandHandler('start',
                        start,
-                       filters=Filters.regex(r'BACA\|[A-Z]{4}\d+\$')),
+                       filters=Filters.regex(r'BACA-[A-Z]{4}\d+\$')),
     ],
     'states': {
         GET_BOOK: [
             MessageHandler(Filters.text & Filters.regex(
-                r'^[A-Z]{4}\d+\$'), get_buku)
+                r'^[A-Z]{4}\d+$'), get_buku)
         ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
