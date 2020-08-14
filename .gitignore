@@ -134,3 +134,6 @@ dmypy.json
 # Private tests
 *.test.py
 *.test.json
+
+# Statics
+/static/images/*
