@@ -26,6 +26,7 @@ def parse_th(th: Tag):
 class Buku:
     id: str
     modul: Optional[List[Modul]]
+    initial: bool = True
 
     def __post_init__(self):
         self.id = self.id.upper()
@@ -39,7 +40,7 @@ class Buku:
                 self.modul.append(
                     from_dict(Modul, datas[data])
                 )
-        elif self.fetch() and self.modul:
+        elif self.initial and self.fetch() and self.modul:
             datas = {}
             for modul in self.modul:
                 datas[modul.doc] = asdict(modul)
@@ -73,8 +74,7 @@ class Buku:
 
     @property
     def reply_markup(self) -> InlineKeyboardMarkup:
-        keyboard = [
-        ]
+        keyboard = []
         for modul in self.modul:
             nama = modul.nama if modul.nama else modul.doc
             keyboard.append(
@@ -95,6 +95,9 @@ class Buku:
     @property
     def url(self) -> str:
         return f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.id}"
+
+    def __len__(self):
+        return len(self.modul)
 
     def __iter__(self):
         return iter(self.modul)
