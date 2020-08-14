@@ -95,6 +95,6 @@ class Modul:
         ]
         return '\n'.join(texts)
 
-    def callback_data(self, page: int = 1):
-        datas = ['MODUL', self.subfolder, self.doc, str(self.end), str(page)]
+    def callback_data(self, page: int = 1, name:str = 'MODUL'):
+        datas = [name, self.subfolder, self.doc, str(self.end), str(page)]
         return CALLBACK_SEPARATOR.join(datas)
