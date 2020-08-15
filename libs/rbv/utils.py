@@ -14,12 +14,12 @@ pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:
 def fetch_page(url: str, retry: int = 0, res: Tag = None, username: str = USERNAME, password: str = PASSWORD) -> Response:
     if not res:
         res = SESSION.get(url)
-        if not res.ok:
+        if not res.ok or not res.text:
             if retry > 0:
                 retry -= 1
                 return fetch_page(url, retry)
             return
-    soup: Tag = BeautifulSoup(res.text, features="lxml")
+    soup = BeautifulSoup(res.text, "lxml")
     captcha_image_url = soup.find('img')['src']
     res = SESSION.get(DOMAIN + captcha_image_url)
     if not res.ok:
