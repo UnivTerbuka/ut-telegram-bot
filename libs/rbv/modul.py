@@ -8,9 +8,9 @@ from telegram import Update, CallbackQuery
 from threading import RLock
 from typing import List, Optional, Union
 from urllib.parse import urlparse, parse_qsl
+from core.config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
 from .base import INDEX_URL
 from .utils import download, fetch_page
-from ..config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
 from ..utils import format_html
 
 
