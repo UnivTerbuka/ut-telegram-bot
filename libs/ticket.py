@@ -131,4 +131,4 @@ class Ticket:
 
     @staticmethod
     def is_nomor_valid(ticket: str = ''):
-        return len(ticket) == 20 and not ' ' in ticket
+        return not ' ' in ticket
