@@ -69,8 +69,11 @@ class Modul:
         return "/".join(urls)
 
     @classmethod
-    def from_data(cls, data: str):
-        datas = data.split(CALLBACK_SEPARATOR)
+    def from_data(cls, data: Union[list, str]):
+        if type(data) == list:
+            datas = data
+        else:
+            datas = data.split(CALLBACK_SEPARATOR)
         @cached(CACHE, lock=LOCK)
         def get(subfolder, doc, end):
             data = {
