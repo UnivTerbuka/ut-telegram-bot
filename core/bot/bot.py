@@ -1,11 +1,16 @@
+import os
 from telegram import Bot, Update, ParseMode
 from telegram.ext import Updater,  Dispatcher, Defaults
 
 from handlers import Handlers, error_callback
 
 
+NAME = os.environ.get('NAME')
+TOKEN = os.environ.get('TOKEN')
+
+
 class UniversitasTerbukaBot(object):
-    def __init__(self, TOKEN: str, NAME: str = None):
+    def __init__(self, TOKEN: str = TOKEN, NAME: str = NAME):
         super(UniversitasTerbukaBot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME = NAME
