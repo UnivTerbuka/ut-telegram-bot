@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ut-telegram-bot"
-version = "1.0.0"
+version = "1.1.0"
 description = ""
 authors = ["Habib Rohman <habibrohman@protonmail.com>"]
 
