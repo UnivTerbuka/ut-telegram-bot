@@ -1,1 +1,1 @@
-web: gunicorn heroku:app --workers 1  --threads 9
+web: gunicorn heroku:app --max-requests 1200
