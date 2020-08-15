@@ -16,6 +16,7 @@ dacite = "^1.5.1"
 cachetools = "^4.1.1"
 fuzzywuzzy = "^0.18.0"
 Flask = "^1.1.2"
+flask_sqlalchemy = "^2.4.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
