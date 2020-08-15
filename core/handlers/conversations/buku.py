@@ -29,6 +29,7 @@ def buku(update: Update, context: CallbackContext):
         return -1
     update.effective_message.reply_text(
         'Cari buku apa?'
+        '/cancel untuk membatalkan'
     )
     return GET_BOOKS
 

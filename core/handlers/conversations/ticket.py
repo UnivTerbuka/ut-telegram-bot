@@ -21,6 +21,7 @@ def ticket(update: Update, context: CallbackContext):
         return -1
     update.effective_message.reply_text(
         'Kirimkan nomor tiket yang akan dicek...'
+        '/cancel untuk membatalkan'
     )
     return GET_TICKET
 

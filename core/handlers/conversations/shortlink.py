@@ -15,7 +15,7 @@ def short(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         'Kirimkan link yang akan dipendekkan...\n'
         'Diawali dengan https://... atau http://...\n'
-        '/cancel untuk membatalkan perintah'
+        '/cancel untuk membatalkan'
     )
     return CREATE
 
