@@ -1,5 +1,5 @@
 import os
-from bot.bot import UniversitasTerbukaBot
+from core.bot import UniversitasTerbukaBot
 from dotenv import load_dotenv
 load_dotenv()
 
