@@ -1,5 +1,5 @@
 from dacite import from_dict
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from libs.rbv import Buku
 from libs.utils import format_html
@@ -10,14 +10,15 @@ GET_BOOK = range(1)
 
 
 def answer(update: Update, code: str):
+    message: Message = update.effective_message.reply_text('Mencari buku...')
     data = {
         'id': code
     }
     buku: Buku = from_dict(Buku, data)
     if not buku:
-        update.effective_message.reply_text('Buku tidak ditemukan')
+        message.edit_text('Buku tidak ditemukan')
         return -1
-    update.effective_message.reply_text(
+    message.edit_text(
         buku.text,
         reply_markup=buku.reply_markup
     )
@@ -27,7 +28,6 @@ def answer(update: Update, code: str):
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
-        update.effective_message.reply_text('Mencari buku...')
         answer(update, msg.lstrip('/baca '))
         return -1
     update.effective_message.reply_text(
@@ -38,7 +38,6 @@ def baca(update: Update, context: CallbackContext):
 
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
-    update.effective_message.reply_text('Mencari buku...')
     answer(update, code)
     return -1
 
