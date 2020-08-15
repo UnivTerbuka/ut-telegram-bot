@@ -13,48 +13,74 @@ COMMAND = 'halaman'
 GET_HALAMAN = range(1)
 
 
+def back(data):
+    data = data if type(data) == str else CALLBACK_SEPARATOR.join(data)
+    keyboard = [
+        [InlineKeyboardButton('Kembali', callback_data=data)]
+    ]
+    return InlineKeyboardMarkup(keyboard)
+
+
 def halaman(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer('Nomor halaman yang dituju?')
-    update.effective_message.reply_text(
-        'Nomor halaman yang dituju?'
+    data: list = callback_query.data.split(CALLBACK_SEPARATOR)
+    callback_query.edit_message_text(
+        'Nomor halaman yang dituju?\n'
+        f'Buku : <code>{data[1]}</code>\n'
+        f'Modul : <code>{data[2]}</code>\n'
+        f'<i>Halaman terakhir {data[3]}.</i>\n'
+        '/cancel untuk membatalkan'
     )
-    context.user_data['halaman'] = callback_query.data
+    data[0] = 'MODUL'
+    context.user_data['halaman'] = data
     return GET_HALAMAN
 
 
 def get_halaman(update: Update, context: CallbackContext):
+    data: str = context.user_data['halaman']
+    reply_text = update.effective_message.reply_text
+    if not data:
+        reply_text('Oops data tidak ditemukan. :3')
+        return -1
     nomor: str = update.effective_message.text
     if nomor.isdigit():
         page = int(nomor)
         if page < 1:
-            update.effective_message.reply_text('Halaman tidak ditemukan')
-            return
-        data = context.user_data['halaman']
+            reply_text(
+                'Halaman tidak ditemukan',
+                reply_markup=back(data)
+            )
+            return -1
         modul, _ = Modul.from_data(data)
         if not modul:
-            update.effective_message.reply_text('Data tidak ditemukan')
+            reply_text(
+                'Data tidak ditemukan',
+                reply_markup=back(data)
+            )
             return -1
+        reply_text('Mencari halaman...')
         if page > modul.end:
-            update.effective_message.reply_text('Halaman tidak ditemukan')
-            return
-        answer(update.effective_message.reply_text, modul, page)
+            reply_text(
+                'Halaman tidak ditemukan',
+                reply_markup=back(data)
+            )
+            return -1
+        answer(reply_text, modul, page)
         return -1
-    update.effective_message.reply_text('Nomor halaman tidak valid')
+    reply_text(
+        'Nomor halaman tidak valid',
+        reply_markup=back(data)
+    )
     return -1
 
 
 def cancel(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(f'Ke {COMMAND} telah dibatalkan')
     data = context.user_data['halaman']
-    modul, page = Modul.from_data(data)
-    if not modul:
-        update.effective_message.reply_text('Data tidak ditemukan')
-        return -1
-    if page > modul.end:
-        update.effective_message.reply_text('Halaman tidak ditemukan')
-        return -1
-    answer(update.effective_message.reply_text, modul, page)
+    update.effective_message.reply_text(
+        f'Ke {COMMAND} telah dibatalkan',
+        reply_markup=back(data)
+    )
     return -1
 
 
@@ -71,5 +97,5 @@ HALAMAN = {
         ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
-    'conversation_timeout': 180,
+    'conversation_timeout': 60,
 }
