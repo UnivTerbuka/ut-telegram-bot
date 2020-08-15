@@ -1,4 +1,38 @@
+import os
 
-__version__ = '0.1.0'
+from flask import Flask
 
-from .bot import SimpleWebsite, UniversitasTerbukaBot
+
+def create_app(test_config=None):
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True,
+                static_folder='static', static_url_path='')
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
+
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
+
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
+    from .bot import bp
+    app.register_blueprint(bp.bp)
+
+    from flask import redirect
+    # a simple page that says hello
+
+    @app.route('/')
+    def hello():
+        return redirect('index.html')
+
+    return app

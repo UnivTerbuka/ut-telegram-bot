@@ -5,7 +5,6 @@ import sys
 def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
-BOT_USERNAME = os.environ.get('BOT_USERNAME', 'UniversitasTerbukaBot')
 HTML_PARSER = 'lxml'
 ROOT_PATH = get_script_path()
 STATIC_PATH = os.path.join(ROOT_PATH, 'static')
@@ -22,3 +21,4 @@ BASE_URL = "https://{}.herokuapp.com/".format(NAME)
 IMG_URL = BASE_URL + 'images/'
 WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
 URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'
+BOT_USERNAME = os.environ.get('BOT_USERNAME', 'UniversitasTerbukaBot')
