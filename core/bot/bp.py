@@ -9,3 +9,4 @@ bot = UniversitasTerbukaBot()
 def webhook():
     update = request.get_json()
     bot.process_update(update)
+    return ''
