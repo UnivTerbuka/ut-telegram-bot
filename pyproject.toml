@@ -17,6 +17,7 @@ cachetools = "^4.1.1"
 fuzzywuzzy = "^0.18.0"
 Flask = "^1.1.2"
 flask_sqlalchemy = "^2.4.4"
+flask_migrate = "^2.5.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
