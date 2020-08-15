@@ -14,14 +14,21 @@ def answer(update: Update, code: str):
     data = {
         'id': code
     }
-    buku: Buku = from_dict(Buku, data)
-    if not buku:
-        message.edit_text('Buku tidak ditemukan')
-        return -1
-    message.edit_text(
-        buku.text,
-        reply_markup=buku.reply_markup
-    )
+    try:
+        buku: Buku = from_dict(Buku, data)
+        if not buku:
+            message.edit_text(
+                f'Buku {code} tidak ditemukan di rbv\n'
+            )
+            return -1
+        message.edit_text(
+            buku.text,
+            reply_markup=buku.reply_markup
+        )
+    except:
+        message.edit_text(
+            'Tidak dapat menghubungi rbv. :<'
+        )
     return -1
 
 
@@ -31,7 +38,9 @@ def baca(update: Update, context: CallbackContext):
         answer(update, msg.lstrip('/baca '))
         return -1
     update.effective_message.reply_text(
-        'Kode buku yang aka dibaca?\n<i>Maaf jika lambat..</i>'
+        'Kode buku yang aka dibaca?\n'
+        '<i>Maaf jika lambat..</i>\n'
+        '/cancel untuk membatalkan'
     )
     return GET_BOOK
 
@@ -61,7 +70,7 @@ BACA = {
                        baca),
         CommandHandler('start',
                        start,
-                       filters=Filters.regex(r'BACA-[A-Z]{4}\d+\$')),
+                       filters=Filters.regex(r'/start READ-[A-Z]{4}\d+$')),
     ],
     'states': {
         GET_BOOK: [
