@@ -5,7 +5,7 @@ import sys
 def get_script_path():
     return os.path.dirname(os.path.realpath(sys.argv[0]))
 
-BOT_USERNAME = 'UniversitasTerbukaBot'
+BOT_USERNAME = os.environ.get('NAME', 'UniversitasTerbukaBot')
 HTML_PARSER = 'lxml'
 ROOT_PATH = get_script_path()
 STATIC_PATH = os.path.join(ROOT_PATH, 'static')
@@ -16,7 +16,7 @@ HEADERS = {
 CALLBACK_SEPARATOR = '|'
 USERNAME_RBV = 'mahasiswa'
 PASSWORD_RBV = 'utpeduli'
-NAME = os.environ.get('NAME')
+NAME = os.environ.get('NAME', 'UniversitasTerbukaBot')
 TOKEN = os.environ.get('TOKEN')
 BASE_URL = "https://{}.herokuapp.com/".format(NAME)
 IMG_URL = BASE_URL + 'images/'
