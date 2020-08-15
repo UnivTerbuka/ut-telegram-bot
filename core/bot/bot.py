@@ -42,11 +42,14 @@ class UniversitasTerbukaBot(object):
             parse_mode=ParseMode.HTML, disable_web_page_preview=True
         )
         # Init bot
-        request = Request(con_pool_size=8)
-        self.bot = MQBot(TOKEN, request=request)
+        # q = messagequeue.MessageQueue(
+        #     all_burst_limit=3, all_time_limit_ms=3000
+        # )
+        # request = Request(con_pool_size=8)
+        # self.bot = MQBot(TOKEN, defaults=self.defaults, request=request, mqueue=q)
         # Register handlers
         self.updater: Updater = Updater(
-            bot=self.bot, use_context=True, defaults=self.defaults
+            TOKEN, use_context=True, defaults=self.defaults
         )
         self.dp: Dispatcher = self.updater.dispatcher
         self.dp.add_error_handler(error_callback)

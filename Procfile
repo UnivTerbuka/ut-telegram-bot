@@ -1,1 +1,1 @@
-web: gunicorn heroku:app
+web: gunicorn heroku:app --workers 1  --threads 9
