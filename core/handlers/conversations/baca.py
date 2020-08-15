@@ -27,6 +27,7 @@ def answer(update: Update, code: str):
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
+        update.effective_message.reply_text('Mencari buku...')
         answer(update, msg.lstrip('/baca '))
         return -1
     update.effective_message.reply_text(
@@ -37,6 +38,7 @@ def baca(update: Update, context: CallbackContext):
 
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
+    update.effective_message.reply_text('Mencari buku...')
     answer(update, code)
     return -1
 
