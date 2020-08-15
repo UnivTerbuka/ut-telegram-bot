@@ -1,1 +1,1 @@
-web: gunicorn heroku:app --max-requests 1200
+web: gunicorn heroku:app --max-requests 1200 --timeout 300 --workers=1
