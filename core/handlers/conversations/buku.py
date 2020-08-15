@@ -28,7 +28,7 @@ def buku(update: Update, context: CallbackContext):
         answer(update, msg.lstrip('/buku '))
         return -1
     update.effective_message.reply_text(
-        'Cari buku apa?'
+        'Cari buku apa?\n'
         '/cancel untuk membatalkan'
     )
     return GET_BOOKS
@@ -49,7 +49,7 @@ BUKU = {
     'entry_points': [CommandHandler(COMMAND, buku)],
     'states': {
         GET_BOOKS: [
-            MessageHandler(Filters.text, get_buku)
+            MessageHandler(Filters.text & ~Filters.regex(r'^/'), get_buku)
         ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
