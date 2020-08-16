@@ -1,4 +1,5 @@
 import os
+from flask import Blueprint, request
 from telegram import Bot, Update, ParseMode
 from telegram.ext import Updater,  Dispatcher, Defaults, messagequeue
 from telegram.utils.request import Request
@@ -69,3 +70,15 @@ class UniversitasTerbukaBot(object):
 
     def polling(self):
         self.updater.start_polling()
+
+
+def get_blueprint():
+    bp = Blueprint('bot', __name__)
+    bot = UniversitasTerbukaBot()
+
+    @bp.route(f"/{bot.TOKEN}", methods=['POST'])
+    def webhook():
+        update = request.get_json()
+        bot.process_update(update)
+        return ''
+    return bp
