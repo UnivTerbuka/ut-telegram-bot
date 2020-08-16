@@ -72,9 +72,9 @@ class UniversitasTerbukaBot(object):
         self.updater.start_polling()
 
 
-def get_blueprint():
+def get_blueprint(token, name):
     bp = Blueprint('bot', __name__)
-    bot = UniversitasTerbukaBot()
+    bot = UniversitasTerbukaBot(token, name)
 
     @bp.route(f"/{bot.TOKEN}", methods=['POST'])
     def webhook():
