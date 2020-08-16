@@ -3,7 +3,6 @@ from flask import Blueprint, request
 from telegram import Bot, Update, ParseMode
 from telegram.ext import Updater,  Dispatcher, Defaults, messagequeue
 from telegram.utils.request import Request
-from handlers import Handlers, error_callback
 
 
 NAME = os.environ.get('NAME')
@@ -53,6 +52,7 @@ class UniversitasTerbukaBot(object):
             TOKEN, use_context=True, defaults=self.defaults
         )
         self.dp: Dispatcher = self.updater.dispatcher
+        from handlers import Handlers, error_callback
         self.dp.add_error_handler(error_callback)
         self.handlers = Handlers()
         self.handlers.register(self.dp)
