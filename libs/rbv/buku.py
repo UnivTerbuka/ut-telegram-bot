@@ -7,7 +7,7 @@ from pathlib import Path
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.utils.helpers import create_deep_linked_url
 from typing import List, Optional
-from core.config import IMG_PATH, IMG_URL, BOT_USERNAME
+from config import IMG_PATH, IMG_URL, BOT_USERNAME
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page

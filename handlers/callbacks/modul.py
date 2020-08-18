@@ -2,7 +2,7 @@ from telegram import Update, CallbackQuery, InlineKeyboardButton, InlineKeyboard
 from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from typing import Callable, Union
-from core.config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR
 from libs.rbv import Buku, Modul
 from libs.utils import helpers
 

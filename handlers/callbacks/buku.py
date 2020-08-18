@@ -1,7 +1,7 @@
 from dacite import from_dict
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
-from core.config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR
 from libs.rbv import Buku, Modul
 
 # data : BUKU|KODE|DOC|END

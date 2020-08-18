@@ -10,6 +10,7 @@ dacite==1.5.1
 decorator==4.4.2
 flask==1.1.2
 flask-migrate==2.5.3
+flask-script==2.0.6
 flask-sqlalchemy==2.4.4
 fuzzywuzzy==0.18.0
 gunicorn==20.0.4
