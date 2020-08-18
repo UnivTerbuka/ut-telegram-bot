@@ -15,7 +15,7 @@ def answer(update: Update, tiket: Ticket):
 def ticket(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     noticket = msg.split(' ')[1] if len(msg) == 27 else ''
-    if Ticket.is_nomor_valid(noticket):
+    if len(msg) > 6 and Ticket.is_nomor_valid(noticket):
         ticket_ = Ticket.from_nomor(noticket)
         answer(update, ticket_)
         return -1
