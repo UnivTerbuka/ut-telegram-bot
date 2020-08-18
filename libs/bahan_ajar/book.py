@@ -6,7 +6,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.utils.helpers import create_deep_linked_url
 from uuid import uuid4
-from core.config import URL_LOGO, BOT_USERNAME
+from config import URL_LOGO, BOT_USERNAME
 from ..rbv import Modul
 from ..utils import format_html
 

@@ -1,7 +1,7 @@
 from dacite import from_dict
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CallbackQueryHandler, CommandHandler, MessageHandler
-from core.config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR
 from handlers.callbacks.modul import answer
 from libs.rbv import Modul
 

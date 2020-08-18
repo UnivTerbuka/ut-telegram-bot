@@ -2,7 +2,7 @@ from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from libs.ticket import Ticket
-from core.config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR
 
 
 def ticket(update: Update, context: CallbackContext):

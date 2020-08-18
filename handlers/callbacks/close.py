@@ -1,6 +1,6 @@
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
-from core.config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR
 
 
 def close(update: Update, context: CallbackContext):
