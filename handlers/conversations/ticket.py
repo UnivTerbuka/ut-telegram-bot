@@ -48,7 +48,7 @@ TICKET = {
     'entry_points': [CommandHandler(COMMAND, ticket)],
     'states': {
         GET_TICKET: [
-            MessageHandler(Filters.text, get_ticket)
+            MessageHandler(Filters.text & ~Filters.command, get_ticket)
         ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
