@@ -9,8 +9,27 @@ COMMAND = 'baca'
 GET_BOOK = range(1)
 
 
-def answer(update: Update, code: str):
-    message: Message = update.effective_message.reply_text('Mencari buku...')
+def delete_data(data: dict):
+    if data and COMMAND in data:
+        del data[COMMAND]
+
+
+def set_data(data: dict, value):
+    if data:
+        data[COMMAND] = value
+
+
+def get_data(data: dict):
+    return data.get(COMMAND) if data else None
+
+
+def answer(update: Update, code: str, user_data: dict = None):
+    if user_data and 'baca' in user_data:
+        message: Message = get_data(user_data)
+    else:
+        message: Message = update.effective_message.reply_text(
+            'Mencari buku...')
+        set_data(user_data, message)
     data = {
         'id': code
     }
@@ -21,21 +40,22 @@ def answer(update: Update, code: str):
                 f'Buku {code} tidak ditemukan di rbv\n'
             )
             return -1
-        message.edit_text(
+        message: Message = message.edit_text(
             buku.text,
             reply_markup=buku.reply_markup
         )
     except:
-        message.edit_text(
+        message: Message = message.edit_text(
             'Tidak dapat menghubungi rbv. :<'
         )
+    delete_data(user_data)
     return -1
 
 
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
-        answer(update, msg.lstrip('/baca '))
+        answer(update, msg.lstrip('/baca '), context.user_data)
         return -1
     update.effective_message.reply_text(
         'Kode buku yang aka dibaca?\n'
@@ -55,12 +75,14 @@ def start(update: Update, context: CallbackContext):
     text: str = update.effective_message.text
     # /start BACA-code
     code: str = text.split('-')[-1]
-    answer(update, code)
+    answer(update, code, context.user_data)
     return -1
 
 
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
+    delete_data(context.user_data)
+    return -1
 
 
 BACA = {
