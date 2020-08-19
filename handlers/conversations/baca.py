@@ -1,12 +1,13 @@
 from dacite import from_dict
+from logging import getLogger
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from libs.rbv import Buku
 from libs.utils import format_html
 
 COMMAND = 'baca'
-
 GET_BOOK = range(1)
+logger = getLogger(__name__)
 
 
 def delete_data(data: dict):
@@ -23,10 +24,10 @@ def get_data(data: dict):
     return data.get(COMMAND) if data else None
 
 
-def answer(update: Update, code: str, user_data: dict = None):
-    if user_data and 'baca' in user_data:
-        message: Message = get_data(user_data)
-    else:
+def answer(update: Update, code: str, context: CallbackContext = None):
+    user_data: dict = context.user_data if context else {}
+    message: Message = get_data(user_data)
+    if not message:
         message: Message = update.effective_message.reply_text(
             'Mencari buku...')
         set_data(user_data, message)
@@ -44,18 +45,20 @@ def answer(update: Update, code: str, user_data: dict = None):
             buku.text,
             reply_markup=buku.reply_markup
         )
-    except:
+    except Exception as E:
+        logger.exception(E)
         message: Message = message.edit_text(
-            'Tidak dapat menghubungi rbv. :<'
+            'Tidak dapat menghubungi rbv.'
         )
-    delete_data(user_data)
+    finally:
+        delete_data(user_data)
     return -1
 
 
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
-        answer(update, msg.lstrip('/baca '), context.user_data)
+        answer(update, msg.lstrip('/baca '), context)
         return -1
     update.effective_message.reply_text(
         'Kode buku yang aka dibaca?\n'
@@ -67,7 +70,7 @@ def baca(update: Update, context: CallbackContext):
 
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
-    answer(update, code)
+    answer(update, code, context)
     return -1
 
 
@@ -75,7 +78,7 @@ def start(update: Update, context: CallbackContext):
     text: str = update.effective_message.text
     # /start BACA-code
     code: str = text.split('-')[-1]
-    answer(update, code, context.user_data)
+    answer(update, code, context)
     return -1
 
 

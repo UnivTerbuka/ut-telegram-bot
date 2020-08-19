@@ -62,12 +62,13 @@ class Buku:
     def baca_reply_markup(self) -> InlineKeyboardMarkup:
         keyboard = [
             [
-                InlineKeyboardButton('Baca di telegram', url=create_deep_linked_url(
-                    BOT_USERNAME, f"READ-{self.id}")
+                InlineKeyboardButton(
+                    'Baca di telegram', url=create_deep_linked_url(BOT_USERNAME, f"READ-{self.id}")
                 )
             ],
             [
-                InlineKeyboardButton('Baca di rbv', url=self.url)
+                InlineKeyboardButton(
+                    'Baca di rbv', url=self.url)
             ]
         ]
         return InlineKeyboardMarkup(keyboard)
@@ -84,7 +85,10 @@ class Buku:
             )
         menu = helpers.build_menu(
             buttons=keyboard, n_cols=2,
-            footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE')
+            header_buttons=InlineKeyboardButton(
+                'Ruang Baca Virtual', url=self.url),
+            footer_buttons=InlineKeyboardButton(
+                'Tutup', callback_data='CLOSE')
         )
         return InlineKeyboardMarkup(menu)
 

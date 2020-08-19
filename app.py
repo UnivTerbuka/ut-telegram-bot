@@ -14,7 +14,8 @@ app.config.from_mapping(
 
 
 with app.app_context():
-    from core import get_blueprint, db
+    from core import get_blueprint
+    from core.db import db
 
 NAME = os.environ.get('NAME')
 TOKEN = os.environ.get('TOKEN')
