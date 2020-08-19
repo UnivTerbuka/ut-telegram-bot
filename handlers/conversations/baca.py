@@ -1,7 +1,8 @@
 from dacite import from_dict
 from logging import getLogger
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Message
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Message, ChatAction
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from core.utils import action
 from libs.rbv import Buku
 from libs.utils import format_html
 
@@ -36,15 +37,18 @@ def answer(update: Update, code: str, context: CallbackContext = None):
     }
     try:
         buku: Buku = from_dict(Buku, data)
-        if not buku:
+        if buku:
+            context.bot.send_chat_action(
+                chat_id=update.effective_message.chat_id, action=ChatAction.UPLOAD_PHOTO
+            )
+            message: Message = message.edit_text(
+                buku.text,
+                reply_markup=buku.reply_markup
+            )
+        else:
             message.edit_text(
                 f'Buku {code} tidak ditemukan di rbv\n'
             )
-            return -1
-        message: Message = message.edit_text(
-            buku.text,
-            reply_markup=buku.reply_markup
-        )
     except Exception as E:
         logger.exception(E)
         message: Message = message.edit_text(
@@ -55,6 +59,7 @@ def answer(update: Update, code: str, context: CallbackContext = None):
     return -1
 
 
+@action.typing
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
@@ -68,6 +73,7 @@ def baca(update: Update, context: CallbackContext):
     return GET_BOOK
 
 
+@action.typing
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
     answer(update, code, context)
@@ -82,6 +88,7 @@ def start(update: Update, context: CallbackContext):
     return -1
 
 
+@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
     delete_data(context.user_data)

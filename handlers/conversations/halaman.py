@@ -1,6 +1,7 @@
 from dacite import from_dict
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CallbackQueryHandler, CommandHandler, MessageHandler
+from core.utils import action
 from config import CALLBACK_SEPARATOR
 from handlers.callbacks.modul import answer
 from libs.rbv import Modul
@@ -21,6 +22,7 @@ def back(data):
     return InlineKeyboardMarkup(keyboard)
 
 
+@action.typing
 def halaman(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer('Nomor halaman yang dituju?')
@@ -37,6 +39,7 @@ def halaman(update: Update, context: CallbackContext):
     return GET_HALAMAN
 
 
+@action.typing
 def get_halaman(update: Update, context: CallbackContext):
     data: str = context.user_data['halaman']
     reply_text = update.effective_message.reply_text
@@ -75,6 +78,7 @@ def get_halaman(update: Update, context: CallbackContext):
     return -1
 
 
+@action.typing
 def cancel(update: Update, context: CallbackContext):
     data = context.user_data['halaman']
     update.effective_message.reply_text(

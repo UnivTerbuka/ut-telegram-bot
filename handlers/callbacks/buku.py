@@ -1,12 +1,14 @@
 from dacite import from_dict
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
+from core.utils import action
 from config import CALLBACK_SEPARATOR
 from libs.rbv import Buku, Modul
 
 # data : BUKU|KODE|DOC|END
 
 
+@action.typing
 def buku(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer()

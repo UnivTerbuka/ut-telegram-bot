@@ -1,5 +1,6 @@
 from telegram import Update, Bot
 from telegram.ext import CallbackContext
+from core.utils import action
 
 MESSAGE = '''
 Developer : @hexatester - Habib Rohman
@@ -15,5 +16,6 @@ Dan menggunakan library :
 '''
 
 
+@action.typing
 def about(update: Update, context: CallbackContext):
     update.effective_message.reply_text(MESSAGE)

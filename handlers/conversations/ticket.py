@@ -1,5 +1,6 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from core.utils import action
 from libs.ticket import Ticket
 
 COMMAND = 'tiket'
@@ -12,6 +13,7 @@ def answer(update: Update, tiket: Ticket):
         str(tiket), reply_markup=tiket.reply_markup)
 
 
+@action.typing
 def ticket(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     noticket = msg.split(' ')[1] if len(msg) == 27 else ''
@@ -20,12 +22,13 @@ def ticket(update: Update, context: CallbackContext):
         answer(update, ticket_)
         return -1
     update.effective_message.reply_text(
-        'Kirimkan nomor tiket yang akan dicek...'
+        'Kirimkan nomor tiket yang akan dicek...\n'
         '/cancel untuk membatalkan'
     )
     return GET_TICKET
 
 
+@action.typing
 def get_ticket(update: Update, context: CallbackContext):
     noticket: str = update.effective_message.text
     noticket = noticket.upper()
@@ -34,8 +37,10 @@ def get_ticket(update: Update, context: CallbackContext):
     return -1
 
 
+@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
+    return -1
 
 
 TICKET = {

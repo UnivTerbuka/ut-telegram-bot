@@ -1,5 +1,6 @@
 from telegram import Update, Bot
 from telegram.ext import CallbackContext
+from core.utils import action
 
 MESSAGE = '''
 Daftar Formulir yang dapat di-download kemudian dicetak untuk diisi
@@ -15,5 +16,6 @@ Daftar Formulir yang dapat di-download kemudian dicetak untuk diisi
 '''
 
 
+@action.typing
 def formulir(update: Update, context: CallbackContext):
     update.effective_message.reply_text(MESSAGE)

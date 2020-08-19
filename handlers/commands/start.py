@@ -1,7 +1,9 @@
 from telegram import Update, User
 from telegram.ext import CallbackContext
+from core.utils import action
 
 
+@action.typing
 def start(update: Update, context: CallbackContext):
     user: User = update.effective_user
     update.effective_message.reply_text(

@@ -1,5 +1,6 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from core.utils import action
 from libs.bahan_ajar import BahanAjar, Book
 
 COMMAND = 'buku'
@@ -22,6 +23,7 @@ def answer(update: Update, query: str):
         )
 
 
+@action.typing
 def buku(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
@@ -34,14 +36,17 @@ def buku(update: Update, context: CallbackContext):
     return GET_BOOKS
 
 
+@action.typing
 def get_buku(update: Update, context: CallbackContext):
     query: str = update.effective_message.text
     answer(update, query)
     return -1
 
 
+@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f'/{COMMAND} telah dibatalkan')
+    return -1
 
 
 BUKU = {
