@@ -104,7 +104,18 @@ class Modul:
         return CALLBACK_SEPARATOR.join(datas)
 
     @staticmethod
-    def validate(id: str) -> str:
-        assert id[0:4].isalpha()
-        assert id[4:].isdigit()
+    def is_valid(id: str) -> bool:
+        if ' ' in id:
+            return False
+        if '\n' in id:
+            return False
+        if not id[0:4].isalpha():
+            return False
+        if not id[4:].isdigit():
+            return False
+        return True
+
+    @classmethod
+    def validate(cls, id: str) -> str:
+        assert cls.is_valid(id)
         return id[0:8].upper()

@@ -3,7 +3,7 @@ from logging import getLogger
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Message, ChatAction
 from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
 from core.utils import action
-from libs.rbv import Buku
+from libs.rbv import Buku, Modul
 from libs.utils import format_html
 
 COMMAND = 'baca'
@@ -26,6 +26,9 @@ def get_data(data: dict):
 
 
 def answer(update: Update, code: str, context: CallbackContext = None):
+    if not Modul.is_valid(code):
+        update.effective_message.reply_text('Kode buku tidak valid')
+        return -1
     user_data: dict = context.user_data if context else {}
     message: Message = get_data(user_data)
     if not message:
@@ -38,9 +41,6 @@ def answer(update: Update, code: str, context: CallbackContext = None):
     try:
         buku: Buku = from_dict(Buku, data)
         if buku:
-            context.bot.send_chat_action(
-                chat_id=update.effective_message.chat_id, action=ChatAction.UPLOAD_PHOTO
-            )
             message: Message = message.edit_text(
                 buku.text,
                 reply_markup=buku.reply_markup
@@ -79,16 +79,12 @@ def baca(update: Update, context: CallbackContext):
 @action.typing
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
-    answer(update, code, context)
-    return -1
+    return answer(update, code, context)
 
 
 def start(update: Update, context: CallbackContext):
-    text: str = update.effective_message.text
-    # /start BACA-code
-    code: str = text.split('-')[-1]
-    answer(update, code, context)
-    return -1
+    code: str = context.args[0][5:]
+    return answer(update, code, context)
 
 
 @action.typing

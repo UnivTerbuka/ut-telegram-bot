@@ -32,8 +32,9 @@ class Book:
         self.bookimages_url = self.bookimages_url if self.bookimages_url else f"http://bahanajar.ut.ac.id/bookimages/{self.id}.jpg"
         self.bookdetail_url = self.bookdetail_url if self.bookdetail_url else f"http://bahanajar.ut.ac.id/books/bookdetail/{self.id}"
         try:
+            kode = Modul.validate(self.modul)
             self.depp_link_url = create_deep_linked_url(
-                BOT_USERNAME, f"READ-{self.modul}")
+                BOT_USERNAME, f"READ-{kode}")
         except:
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ")
 
@@ -61,9 +62,9 @@ class Book:
     @property
     def text(self):
         texts = [
-            f"Judul : {format_html.code(self.title)}",
+            f"Buku : {format_html.code(self.title)}",
             f"Penulis : {format_html.code(self.author)}",
-            f"Modul : {format_html.code(self.modul)}",
+            f"Kode : {format_html.code(self.modul)}",
             format_html.href('Baca di rbv', self.rbv_url),
             format_html.href('Baca di telegram', self.depp_link_url),
             format_html.href('\u200c', self.bookimages_url),
