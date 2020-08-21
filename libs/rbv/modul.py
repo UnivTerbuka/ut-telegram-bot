@@ -1,4 +1,6 @@
 import os
+from logging import getLogger
+
 from bs4 import BeautifulSoup
 from cachetools import cached, TTLCache
 from dacite import from_dict
@@ -16,6 +18,7 @@ from ..utils import format_html
 
 LOCK = RLock()
 CACHE = TTLCache(50, 10*60)
+logger = getLogger(__name__)
 
 
 @dataclass
@@ -40,7 +43,14 @@ class Modul:
         self.doc = self.doc.upper()
         self.filepath = os.path.join(IMG_PATH, self.subfolder)
         if not self.end:
-            self.fetch()
+            if self.fetch():
+                logger.debug(
+                    'Berhasil mendapatkan modul {}'.format(repr(self))
+                )
+            else:
+                logger.debug(
+                    'Gagal mendapatkan modul {}'.format(repr(self))
+                )
 
     def fetch(self) -> bool:
         res = fetch_page(self.url, retry=10)

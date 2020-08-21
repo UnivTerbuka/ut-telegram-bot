@@ -1,5 +1,7 @@
 import json
 import os
+from logging import getLogger
+
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
 from dataclasses import dataclass, asdict
@@ -13,6 +15,8 @@ from .base import READER_URL, RETRY
 from .utils import fetch_page
 from ..utils import helpers
 
+
+logger = getLogger(__name__)
 
 def parse_th(th: Tag):
     a: Tag = th.find('a')
@@ -40,12 +44,14 @@ class Buku:
                 self.modul.append(
                     from_dict(Modul, datas[data])
                 )
+            logger.debug('Buku dari cache {}'.format(repr(self)))
         elif self.initial and self.fetch() and self.modul:
             datas = {}
             for modul in self.modul:
                 datas[modul.doc] = asdict(modul)
             with open(self.config_path, 'w') as f:
                 json.dump(datas, f)
+            logger.debug('Berhasil mendapatkan buku {}'.format(repr(self)))
 
     def fetch(self) -> bool:
         res = fetch_page(self.url, RETRY)
