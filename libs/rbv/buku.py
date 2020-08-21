@@ -60,10 +60,11 @@ class Buku:
 
     @property
     def baca_reply_markup(self) -> InlineKeyboardMarkup:
+        id_ = Modul.validate(self.id)
         keyboard = [
             [
                 InlineKeyboardButton(
-                    'Baca di telegram', url=create_deep_linked_url(BOT_USERNAME, f"READ-{self.id}")
+                    'Baca di telegram', url=create_deep_linked_url(BOT_USERNAME, f"READ-{id_}")
                 )
             ],
             [
