@@ -1,4 +1,5 @@
 import requests
+from logging import getLogger
 from bs4 import BeautifulSoup
 from requests import Session
 from typing import List
@@ -14,15 +15,20 @@ class BahanAjar:
         self.email = email
         self.password = password
         self._my_books: List[Book] = []
-        if login:
-            self.login()
+        self.logger = getLogger(self.__class__.__name__)
+        if login and self.login():
+            self.logger.debug('Berhasil login ke bahan ajar')
 
     def login(self, email: str = None, password: str = None) -> bool:
-        email = email if email else self.email
-        password = password if password else self.password
-        url = f"http://bahanajar.ut.ac.id/Homes/login_frame/{email}/{password}//////?service="
-        res = self.session.post(url)
-        return res.ok
+        try:
+            email = email if email else self.email
+            password = password if password else self.password
+            url = f"http://bahanajar.ut.ac.id/Homes/login_frame/{email}/{password}//////?service="
+            res = self.session.post(url)
+            return res.ok
+        except:
+            pass
+        return False
 
     @property
     def my_books(self) -> List[Book]:

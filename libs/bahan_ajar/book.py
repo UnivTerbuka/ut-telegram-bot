@@ -1,3 +1,5 @@
+from logging import getLogger
+
 from bs4 import BeautifulSoup
 from dacite import from_dict
 from dataclasses import dataclass
@@ -9,6 +11,10 @@ from uuid import uuid4
 from config import URL_LOGO, BOT_USERNAME
 from ..rbv import Modul
 from ..utils import format_html
+
+
+logger = getLogger(__name__)
+
 
 @dataclass
 class Book:
@@ -37,6 +43,7 @@ class Book:
                 BOT_USERNAME, f"READ-{kode}")
         except:
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ")
+        logger.debug('Berhasil membuat {}'.format(repr(self)))
 
     def __str__(self):
         return self.text
