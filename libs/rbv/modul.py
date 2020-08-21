@@ -74,6 +74,7 @@ class Modul:
             datas = data
         else:
             datas = data.split(CALLBACK_SEPARATOR)
+
         @cached(CACHE, lock=LOCK)
         def get(subfolder, doc, end):
             data = {
@@ -88,7 +89,7 @@ class Modul:
                 end=int(datas[3])
                 ), int(datas[4]))
 
-    def message_page(self, page: int):
+    def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder
         texts = [
             f"Buku : {format_html.code(nama)}",
@@ -98,6 +99,12 @@ class Modul:
         ]
         return '\n'.join(texts)
 
-    def callback_data(self, page: int = 1, name:str = 'MODUL'):
+    def callback_data(self, page: int = 1, name: str = 'MODUL') -> str:
         datas = [name, self.subfolder, self.doc, str(self.end), str(page)]
         return CALLBACK_SEPARATOR.join(datas)
+
+    @staticmethod
+    def validate(id: str) -> str:
+        assert id[0:4].isalpha()
+        assert id[4:].isdigit()
+        return id[0:8].upper()
