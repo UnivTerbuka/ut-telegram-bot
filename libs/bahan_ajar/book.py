@@ -37,6 +37,9 @@ class Book:
         except:
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ")
 
+    def __str__(self):
+        return self.text
+
     @classmethod
     def from_bkthumb(cls, bkthumb: BeautifulSoup):
         data = {
@@ -61,9 +64,9 @@ class Book:
             f"Judul : {format_html.code(self.title)}",
             f"Penulis : {format_html.code(self.author)}",
             f"Modul : {format_html.code(self.modul)}",
-            format_html.href('\u200c', self.bookimages_url),
             format_html.href('Baca di rbv', self.rbv_url),
             format_html.href('Baca di telegram', self.depp_link_url),
+            format_html.href('\u200c', self.bookimages_url),
         ]
         return '\n'.join(texts)
 
