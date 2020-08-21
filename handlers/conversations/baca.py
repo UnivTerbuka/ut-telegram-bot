@@ -48,6 +48,9 @@ def answer(update: Update, code: str, context: CallbackContext = None):
         else:
             message.edit_text(
                 f'Buku {code} tidak ditemukan di rbv\n'
+                'Kode pastikan kode buku 8 karakter 4 huruf 4 angka'
+                'Jika kode melebihi 8 karakter, misal <code>SKOM420603</code>\n'
+                'Maka yang dituliskan adalah 8 karakter pertama, menjadi <code>SKOM4206</code>'
             )
     except Exception as E:
         logger.exception(E)
