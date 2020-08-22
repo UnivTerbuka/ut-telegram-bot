@@ -42,7 +42,7 @@ jobs:
       with:
         path: ~/.cache/pip
         key: ${{ matrix.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-key: |
+        restore-keys: |
           ${{ matrix.os }}-pip-
     - name: Cache windows
       uses: actions/cache@v2
@@ -50,7 +50,7 @@ jobs:
       with:
         path: ~\AppData\Local\pip\Cache
         key: ${{ matrix.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-key: |
+        restore-keys: |
           ${{ matrix.os }}-pip-
     - name: Install dependencies
       run: |
