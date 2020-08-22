@@ -3,7 +3,7 @@
 [![Group Telegram](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://t.me/UniversitasTerbuka)
 [![Donasi DANA](https://img.shields.io/badge/Donasi-DANA-blue)](https://link.dana.id/qr/1lw2r12r)
 [![LISENSI](https://img.shields.io/github/license/hexatester/ut-telegram-bot)](https://github.com/hexatester/ut-telegram-bot/blob/master/LISENSI)
-[![BUILD](https://img.shields.io/travis/com/hexatester/ut-telegram-bot)](https://travis-ci.com/github/hexatester/ut-telegram-bot)
+[![GitHub Actions](https://github.com/hexatester/ut-telegram-bot/workflows/GitHub%20Actions/badge.svg)](https://github.com/hexatester/ut-telegram-bot/actions?query=workflow%3AGithub%3AActions)
 
 Source code dari @UniversitasTerbukaBot dibuat untuk memudahkan mahasiswa Universitas Terbuka mengakses layanan Universitas Terbuka melalui aplikasi Telegram.
 
