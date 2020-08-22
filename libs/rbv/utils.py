@@ -1,15 +1,15 @@
 import os
-import pytesseract
+# import pytesseract
 from bs4 import BeautifulSoup, Tag
 from logging import getLogger
 from io import BytesIO
-from PIL import Image
+# from PIL import Image
 from requests import Response
 from .base import SESSION, USERNAME, PASSWORD, DOMAIN
 
 
-TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
-pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
+# pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 logger = getLogger(__name__)
 
 
@@ -45,27 +45,27 @@ def fetch_page(url: str, retry: int = 0, res: Tag = None, username: str = USERNA
                 return fetch_page(url, retry)
             return
     soup = BeautifulSoup(res.text, "lxml")
-    try:
-        captcha_image_url = soup.find('img')['src']
-        res = SESSION.get(DOMAIN + captcha_image_url)
-        if not res.ok:
-            if retry > 0:
-                retry -= 1
-                return fetch_page(url, retry)
-            return
-        with BytesIO() as img_bytes:
-            for chunk in res.iter_content(1024):
-                img_bytes.write(chunk)
-            img = Image.open(img_bytes)
-            captcha: str = pytesseract.image_to_string(img)
-    except:
-        captcha = get_chaptcha(soup)
-    if captcha:
-        captcha = captcha.strip()
-        if '\n' in captcha:
-            captcha = captcha.split('\n')[0]
-    else:
-        captcha = ''
+    # try:
+    #     captcha_image_url = soup.find('img')['src']
+    #     res = SESSION.get(DOMAIN + captcha_image_url)
+    #     if not res.ok:
+    #         if retry > 0:
+    #             retry -= 1
+    #             return fetch_page(url, retry)
+    #         return
+    #     with BytesIO() as img_bytes:
+    #         for chunk in res.iter_content(1024):
+    #             img_bytes.write(chunk)
+    #         img = Image.open(img_bytes)
+    #         captcha: str = pytesseract.image_to_string(img)
+    # except:
+    captcha = get_chaptcha(soup)
+    # if captcha:
+    #     captcha = captcha.strip()
+    #     if '\n' in captcha:
+    #         captcha = captcha.split('\n')[0]
+    # else:
+    #     captcha = ''
     data = {
         '_submit_check': '1',
         'username': USERNAME,
