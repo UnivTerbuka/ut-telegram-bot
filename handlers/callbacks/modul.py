@@ -44,7 +44,7 @@ def answer(send: Callable, data: Union[Modul, str], page_: int = None):
         InlineKeyboardButton('Tutup', callback_data='CLOSE')
     )
     halaman = InlineKeyboardButton(
-        'Ke Halaman?', callback_data=modul_.callback_data(page, 'HALAMAN'))
+        'Ke Halaman?', callback_data=modul_.callback_data(page, 'PAGE'))
     menu = helpers.build_menu(
         buttons=keyboard,
         n_cols=2,
