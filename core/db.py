@@ -3,4 +3,4 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 db = SQLAlchemy(current_app)
-from .models import *
+from .models import *  # NOQA
