@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 
 
-name: Test and Submit Coverage
+name: Test
 
 on:
   pull_request:
