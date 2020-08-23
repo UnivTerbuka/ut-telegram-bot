@@ -1,5 +1,6 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from telegram import Update
+from telegram.ext import (CallbackContext, Filters, CommandHandler,
+                          MessageHandler)
 from core.utils import action
 from libs.ticket import Ticket
 
@@ -9,8 +10,8 @@ GET_TICKET = range(1)
 
 
 def answer(update: Update, tiket: Ticket):
-    update.effective_message.reply_text(
-        str(tiket), reply_markup=tiket.reply_markup)
+    update.effective_message.reply_text(str(tiket),
+                                        reply_markup=tiket.reply_markup)
 
 
 @action.typing
@@ -23,8 +24,7 @@ def ticket(update: Update, context: CallbackContext):
         return -1
     update.effective_message.reply_text(
         'Kirimkan nomor tiket yang akan dicek...\n'
-        '/cancel untuk membatalkan'
-    )
+        '/cancel untuk membatalkan')
     return GET_TICKET
 
 
@@ -47,9 +47,8 @@ TICKET = {
     'name': COMMAND,
     'entry_points': [CommandHandler(COMMAND, ticket)],
     'states': {
-        GET_TICKET: [
-            MessageHandler(Filters.text & ~Filters.command, get_ticket)
-        ]
+        GET_TICKET:
+        [MessageHandler(Filters.text & ~Filters.command, get_ticket)]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
     'conversation_timeout': 180,

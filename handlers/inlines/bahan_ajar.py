@@ -1,4 +1,4 @@
-from telegram import Update, InlineQuery, InlineQueryResultPhoto
+from telegram import Update, InlineQuery
 from telegram.ext import CallbackContext
 from typing import List
 from libs.bahan_ajar import BahanAjar, Book

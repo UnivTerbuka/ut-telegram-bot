@@ -1,5 +1,6 @@
 from telegram import Update, MessageEntity
-from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from telegram.ext import (CallbackContext, Filters, CommandHandler,
+                          MessageHandler)
 from core.utils import action
 from libs import shorten_link
 
@@ -9,7 +10,8 @@ CREATE = range(1)
 
 
 def valid_link(link: str = ''):
-    return link and (link.startswith('https://') or link.startswith('http://')) and ' ' not in link
+    return link and (link.startswith('https://')
+                     or link.startswith('http://')) and ' ' not in link
 
 
 @action.typing
@@ -17,8 +19,7 @@ def short(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         'Kirimkan link yang akan dipendekkan...\n'
         'Diawali dengan https://... atau http://...\n'
-        '/cancel untuk membatalkan'
-    )
+        '/cancel untuk membatalkan')
     return CREATE
 
 
@@ -31,8 +32,7 @@ def create(update: Update, context: CallbackContext):
         new_link = shorten_link(link)
         if new_link:
             update.effective_message.reply_text(
-                f'''Sukses memendekan link {link}, menjadi {new_link}'''
-            )
+                f'''Sukses memendekan link {link}, menjadi {new_link}''')
         else:
             update.effective_message.reply_text('Gagal memendekkan link')
     return -1
@@ -45,8 +45,7 @@ def invalid(update: Update, context: CallbackContext):
         'Link tidak valid. :<\n'
         'Kirimkan link yang akan dipendekkan...\n'
         'Diawali dengan https://... atau http://...\n'
-        '/cancel untuk membatalkan perintah'
-    )
+        '/cancel untuk membatalkan perintah')
 
 
 @action.typing
@@ -59,8 +58,8 @@ SHORTLINK = {
     'entry_points': [CommandHandler(COMMAND, short)],
     'states': {
         CREATE: [
-            MessageHandler(Filters.text & Filters.entity(
-                MessageEntity.URL), create)
+            MessageHandler(Filters.text & Filters.entity(MessageEntity.URL),
+                           create)
         ]
     },
     'fallbacks': [CommandHandler('cancel', cancel)]

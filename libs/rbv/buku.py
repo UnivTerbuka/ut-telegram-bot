@@ -5,25 +5,21 @@ from logging import getLogger
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
 from dataclasses import dataclass, asdict
-from pathlib import Path
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.utils.helpers import create_deep_linked_url
 from typing import List, Optional
-from config import IMG_PATH, IMG_URL, BOT_USERNAME
+from config import IMG_PATH, BOT_USERNAME
 from .modul import Modul
 from .base import READER_URL, RETRY
 from .utils import fetch_page
 from ..utils import helpers
 
-
 logger = getLogger(__name__)
+
 
 def parse_th(th: Tag):
     a: Tag = th.find('a')
-    return {
-        'nama': a.text,
-        'url': READER_URL + a.attrs.get('href', '')
-    }
+    return {'nama': a.text, 'url': READER_URL + a.attrs.get('href', '')}
 
 
 @dataclass
@@ -41,9 +37,7 @@ class Buku:
             with open(self.config_path, 'r') as f:
                 datas: dict = json.load(f)
             for data in datas:
-                self.modul.append(
-                    from_dict(Modul, datas[data])
-                )
+                self.modul.append(from_dict(Modul, datas[data]))
             logger.debug('Buku dari cache {}'.format(repr(self)))
         elif self.initial and self.fetch() and self.modul:
             datas = {}
@@ -67,17 +61,11 @@ class Buku:
     @property
     def baca_reply_markup(self) -> InlineKeyboardMarkup:
         id_ = Modul.validate(self.id)
-        keyboard = [
-            [
-                InlineKeyboardButton(
-                    'Baca di telegram', url=create_deep_linked_url(BOT_USERNAME, f"READ-{id_}")
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    'Baca di rbv', url=self.url)
-            ]
-        ]
+        keyboard = [[
+            InlineKeyboardButton('Baca di telegram',
+                                 url=create_deep_linked_url(
+                                     BOT_USERNAME, f"READ-{id_}"))
+        ], [InlineKeyboardButton('Baca di rbv', url=self.url)]]
         return InlineKeyboardMarkup(keyboard)
 
     @property
@@ -86,17 +74,15 @@ class Buku:
         for modul in self.modul:
             nama = modul.nama if modul.nama else modul.doc
             keyboard.append(
-                InlineKeyboardButton(
-                    nama, callback_data=modul.callback_data()
-                )
-            )
+                InlineKeyboardButton(nama,
+                                     callback_data=modul.callback_data()))
         menu = helpers.build_menu(
-            buttons=keyboard, n_cols=2,
-            header_buttons=InlineKeyboardButton(
-                'Ruang Baca Virtual', url=self.url),
-            footer_buttons=InlineKeyboardButton(
-                'Tutup', callback_data='CLOSE')
-        )
+            buttons=keyboard,
+            n_cols=2,
+            header_buttons=InlineKeyboardButton('Ruang Baca Virtual',
+                                                url=self.url),
+            footer_buttons=InlineKeyboardButton('Tutup',
+                                                callback_data='CLOSE'))
         return InlineKeyboardMarkup(menu)
 
     @property

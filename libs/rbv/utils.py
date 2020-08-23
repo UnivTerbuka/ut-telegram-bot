@@ -2,11 +2,9 @@ import os
 # import pytesseract
 from bs4 import BeautifulSoup, Tag
 from logging import getLogger
-from io import BytesIO
 # from PIL import Image
 from requests import Response
-from .base import SESSION, USERNAME, PASSWORD, DOMAIN
-
+from .base import SESSION, USERNAME, PASSWORD
 
 # TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
 # pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -36,7 +34,11 @@ def get_chaptcha(soup: Tag) -> str:
         return str(c)
 
 
-def fetch_page(url: str, retry: int = 0, res: Tag = None, username: str = USERNAME, password: str = PASSWORD) -> Response:
+def fetch_page(url: str,
+               retry: int = 0,
+               res: Tag = None,
+               username: str = USERNAME,
+               password: str = PASSWORD) -> Response:
     if not res:
         res = SESSION.get(url)
         if not res.ok or not res.text:
@@ -93,9 +95,7 @@ def get_file(url, filepath, headers=None):
 
 
 def download(url, page, filepath, module_url, doc, subfolder):
-    headers = {
-        'Referer': module_url
-    }
+    headers = {'Referer': module_url}
     if os.path.isfile(filepath):
         return True
     if get_file(url, filepath, headers):
@@ -103,9 +103,10 @@ def download(url, page, filepath, module_url, doc, subfolder):
     res = fetch_page(module_url, 10)
     if not res or not res.ok:
         return False
-    page = (page//10+1)*10
+    page = (page // 10 + 1) * 10
     jsonp_url = f'http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}'
     res = SESSION.get(jsonp_url, headers=headers)
-    if res.ok and get_file(url, filepath, headers) and os.path.isfile(filepath):
+    if res.ok and get_file(url, filepath,
+                           headers) and os.path.isfile(filepath):
         return True
     return False

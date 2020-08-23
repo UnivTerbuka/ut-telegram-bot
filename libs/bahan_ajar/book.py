@@ -7,7 +7,6 @@ from typing import Optional
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.utils.helpers import create_deep_linked_url
-from uuid import uuid4
 from config import URL_LOGO, BOT_USERNAME
 from ..rbv import Modul
 from ..utils import format_html
@@ -31,7 +30,8 @@ class Book:
         try:
             self.modul = self.modul if self.modul else self.title.split(
                 '-')[0].strip()
-        except:
+        except Exception as E:
+            logger.exception(E)
             self.modul = ''
         self.rbv_url = self.rbv_url if self.rbv_url else f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.modul}" if self.modul else None
         self.epub_url = self.epub_url if self.epub_url else f"http://bahanajar.ut.ac.id/epub/cbc_files/{self.id}.epub"
@@ -41,8 +41,9 @@ class Book:
             kode = Modul.validate(self.modul)
             self.depp_link_url = create_deep_linked_url(
                 BOT_USERNAME, f"READ-{kode}")
-        except:
-            self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ")
+        except Exception as E:
+            logger.exception(E)
+            self.depp_link_url = create_deep_linked_url(BOT_USERNAME, "READ")
         logger.debug('Berhasil membuat {}'.format(repr(self)))
 
     def __str__(self):
