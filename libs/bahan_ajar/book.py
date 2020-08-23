@@ -33,10 +33,10 @@ class Book:
         except Exception as E:
             logger.exception(E)
             self.modul = ''
-        self.rbv_url = self.rbv_url if self.rbv_url else f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.modul}" if self.modul else None
-        self.epub_url = self.epub_url if self.epub_url else f"http://bahanajar.ut.ac.id/epub/cbc_files/{self.id}.epub"
-        self.bookimages_url = self.bookimages_url if self.bookimages_url else f"http://bahanajar.ut.ac.id/bookimages/{self.id}.jpg"
-        self.bookdetail_url = self.bookdetail_url if self.bookdetail_url else f"http://bahanajar.ut.ac.id/books/bookdetail/{self.id}"
+        self.rbv_url = self.rbv_url if self.rbv_url else f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.modul}" if self.modul else None  # NOQA
+        self.epub_url = self.epub_url if self.epub_url else f"http://bahanajar.ut.ac.id/epub/cbc_files/{self.id}.epub"  # NOQA
+        self.bookimages_url = self.bookimages_url if self.bookimages_url else f"http://bahanajar.ut.ac.id/bookimages/{self.id}.jpg"  # NOQA
+        self.bookdetail_url = self.bookdetail_url if self.bookdetail_url else f"http://bahanajar.ut.ac.id/books/bookdetail/{self.id}"  # NOQA
         try:
             kode = Modul.validate(self.modul)
             self.depp_link_url = create_deep_linked_url(
@@ -83,6 +83,7 @@ class Book:
     def reply_markup(self):
         keyboard = [
             [InlineKeyboardButton('Detail', url=self.bookdetail_url)],
+            [InlineKeyboardButton('Baca Sekarang', url=self.depp_link_url)],
             [InlineKeyboardButton('Ruang Baca Virtual', url=self.rbv_url)],
         ]
         return InlineKeyboardMarkup(keyboard)

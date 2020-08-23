@@ -6,10 +6,11 @@ from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass
 from pathlib import Path
+from telegram.utils.helpers import create_deep_linked_url
 from threading import RLock
 from typing import Optional, Union
 from urllib.parse import urlparse, parse_qsl
-from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
+from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME
 from .utils import download, fetch_page
 from ..utils import format_html
 
@@ -27,7 +28,7 @@ class Modul:
     end: Optional[int]
 
     def __post_init__(self):
-        self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"
+        self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"  # NOQA
         query = urlparse(self.url).query
         data = dict(parse_qsl(query))
         if not self.subfolder:
@@ -57,7 +58,7 @@ class Modul:
     def get_page(self, page: int) -> str:
         if page < 0 or page > self.end:
             return
-        url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"
+        url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"  # NOQA
         if download(url, page, self.abspath(page), self.url, self.doc,
                     self.subfolder):
             return self.absurl(page)
@@ -72,6 +73,12 @@ class Modul:
     def absurl(self, page: int) -> str:
         urls = [IMG_URL, self.subfolder, f"{self.doc}-{page}.jpg"]
         return "/".join(urls)
+
+    def deep_linked_page(self, page: int) -> str:
+        return create_deep_linked_url(
+            BOT_USERNAME,
+            payload=f"READ-{self.subfolder}-{self.doc}-{page}"
+        )
 
     @classmethod
     def from_data(cls, data: Union[list, str]):
@@ -94,11 +101,14 @@ class Modul:
 
     def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder
+        img = self.get_page(page)
+        share = self.deep_linked_page(page)
         texts = [
             f"Buku : {format_html.code(nama)}",
-            f"Modul : {format_html.code(self.doc)}",
-            format_html.href('\u200c', self.get_page(page)),
+            format_html.href('\u200c', img),
+            f"Modul : {format_html.href(self.doc, self.url)}",
             f"Halaman {page} dari {self.end} halaman.",
+            f"Klik kanan / tahan {format_html.href('Share', share)}, untuk membagikan halaman"  # NOQA
         ]
         return '\n'.join(texts)
 
