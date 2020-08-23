@@ -1,13 +1,18 @@
-from telegram import Update
+import logging
+import re
+from dacite import from_dict
+from telegram import Update, Message
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler, Job)
 from core.utils import action
 from handlers.jobs.baca import baca as job_baca
-from libs.rbv import Modul
+from handlers.jobs.modul import modul as job_modul
+from libs.rbv import Modul, Buku
 from libs.utils.helpers import cancel_markup
 
 COMMAND = 'baca'
 GET_BOOK = range(1)
+logger = logging.getLogger(__name__)
 
 
 def delete_data(data: dict):
@@ -62,8 +67,48 @@ def get_buku(update: Update, context: CallbackContext):
 
 
 def start(update: Update, context: CallbackContext):
-    code: str = context.args[0][5:]
-    return answer(update, code, context)
+    code: str = update.effective_message.text
+    # /start READ-ABCD1234
+    if len(code) == 20:
+        code: str = context.args[0][5:]
+        return answer(update, code, context)
+
+    # /start READ-ABCD1234-DOC-PAGE
+    match = re.match(r'^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$', code)
+    groups = match.groups()
+    if not match or len(groups) != 3:
+        update.effective_message.reply_text('Kode buku tidak valid')
+        return -1
+
+    subfolder, doc, page = groups
+    page = int(page)
+    message: Message = update.effective_message.reply_text(
+        'Mencari halaman...')
+    try:
+        buku: Buku = from_dict(Buku, {'id': subfolder})
+        if not buku:
+            message.edit_text('Buku tidak ditemukan.')
+            return -1
+
+        modul: Modul = buku.get_modul(doc)
+        if not modul:
+            message.edit_text('Modul tidak ditemukan.')
+            return -1
+
+        chat_id = update.effective_message.chat.id
+        data = f'MODUL|{subfolder}|{doc}|{modul.end}|{page}'
+        job_name = f"{chat_id}|{data}"
+
+        job = Job(callback=job_modul,
+                  context=(chat_id, message.message_id, data),
+                  name=job_name,
+                  repeat=False)
+        job.run(context.dispatcher)
+    except Exception as E:
+        logger.exception(E)
+        message.edit_text('Terjadi error.')
+        raise E
+    return -1
 
 
 @action.typing
@@ -80,11 +125,16 @@ BACA = {
         CommandHandler(COMMAND, baca),
         CommandHandler('start',
                        start,
-                       filters=Filters.regex(r'/start READ-[a-zA-Z]{4}\d+$')),
+                       filters=Filters.regex(r'^\/start READ-[A-Z]{4}\d{4}$')),
+        CommandHandler(
+            'start',
+            start,
+            filters=Filters.regex(
+                r'^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$')),
     ],
     'states': {
         GET_BOOK: [
-            MessageHandler(Filters.text & Filters.regex(r'^[A-Z]{4}\d+$'),
+            MessageHandler(Filters.text & Filters.regex(r'^[a-zA-Z]{4}\d+$'),
                            get_buku)
         ]
     },
