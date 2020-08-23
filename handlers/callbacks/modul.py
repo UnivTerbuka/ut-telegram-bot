@@ -1,67 +1,28 @@
-from telegram import Update, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
-from telegram.error import BadRequest
-from typing import Callable, Union
-from config import CALLBACK_SEPARATOR
-from libs.rbv import Buku, Modul
-from libs.utils import helpers
-
+from handlers.jobs.modul import modul as job_modul
 
 # Data : MODUL|SUBFOLDER|DOC|END|PAGE
 # Data : MODUL|MNAU1234|M1|12|1
 
 
-def answer(send: Callable, data: Union[Modul, str], page_: int = None):
-    if isinstance(data, Modul):
-        modul_ = data
-    else:
-        modul_, page = Modul.from_data(data)
-    if page_:
-        page = page_
-    keyboard = []
-    if page > 1:
-        keyboard.append(
-            InlineKeyboardButton(
-                'Sebelumnya',
-                callback_data=modul_.callback_data(page-1)
-            )
-        )
-    if page < modul_.end:
-        keyboard.append(
-            InlineKeyboardButton(
-                'Selanjutnya',
-                callback_data=modul_.callback_data(page+1)
-            )
-        )
-    footer = []
-    footer.append(
-        InlineKeyboardButton(
-            'Kembali',
-            callback_data=f"BUKU|{modul_.subfolder}"
-        )
-    )
-    footer.append(
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
-    )
-    halaman = InlineKeyboardButton(
-        'Ke Halaman?', callback_data=modul_.callback_data(page, 'PAGE'))
-    menu = helpers.build_menu(
-        buttons=keyboard,
-        n_cols=2,
-        header_buttons=halaman,
-        footer_buttons=footer,
-    )
-    send(
-        modul_.message_page(page),
-        reply_markup=InlineKeyboardMarkup(menu),
-        disable_web_page_preview=False,
-    )
-    return -1
-
-
 def modul(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
-    callback_query.answer()
+
     data: str = callback_query.data
-    answer(callback_query.edit_message_text, data)
+    chat_id: int = callback_query.message.chat_id
+    message_id: int = callback_query.message.message_id
+
+    job_name = f"{chat_id}|{data}"
+    if context.job_queue.get_jobs_by_name(job_name):
+        callback_query.answer('Sedang mengunduh halaman, harap bersabar..')
+        return -1
+    else:
+        callback_query.answer('Mengunduh halaman...')
+        context.job_queue.run_once(
+            callback=job_modul,
+            when=1,
+            context=(chat_id, message_id, data),
+            name=job_name,
+        )
     return -1
