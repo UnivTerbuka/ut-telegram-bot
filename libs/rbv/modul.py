@@ -6,10 +6,11 @@ from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass
 from pathlib import Path
+from telegram.utils.helpers import create_deep_linked_url
 from threading import RLock
 from typing import Optional, Union
 from urllib.parse import urlparse, parse_qsl
-from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
+from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME
 from .utils import download, fetch_page
 from ..utils import format_html
 
@@ -73,6 +74,12 @@ class Modul:
         urls = [IMG_URL, self.subfolder, f"{self.doc}-{page}.jpg"]
         return "/".join(urls)
 
+    def deep_linked_page(self, page: int) -> str:
+        return create_deep_linked_url(
+            BOT_USERNAME,
+            payload=f"READ-{self.subfolder}-{self.doc}-{page}"
+        )
+
     @classmethod
     def from_data(cls, data: Union[list, str]):
         if type(data) == list:
@@ -99,6 +106,7 @@ class Modul:
             f"Modul : {format_html.code(self.doc)}",
             format_html.href('\u200c', self.get_page(page)),
             f"Halaman {page} dari {self.end} halaman.",
+            "Klik tahan tombol Share, untuk membagikan halaman...",
         ]
         return '\n'.join(texts)
 
