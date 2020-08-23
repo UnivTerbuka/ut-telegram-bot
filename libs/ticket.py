@@ -2,15 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 from cachetools import cached, TTLCache
 from dacite import from_dict
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import InlineQueryResultArticle, InputTextMessageContent, ParseMode, Update
+from telegram import InlineQueryResultArticle, InputTextMessageContent
 from threading import RLock
-from typing import Union,  Optional
-from uuid import uuid4
+from typing import Optional
 from .config import HEADERS, CALLBACK_SEPARATOR
 from .utils import format_html
-
 
 CACHE = TTLCache(25, 60)
 LOCK = RLock()
@@ -47,14 +45,10 @@ class Ticket:
     @cached(CACHE, lock=LOCK)
     def from_nomor(cls, noticket: str):
         noticket = noticket.upper()
-        data = {
-            'nomor': noticket
-        }
+        data = {'nomor': noticket}
         if not cls.is_nomor_valid:
             return from_dict(cls, data)
-        params = {
-            'noticket': noticket
-        }
+        params = {'noticket': noticket}
         res = requests.get(URL, params=params, headers=HEADERS)
         if not res.ok or 'Tiket Tidak Ditemukan, silakan Lakukan Pencarian Ulang' in res.text:
             return from_dict(cls, data)
@@ -63,9 +57,8 @@ class Ticket:
         th = table.findAll('th')
         td = table.findAll('td')
         # data,
-        status = soup.find(
-            'div', class_=['col-md-4', 'col-sm-4']
-        ).find('span').text
+        status = soup.find('div', class_=['col-md-4',
+                                          'col-sm-4']).find('span').text
         data['status'] = status
         data['nama'] = th[2].text
         data['judul'] = th[6].text
@@ -80,7 +73,8 @@ class Ticket:
             data['nomor'] = td[10].text
             data['pesan'] = td[14].text
         else:
-            data['warning'] = f"status = {status} tidak dikenali, mohon hubugi @hexatester untuk mengimplementisakannya."
+            data[
+                'warning'] = f"status = {status} tidak dikenali, mohon hubugi @hexatester untuk mengimplementisakannya."
         return from_dict(cls, data)
 
     @property
@@ -106,12 +100,11 @@ class Ticket:
 
     @property
     def reply_markup(self):
-        keyboard = [
-            [InlineKeyboardButton('Detail', url=self.url)]
-        ]
+        keyboard = [[InlineKeyboardButton('Detail', url=self.url)]]
         if self.status == 'OPEN':
-            keyboard[0].append(InlineKeyboardButton(
-                'Refresh', callback_data=self.callback_data))
+            keyboard[0].append(
+                InlineKeyboardButton('Refresh',
+                                     callback_data=self.callback_data))
         return InlineKeyboardMarkup(keyboard)
 
     @property
@@ -121,8 +114,7 @@ class Ticket:
             title=self.judul,
             description=f"Status : {self.status}; Oleh :{self.nama}",
             input_message_content=InputTextMessageContent(
-                message_text=self.string
-            ),
+                message_text=self.string),
             reply_markup=self.reply_markup,
             thumb_url='http://hallo-ut.ut.ac.id/assets/images/image01.jpg',
             thumb_width=800,
@@ -131,4 +123,4 @@ class Ticket:
 
     @staticmethod
     def is_nomor_valid(ticket: str = ''):
-        return not ' ' in ticket
+        return ' ' not in ticket

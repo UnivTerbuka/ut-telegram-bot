@@ -10,11 +10,9 @@ def shorten_link(link: str, options='p', custom_ending=''):
     soup: BeautifulSoup = BeautifulSoup(res.text, features="lxml")
     token = soup.find('input', attrs={'name': '_token'})['value']
     if custom_ending:
-        data = {
-            'link_ending': custom_ending
-        }
+        data = {'link_ending': custom_ending}
         res = S.post('https://sl.ut.ac.id/api/v2/link_avail_check', data)
-        if not 'available' in res.text:
+        if 'available' not in res.text:
             return
     data = {
         'link-url': link,

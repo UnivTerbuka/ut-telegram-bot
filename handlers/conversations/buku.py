@@ -1,7 +1,8 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, ConversationHandler, Filters, CommandHandler, MessageHandler
+from telegram import Update
+from telegram.ext import (CallbackContext, Filters, CommandHandler,
+                          MessageHandler)
 from core.utils import action
-from libs.bahan_ajar import BahanAjar, Book
+from libs.bahan_ajar import BahanAjar
 
 COMMAND = 'buku'
 
@@ -14,13 +15,9 @@ def answer(update: Update, query: str):
         texts = []
         for book in books:
             texts.append(book.text)
-        update.effective_message.reply_text(
-            '\n'.join(texts)
-        )
+        update.effective_message.reply_text('\n'.join(texts))
     else:
-        update.effective_message.reply_text(
-            f'Buku `{query}` tidak ditemukan'
-        )
+        update.effective_message.reply_text(f'Buku `{query}` tidak ditemukan')
 
 
 @action.typing
@@ -29,10 +26,8 @@ def buku(update: Update, context: CallbackContext):
     if len(msg) > 5:
         answer(update, msg.lstrip('/buku '))
         return -1
-    update.effective_message.reply_text(
-        'Cari buku apa?\n'
-        '/cancel untuk membatalkan'
-    )
+    update.effective_message.reply_text('Cari buku apa?\n'
+                                        '/cancel untuk membatalkan')
     return GET_BOOKS
 
 
@@ -53,9 +48,8 @@ BUKU = {
     'name': COMMAND,
     'entry_points': [CommandHandler(COMMAND, buku)],
     'states': {
-        GET_BOOKS: [
-            MessageHandler(Filters.text & ~Filters.regex(r'^/'), get_buku)
-        ]
+        GET_BOOKS:
+        [MessageHandler(Filters.text & ~Filters.regex(r'^/'), get_buku)]
     },
     'fallbacks': [CommandHandler('cancel', cancel)],
     'conversation_timeout': 180,

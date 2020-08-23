@@ -6,18 +6,15 @@ from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass
 from pathlib import Path
-from telegram import Update, CallbackQuery
 from threading import RLock
-from typing import List, Optional, Union
+from typing import Optional, Union
 from urllib.parse import urlparse, parse_qsl
 from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR
-from .base import INDEX_URL
 from .utils import download, fetch_page
 from ..utils import format_html
 
-
 LOCK = RLock()
-CACHE = TTLCache(50, 10*60)
+CACHE = TTLCache(50, 10 * 60)
 logger = getLogger(__name__)
 
 
@@ -44,13 +41,10 @@ class Modul:
         self.filepath = os.path.join(IMG_PATH, self.subfolder)
         if not self.end:
             if self.fetch():
-                logger.debug(
-                    'Berhasil mendapatkan modul {}'.format(repr(self))
-                )
+                logger.debug('Berhasil mendapatkan modul {}'.format(
+                    repr(self)))
             else:
-                logger.debug(
-                    'Gagal mendapatkan modul {}'.format(repr(self))
-                )
+                logger.debug('Gagal mendapatkan modul {}'.format(repr(self)))
 
     def fetch(self) -> bool:
         res = fetch_page(self.url, retry=10)
@@ -64,7 +58,8 @@ class Modul:
         if page < 0 or page > self.end:
             return
         url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"
-        if download(url, page, self.abspath(page), self.url, self.doc, self.subfolder):
+        if download(url, page, self.abspath(page), self.url, self.doc,
+                    self.subfolder):
             return self.absurl(page)
         return
 
@@ -93,11 +88,9 @@ class Modul:
                 'end': end,
             }
             return from_dict(cls, data)
-        return (get(
-                subfolder=datas[1],
-                doc=datas[2],
-                end=int(datas[3])
-                ), int(datas[4]))
+
+        return (get(subfolder=datas[1], doc=datas[2],
+                    end=int(datas[3])), int(datas[4]))
 
     def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder

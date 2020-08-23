@@ -1,4 +1,4 @@
-from telegram import Update, Bot
+from telegram import Update
 from telegram.ext import CallbackContext
 from core.utils import action
 

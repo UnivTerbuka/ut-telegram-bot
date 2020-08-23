@@ -1,4 +1,5 @@
-from telegram import Update, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import (Update, CallbackQuery, InlineKeyboardButton,
+                      InlineKeyboardMarkup)
 from telegram.ext import CallbackContext
 from config import CALLBACK_SEPARATOR
 from libs.utils.helpers import build_menu
@@ -29,48 +30,37 @@ def page(update: Update, context: CallbackContext):
         number = current // 10
 
     # Number buttons
-    a = 10*number if 10*number > 1 else 1
-    b = 10*(number+1)
+    a = 10 * number if 10 * number > 1 else 1
+    b = 10 * (number + 1)
     keyboard = []
     limit = False
     for page_number in range(a, b):
         if page_number > end:
             limit = True
             break
-        datas = f'MODUL,{subfolder},{doc},{end},{page_number}'.replace(',', CALLBACK_SEPARATOR)
+        datas = f'MODUL,{subfolder},{doc},{end},{page_number}'.replace(
+            ',', CALLBACK_SEPARATOR)
         keyboard.append(
-            InlineKeyboardButton(
-                str(page_number),
-                callback_data=datas
-            )
-        )
+            InlineKeyboardButton(str(page_number), callback_data=datas))
 
     # Header buttons
     header = []
     if number > 0:
         datas = f"PAGE,{subfolder},{doc},{end},{current},{number - 1}".replace(
             ',', CALLBACK_SEPARATOR)
-        header.append(
-            InlineKeyboardButton('Sebelumnya', callback_data=datas)
-        )
+        header.append(InlineKeyboardButton('Sebelumnya', callback_data=datas))
     if not limit:
         datas = f"PAGE,{subfolder},{doc},{end},{current},{number + 1}".replace(
             ',', CALLBACK_SEPARATOR)
-        header.append(
-            InlineKeyboardButton('Selanjutnya', callback_data=datas)
-        )
+        header.append(InlineKeyboardButton('Selanjutnya', callback_data=datas))
 
     # Footer buttons
     foooter = [
         InlineKeyboardButton(
             'Kembali',
             callback_data=f'MODUL,{subfolder},{doc},{end},{current}'.replace(
-                ',', CALLBACK_SEPARATOR)
-        ),
-        InlineKeyboardButton(
-            'Tutup',
-            callback_data='CLOSE'
-        )
+                ',', CALLBACK_SEPARATOR)),
+        InlineKeyboardButton('Tutup', callback_data='CLOSE')
     ]
 
     menu = build_menu(
@@ -79,7 +69,5 @@ def page(update: Update, context: CallbackContext):
         header_buttons=header,
         footer_buttons=foooter,
     )
-    callback_query.edit_message_reply_markup(
-        InlineKeyboardMarkup(menu)
-    )
+    callback_query.edit_message_reply_markup(InlineKeyboardMarkup(menu))
     return -1

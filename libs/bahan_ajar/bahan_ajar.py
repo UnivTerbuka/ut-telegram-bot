@@ -26,8 +26,8 @@ class BahanAjar:
             url = f"http://bahanajar.ut.ac.id/Homes/login_frame/{email}/{password}//////?service="
             res = self.session.post(url)
             return res.ok
-        except:
-            pass
+        except Exception as E:
+            self.logger.exception(E)
         return False
 
     @property

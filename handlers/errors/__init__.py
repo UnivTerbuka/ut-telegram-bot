@@ -1,7 +1,7 @@
 import sys
 import traceback
-from telegram.error import (TelegramError, Unauthorized, BadRequest,
-                            TimedOut, ChatMigrated, NetworkError)
+from telegram.error import (TelegramError, Unauthorized, BadRequest, TimedOut,
+                            ChatMigrated, NetworkError)
 from telegram.utils.helpers import mention_html
 
 

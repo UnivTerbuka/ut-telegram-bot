@@ -16,5 +16,4 @@ def start(update: Update, context: CallbackContext):
         '/shortlink - Memendekan url dengan <a href="https://sl.ut.ac.id/">sl-ut</a>\n'
         '/link - Daftar link UT\n'
         '/formulir - Daftar Formulir\n'
-        '/about - Tentang bot ini\n'
-    )
+        '/about - Tentang bot ini\n')
