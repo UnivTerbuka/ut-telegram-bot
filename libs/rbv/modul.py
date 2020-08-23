@@ -101,12 +101,14 @@ class Modul:
 
     def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder
+        img = self.get_page(page)
+        share = self.deep_linked_page(page)
         texts = [
             f"Buku : {format_html.code(nama)}",
-            f"Modul : {format_html.code(self.doc)}",
-            format_html.href('\u200c', self.get_page(page)),
+            format_html.href('\u200c', img),
+            f"Modul : {format_html.href(self.doc, self.url)}",
             f"Halaman {page} dari {self.end} halaman.",
-            "Klik tahan tombol Share, untuk membagikan halaman...",
+            f"Klik kanan / tahan {format_html.href('Share', share)}, untuk membagikan halaman"  # NOQA
         ]
         return '\n'.join(texts)
 

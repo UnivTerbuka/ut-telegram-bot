@@ -21,15 +21,12 @@ def modul(context: CallbackContext):
                                  callback_data=modul_.callback_data(page + 1)))
     footer = []
     footer.append(
-        InlineKeyboardButton('Kembali',
+        InlineKeyboardButton('Pilih modul',
                              callback_data=f"BUKU|{modul_.subfolder}"))
     footer.append(InlineKeyboardButton('Tutup', callback_data='CLOSE'))
-    header = []
-    header.append(
-        InlineKeyboardButton('Share', url=modul_.deep_linked_page(page)))
-    header.append(
-        InlineKeyboardButton('Ke Halaman?',
-                             callback_data=modul_.callback_data(page, 'PAGE')))
+    header = InlineKeyboardButton('Ke Halaman?',
+                                  callback_data=modul_.callback_data(
+                                      page, 'PAGE'))
     menu = build_menu(
         buttons=keyboard,
         n_cols=2,
