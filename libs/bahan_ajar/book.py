@@ -83,6 +83,7 @@ class Book:
     def reply_markup(self):
         keyboard = [
             [InlineKeyboardButton('Detail', url=self.bookdetail_url)],
+            [InlineKeyboardButton('Baca Sekarang', url=self.depp_link_url)],
             [InlineKeyboardButton('Ruang Baca Virtual', url=self.rbv_url)],
         ]
         return InlineKeyboardMarkup(keyboard)
