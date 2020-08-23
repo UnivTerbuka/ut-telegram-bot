@@ -28,7 +28,7 @@ class Modul:
     end: Optional[int]
 
     def __post_init__(self):
-        self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"
+        self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"  # NOQA
         query = urlparse(self.url).query
         data = dict(parse_qsl(query))
         if not self.subfolder:
@@ -58,7 +58,7 @@ class Modul:
     def get_page(self, page: int) -> str:
         if page < 0 or page > self.end:
             return
-        url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"
+        url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"  # NOQA
         if download(url, page, self.abspath(page), self.url, self.doc,
                     self.subfolder):
             return self.absurl(page)
