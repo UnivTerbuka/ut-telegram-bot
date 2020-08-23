@@ -22,3 +22,4 @@ IMG_URL = BASE_URL + 'images/'
 WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
 URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'
 BOT_USERNAME = os.environ.get('BOT_USERNAME', 'UniversitasTerbukaBot')
+DEVS = [529004070]

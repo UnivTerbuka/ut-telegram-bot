@@ -1,9 +1,10 @@
 from telegram import Update
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
-                          MessageHandler)
+                          MessageHandler, Job)
 from core.utils import action
 from handlers.jobs.baca import baca as job_baca
 from libs.rbv import Modul
+from libs.utils.helpers import cancel_markup
 
 COMMAND = 'baca'
 GET_BOOK = range(1)
@@ -26,15 +27,17 @@ def get_data(data: dict):
 def answer(update: Update, code: str, context: CallbackContext = None):
     if Modul.is_valid(code):
         chat_id = update.message.chat_id
-        job_name = f'BACA|{chat_id}|{code}'
+        job_name = f'{chat_id}|BACA|{code}'
         if context.job_queue.get_jobs_by_name(job_name):
-            update.effective_message.reply_text('Sedang mencari buku...')
+            update.effective_message.reply_text(
+                'Sedang mencari buku...', reply_markup=cancel_markup(job_name))
             return -1
         update.effective_message.reply_text('Mencari buku...')
-        context.job_queue.run_once(callback=job_baca,
-                                   when=1,
-                                   context=(chat_id, code),
-                                   name=job_name)
+        job = Job(callback=job_baca,
+                  context=(chat_id, code),
+                  name=job_name,
+                  repeat=False)
+        job.run(context.dispatcher)
     else:
         update.effective_message.reply_text('Kode buku tidak valid')
     return -1

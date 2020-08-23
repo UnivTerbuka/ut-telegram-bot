@@ -3,11 +3,12 @@ import traceback
 from telegram.error import (TelegramError, Unauthorized, BadRequest, TimedOut,
                             ChatMigrated, NetworkError)
 from telegram.utils.helpers import mention_html
+from config import DEVS
 
 
 def error_callback(update, context):
     # add all the dev user_ids in this list. You can also add ids of channels or groups.
-    devs = [529004070]
+    devs = DEVS
     # we want to notify the user of this problem. This will always work, but not notify users if the update is an
     # callback or inline query, or a poll update. In case you want this, keep in mind that sending the message
     # could fail

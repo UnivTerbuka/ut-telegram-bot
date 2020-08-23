@@ -1,5 +1,5 @@
 from telegram import Update, CallbackQuery
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, Job
 from handlers.jobs.modul import modul as job_modul
 
 # Data : MODUL|SUBFOLDER|DOC|END|PAGE
@@ -19,10 +19,9 @@ def modul(update: Update, context: CallbackContext):
         return -1
     else:
         callback_query.answer('Mengunduh halaman...')
-        context.job_queue.run_once(
-            callback=job_modul,
-            when=1,
-            context=(chat_id, message_id, data),
-            name=job_name,
-        )
+        job = Job(callback=job_modul,
+                  context=(chat_id, message_id, data),
+                  name=job_name,
+                  repeat=False)
+        job.run(context.dispatcher)
     return -1
