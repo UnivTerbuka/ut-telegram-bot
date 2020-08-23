@@ -47,6 +47,11 @@ class Buku:
                 json.dump(datas, f)
             logger.debug('Berhasil mendapatkan buku {}'.format(repr(self)))
 
+    def get_modul(self, doc: str) -> Optional[Modul]:
+        for modul in self.modul:
+            if modul.doc == doc:
+                return modul
+
     def fetch(self) -> bool:
         res = fetch_page(self.url, RETRY)
         if not res or not res.ok:
