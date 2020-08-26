@@ -48,20 +48,20 @@ class UniversitasTerbukaBot(object):
         self.defaults = Defaults(parse_mode=ParseMode.HTML,
                                  disable_web_page_preview=True)
         # Init bot
-        q = messagequeue.MessageQueue(all_burst_limit=3,
-                                      all_time_limit_ms=3000)
-        request = Request(con_pool_size=8)
-        self.bot = QueueBot(token=TOKEN,
-                            request=request,
-                            mqueue=q,
-                            defaults=self.defaults)
-        # Register handlers
-        self.updater: QueueUpdater = QueueUpdater(self.bot,
-                                                  use_context=True,
-                                                  defaults=self.defaults)
-        # self.updater: Updater = Updater(
-        #     TOKEN, use_context=True, defaults=self.defaults
-        # )
+        # q = messagequeue.MessageQueue(all_burst_limit=3,
+        #                               all_time_limit_ms=3000)
+        # request = Request(con_pool_size=8)
+        # self.bot = QueueBot(token=TOKEN,
+        #                     request=request,
+        #                     mqueue=q,
+        #                     defaults=self.defaults)
+        # # Register handlers
+        # self.updater: QueueUpdater = QueueUpdater(self.bot,
+        #                                           use_context=True,
+        #                                           defaults=self.defaults)
+        self.updater: Updater = Updater(
+            TOKEN, use_context=True, defaults=self.defaults
+        )
         self.dp: Dispatcher = self.updater.dispatcher
         from handlers import Handlers, error_callback
         self.dp.add_error_handler(error_callback)
