@@ -33,4 +33,4 @@ class TestRbv:
         assert type(buku.text) == str
         assert type(buku.url) == str
         assert len(buku) == 1
-        assert bool(buku) == True
+        assert bool(buku) is True
