@@ -4,6 +4,7 @@ from dacite import from_dict
 from telegram import Update, Message
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler, Job)
+from telegram.ext.dispatcher import run_async
 from core.utils import action
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
@@ -48,6 +49,7 @@ def answer(update: Update, code: str, context: CallbackContext = None):
     return -1
 
 
+@run_async
 @action.typing
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
@@ -60,12 +62,14 @@ def baca(update: Update, context: CallbackContext):
     return GET_BOOK
 
 
+@run_async
 @action.typing
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
     return answer(update, code, context)
 
 
+@run_async
 def start(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
     # /start READ-ABCD1234
