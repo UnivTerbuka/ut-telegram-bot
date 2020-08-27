@@ -77,7 +77,7 @@ class UniversitasTerbukaBot(object):
         self.dp.process_update(update)
 
     def polling(self):
-        self.updater.start_polling()
+        self.updater.start_polling(clean=True)
 
 
 def get_blueprint(token, name):
