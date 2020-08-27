@@ -1,6 +1,7 @@
 from telegram import (Update, CallbackQuery, InlineKeyboardButton,
                       InlineKeyboardMarkup)
 from telegram.ext import CallbackContext
+from telegram.ext.dispatcher import run_async
 from config import CALLBACK_SEPARATOR
 from libs.utils.helpers import build_menu
 
@@ -14,6 +15,7 @@ from libs.utils.helpers import build_menu
 # [Kembali] [Tutup]
 
 
+@run_async
 def page(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     if not callback_query or not callback_query.data:

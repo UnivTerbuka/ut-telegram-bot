@@ -16,14 +16,6 @@
         "TOKEN": {
             "description": "Token dari bot",
             "value": "TOKEN!"
-        },
-        "TESSDATA_PREFIX": {
-            "description": "Jangan dirubah :D",
-            "value": "./.apt/usr/share/tesseract-ocr/4.00/tessdata"
-        },
-        "TESSERACT_CMD": {
-            "description": "Jangan dirubah :D",
-            "value": "/app/.apt/usr/bin/tesseract"
         }
     },
     "buildpacks": [
