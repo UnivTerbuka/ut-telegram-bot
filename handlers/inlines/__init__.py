@@ -3,6 +3,7 @@ from logging import Logger
 from telegram.ext import Dispatcher, InlineQueryHandler
 # InlineQuery
 from .bahan_ajar import bahan_ajar
+from .search import search
 from .ticket import ticket
 
 
@@ -11,7 +12,8 @@ class InlineMixin(object):
     INLINES_GROUP: int = 0
     INLINES: List[InlineQueryHandler] = [
         InlineQueryHandler(ticket, pattern=r'^[A-Z]\d{10}-\d{8}$'),
-        InlineQueryHandler(bahan_ajar, pattern=r'^[A-Z]{4}\d+$'),
+        InlineQueryHandler(bahan_ajar, pattern=r'^[a-zA-Z]{4}\d{4}$'),
+        InlineQueryHandler(search),
     ]
 
     def register_inline(self, dispatcher: Dispatcher):
