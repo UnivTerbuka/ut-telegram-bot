@@ -1,0 +1,158 @@
+- topic: Register Calon Mahasiwa Baru
+  qna:
+  - answer: |
+      "Klik menu Register Akun, dilanjutkan klik tombol Register Calon Mahasiswa UT pada halaman https://sia.ut.ac.id/.\n
+      Ikuti langkah-langkah yang diminta oleh sistem : \n
+      * Panduan tata cara register dapat didownload pada menu Panduan"
+    question: " Bagaimana cara register untuk calon mahasiswa?"
+  - answer: |
+      "Tidak ada peraturan khusus terkait dengan jenis email, namun pastikan kembali
+      email yang anda daftarkan adalah email valid (masih bisa digunakan). "
+    question: |
+      Adakah jenis email khusus yang hanya dapat digunakan untuk melakukan register
+      akun?
+  - answer: "Setelah proses register akun, sistem akan mengirimkan email yang berisi link aktivasi. Link aktivasi berfungsi untuk mengaktifkan akun sehingga anda dapat masuk/login kedalam sistem dan melakukan aktivitas didalamnya."
+    question: "Apakah yang harus saya lakukan setelah register akun sebagai calon mahasiwa?"
+  - answer: "Tidak bisa, email anda hanya bisa digunakan selama 1 kali proses register."
+    question: "Apakah email bisa digunakan untuk lebih dari 1 kali register?"
+  - answer: "Silahkan lapor ke UPBJJ tempat anda mendaftar atau Hallo UT"
+    question: "Bagaimana jika pada saat melakukan register, saya salah memasukan alamat email?"
+
+- topic: Register Mahasiswa UT
+  qna:
+  - answer: |
+      "Klik menu “Register Akun”, dilanjutkan klik tombol “Register Mahasiswa UT” pada halaman https://sia.ut.ac.id/
+      Input data “Aktivasi Akun NIM Mahasiswa Lama” :
+      - Panduan tata cara aktivasi akun mahasiswa lama dapat didownload pada menu “Panduan”, atau
+      - Video tata cara aktivasi akun mahasiswa lama mahasiswa UT bisa di cek <a href="https://www.youtube.com/watch?v=8jKb_iDWnEI&t=0s&index=7&list=PLhUGNK-BPuwAUJX8hKMQl6KYIpghljJqd">disini</a>"
+    question: "Apakah yang harus saya lakukan apabila saya sudah memiliki nim namun saya belum memiliki akun SIA?"
+  - answer: "Setelah proses register akun, sistem akan mengirimkan email yang berisi link aktivasi. Link aktivasi berfungsi untuk mengaktifkan akun sehingga anda dapat masuk/ login kedalam sistem dan melakukan aktivitas didalamnya."
+    question: "Apa yang yang harus dilakukan setelah melakukan register?"
+
+- topic: Aktivasi Akun
+  qna:
+  - answer: "Cek menu Spam pada email anda."
+    question: "Bagaimana jika link aktivasi tidak terkirim kedalam email yang sudah di daftarkan?"
+  - answer: |
+      "Klik menu “Aktivasi & Login” kemudian klik tombol “Aktivasi Akun Mahasiwa”.
+      Untuk penjelasan lebih lengkap dapat diklik <a href="https://www.youtube.com/watch?v=M-IboXUV9ns&t=0s&index=2&list=PLhUGNK-BPuwAUJX8hKMQl6KYIpghljJqd">disini</a>."
+    question: "Bagamiana jika link aktivasi sudah expired (lebih dari 3 x 24 jam)?"
+
+- topic: Login
+  qna:
+  - answer: |
+      "Lapor ke UPBJJ masing-masing dan minta kepada petugas terkait untuk reset email.
+      Lakukan proses register ulang dan aktivasi akun dengan memilih menu “Register Akun” dan klik tombol “Register Mahasiswa UT” pada halaman https://sia.ut.ac.id/. "
+    question: "Bagaimana jika ketika saya login, status saya masih calon mahasiswa padahal sudah memiliki nim?"
+  - answer: |
+      "Klik menu “Aktivasi & Login” pada halaman https://sia.ut.ac.id/.
+      Klik tombol “Login”.
+      Klik “Forgot Your Password?”, kemuadian ikuti langkah-langkah yang diminta oleh sistem.
+      Video tata cara forgot password bisa di cek <a href="https://www.youtube.com/watch?v=hJURo7UKQ5Y">disini</a>."
+    question: "Bagaimana jika saya lupa password login?"
+
+- topic: Registrasi Data Pribadi
+  qna:
+  - answer: |
+      "Tata cara registrasi data pribadi program NON PENDAS dapat diklik <a href="https://www.youtube.com/watch?v=qQTvH76VHNo&t=0s&index=5&list=PLhUGNK-BPuwAUJX8hKMQl6KYIpghljJqd">disini</a>."
+    question: "Bagaimana cara registrasi data pribadi program NON Pendidikan Dasar (NON PENDAS)?"
+  - answer: "Silahkan menghubungi UPBJJ tempat anda mendaftar."
+    question: "Bagaimana jika saya salah memilih program studi?"
+  - answer: "Tidak bisa, calon mahasiswa pendas hanya bisa melakukan pendaftaran data pribadi melalui UPBJJ."
+    question: "Apakah calon mahasiswa pendas bisa melakukan registrasi data pribadi secara online (mandiri)?"
+  - answer: |
+      "Pastikan mengupload dengan jenis file yang sesuai dengan jenis yang diminta.
+      Ukuran file maksimal 1 MB."
+    question: "Bagaimana jika saya selalu gagal upload berkas?"
+  - answer:
+      "Data pribadi dapat diubah selama data belum divalidasi oleh pegawai UPBJJ.
+      Jika data telah tervalidasi dan memiliki nim maka data sudah tidak dapat diubah kembali. Silahkan menghubungi UPBJJ terkait atau Hallo UT mengenai kasus tersebut."
+    question: "Bagaimana jika saya salah menginput informasi data pribadi?"
+- topic: Registrasi Matakuliah (Reguler) Pendas
+  qna:
+  - answer: "Cek kembali katalog.
+    Lapor kepada UPBJJ tempat anda mendaftar atau Hallo UT."
+    question: "Bagaimana jika keterangan tingkat semester tidak sesuai ketika akan melakukan proses registrasi matakuliah?"
+  - answer: "Silahkan menghubungi UPBJJ atau Hallo UT untuk melakukan pengecekan dan pendaftaran tempat ujian sesuai dengan data pribadi anda."
+    question: "Bagaimana jika muncul keterangan “Tempat Ujian tidak ditemukan, harap hubungi BAKP”?"
+  - answer: |
+        "Lokasi ujian dapat diubah selama billing belum dibayar lunas, dengan langkah-langkah :
+        - Lakukan drop billing registrasi. 
+        - Lakukan registrasi ulang. 
+        Namun jika billing sudah lunas, silahkan menghubungi UPBJJ tempat anda mendaftar atau Hallo UT."
+    question: "Bagaimana jika saya ingin mengganti lokasi ujian?"
+  - answer: "Cek kembali katalog anda, jika tidak sesuai segera hubungi UPBJJ terkait atau Hallo UT."
+    question: "Bagaimana jika daftar paket matakuliah tidak sesuai dengan katalog?"
+  - answer:
+          "Jumlah maksimal registrasi matakuliah adalah 9 kali per semester.
+          Jumlah maksimal SKS yang diambil adalah 24 SKS/Semester."
+    question: "Berapa jumlah maksimal registrasi matakuliah dan sks yang dapat diambil untuk setiap semesternya?"
+
+- topic: Registrasi Matakuliah (Ulang) Pendas
+  qna:
+  - answer: "Bisa selama billing registrasi Ujul belum berstatus <b>Lunas</b>, silahkan drop dahulu billing matakuliah ujian ulang (UJUL) yang telah tercreate kemudian registrasi kembali matakuliah ulang (UJUL)."
+    question: "Saya salah mengambil matakuliah ulang, apakah bisa diubah?"
+
+- topic: Pembayaran Billing Pendas
+  qna:
+  - answer: "Silahkan hubungi UPBJJ terkait atau Hallo UT."
+    question: "Saya salah mengambil matakuliah Ujul namun sudah terlanjur membayar, apakah yang harus saya lakukan?"
+  - answer: "Silahkan hubungi UPBJJ terkait atau Hallo UT."
+    question: "Paket semester saya tidak sesuai namun saya sudah terlanjur membayar, apakah yang harus saya lakukan?"
+
+- topic: Sistem Paket Semester (SIPAS)
+  qna:
+  - answer: |
+          "Tata cara registrasi program SIPAS dapat diklik <a href="https://www.youtube.com/watch?v=wFggJhzmXxI&t=0s&index=4&list=PLhUGNK-BPuwAUJX8hKMQl6KYIpghljJqd">disini</a>."
+    question: "Bagaimana cara registrasi program Sistem Paket (SIPAS)?"
+  - answer: "Untuk penanganan kasus tersebut silahkan melapor ke UPBJJ tempat anda mendaftarakan diri atau Hallo UT."
+    question: "Bagaimana jika saya mendaftar registrasi dengan layanan sipas namun ketika ingin melakukan registrasi tampilan sistem yang keluar adalah tampilan registrasi matakuliah non sipas?"
+  - answer: "Untuk penanganan kasus tersebut silahkan melapor ke UPBJJ tempat anda mendaftarakan diri atau Hallo UT."
+    question: "Bagaimana jika tingkat semester dan paket yang tampil tidak sesuai?"
+  - answer: |
+          "Lakukan registrasi paket matakuliah, kemudian dilanjutkan dengan registrasi matakuliah ujian ulang (Ujul). Untuk penjelasan lebih lengkap dapat diklik <a href="https://www.youtube.com/watch?v=ll3GHbk4CSA&t=0s&index=3&list=PLhUGNK-BPuwAUJX8hKMQl6KYIpghljJqd">disini</a>."
+    question: "Bagaimana cara mendaftar ujian ulang (Ujul)?"
+  - answer: "Untuk penanganan kasus tersebut silahkan melapor ke UPBJJ tempat anda mendaftarakan diri atau Hallo UT."
+    question: "Bagaimana jika saya sudah bebas semester namun masih keluar daftar paket matakuliah?"
+  - answer: "Untuk penanganan kasus tersebut silahkan konfirmasi ke UPBJJ tempat anda mendaftarakan diri atau Hallo UT."
+    question: "Bisakan pindah layanan dari sipas ke non sipas?"
+
+- topic: Non Sistem Paket Semester (Non SIPAS) dan Bahan Ajar
+  qna:
+  - answer: |
+          "Tata cara registrasi matakuliah NON SIPAS dapat diklik <a href="https://youtu.be/pe2iyk3npP0">disini</a>."
+    question: "Bagaimana cara melakukan registrasi Matakuliah NON SIPAS?"
+  - answer: "Bagaimana jika keterangan tempat uijan tidak keluar padahal sudah diinput kode tempat ujiannya?"
+    image: "https://sia.ut.ac.id/assets/images/tempatujiantidakkeluar.png"
+    question: "Data yang diinput adalah “Nama” tempat ujian."
+  - answer: "Ya, pembelian buku bersifat wajib untuk matakuliah yang baru diambil pertama kali."
+    question: "Apakah pembelian buku bersifat wajib?"
+  - answer: "Silahkan aktifkan billing ajar anda kembali menggunakan fasilitas aktivasi billing pada peragaan billing."
+    image: "https://sia.ut.ac.id/assets/images/aktivasibilling.png"
+    question: "Bagaimana jika billing bahan ajar saya sudah expired?"
+  - answer: "Bisa, anda bisa membayarkan billing bahan ajar terlebih dahulu baru membayar billling registrasi matakuliah."
+    question: "Apakah bisa membayar billing Bahan ajar terlebih dahulu dibanding billing registrasi matakuliah?"
+  - answer: "Cek kembali apakah anda pernah melakukan registrasi program lain seperti tutorial tatap muka (TTM). Jika iya, maka drop terlebih dahulu billing tersebut baru anda dapat melakukan drop billing registrasi non sipas."
+    question: "Mengapa saya tidak bisa melakukan drop billing non sipas?"
+
+- topic: Tutorial Online
+  qna:
+  - answer: "Registrasi tuton adalah langkah kedua yang harus dilakukan mahasiswa jika ingin mengikuti kegiatan tutorial pada semester berjalan. Registrasi matakuliah tuton dilakukan dilaman Sistem Informasi Akademik UT : https://sia.ut.ac.id/."
+    question: "Apa yang dimaksud dengan registrasi Tuton (Tutorial Online) ?"
+  - answer: "Tuton tidak bersifat wajib, namun apabila ingin mengikuti tuton silahkan klik button check list “Reg Tuton”."
+    image: "https://sia.ut.ac.id/assets/images/regtuton.png"
+    question: "Apakah tuton bersifat wajib ?"
+  - answer: "Silahkan update status tuton, update status tuton dapat dilakukan selama dalam rentang batas waktu yang ditelah ditentukan. Proses update tuton dapat dilakukan pada menu “Update Reg Tuton”."
+    image: "https://sia.ut.ac.id/assets/images/updateregtuton.png"
+    question: "Bagaimana jika saya ingin mengikui tuton namun saya terlanjur menyimpan data registrasi matakuliah tanpa men-check list “Reg Tuton” ?"
+
+- topic: Pembayaran
+  qna:
+  - answer: |
+        "Anda bisa melakukan proses pembayaran pada Bank atau merchant yang bekerjasama dengan Universitas Terbuka, seperti :
+        • Bank BRI
+        • Bank Mandiri
+        • Bank BTN
+        • Bank BNI
+        • Alfamart"
+    question: "Dimana saya bisa melakukan pembayaran registrasi?"
