@@ -1,7 +1,6 @@
 from telegram import Update
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler)
-from telegram.ext.dispatcher import run_async
 from core.utils import action
 from libs.ticket import Ticket
 
@@ -15,7 +14,6 @@ def answer(update: Update, tiket: Ticket):
                                         reply_markup=tiket.reply_markup)
 
 
-@run_async
 @action.typing
 def ticket(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
@@ -30,7 +28,6 @@ def ticket(update: Update, context: CallbackContext):
     return GET_TICKET
 
 
-@run_async
 @action.typing
 def get_ticket(update: Update, context: CallbackContext):
     noticket: str = update.effective_message.text

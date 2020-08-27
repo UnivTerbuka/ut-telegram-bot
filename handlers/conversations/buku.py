@@ -1,7 +1,6 @@
 from telegram import Update
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler)
-from telegram.ext.dispatcher import run_async
 from core.utils import action
 from libs.bahan_ajar import BahanAjar
 
@@ -21,7 +20,6 @@ def answer(update: Update, query: str):
         update.effective_message.reply_text(f'Buku `{query}` tidak ditemukan')
 
 
-@run_async
 @action.typing
 def buku(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
@@ -33,7 +31,6 @@ def buku(update: Update, context: CallbackContext):
     return GET_BOOKS
 
 
-@run_async
 @action.typing
 def get_buku(update: Update, context: CallbackContext):
     query: str = update.effective_message.text

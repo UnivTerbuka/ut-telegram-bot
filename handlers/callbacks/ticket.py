@@ -1,12 +1,10 @@
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
-from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from libs.ticket import Ticket
 from config import CALLBACK_SEPARATOR
 
 
-@run_async
 def ticket(update: Update, context: CallbackContext):
     try:
         callback_query: CallbackQuery = update.callback_query

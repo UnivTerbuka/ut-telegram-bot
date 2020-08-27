@@ -1,7 +1,6 @@
 import logging
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext, Job
-from telegram.ext.dispatcher import run_async
 from handlers.jobs.modul import modul as job_modul
 
 # Data : MODUL|SUBFOLDER|DOC|END|PAGE
@@ -10,7 +9,6 @@ from handlers.jobs.modul import modul as job_modul
 logger = logging.getLogger(__name__)
 
 
-@run_async
 def modul(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
 

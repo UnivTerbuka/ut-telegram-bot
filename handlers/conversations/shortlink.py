@@ -1,7 +1,6 @@
 from telegram import Update, MessageEntity
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler)
-from telegram.ext.dispatcher import run_async
 from core.utils import action
 from libs import shorten_link
 
@@ -24,7 +23,6 @@ def short(update: Update, context: CallbackContext):
     return CREATE
 
 
-@run_async
 @action.typing
 def create(update: Update, context: CallbackContext):
     link: str = update.effective_message.text
