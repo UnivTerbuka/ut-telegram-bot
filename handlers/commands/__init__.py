@@ -1,6 +1,6 @@
 from typing import List
 from logging import Logger
-from telegram.ext import Dispatcher, CommandHandler
+from telegram.ext import Dispatcher, CommandHandler, Filters
 # Commands
 from .registrasi import registrasi
 from .link import link
@@ -11,17 +11,20 @@ from .cancel import cancel
 from .start import start
 
 
+private_filter = Filters.private
+
+
 class CommandMixin(object):
     logger: Logger = None
     COMMANDS_GROUP: int = 0
     COMMANDS: List[CommandHandler] = [
-        CommandHandler('link', link),
-        CommandHandler('formulir', formulir),
-        CommandHandler('registrasi', registrasi),
-        CommandHandler('about', about),
-        CommandHandler('donasi', donasi),
-        CommandHandler('cancel', cancel),
-        CommandHandler('start', start),
+        CommandHandler('link', link, private_filter),
+        CommandHandler('formulir', formulir, private_filter),
+        CommandHandler('registrasi', registrasi, private_filter),
+        CommandHandler('about', about, private_filter),
+        CommandHandler('donasi', donasi, private_filter),
+        CommandHandler('cancel', cancel, private_filter),
+        CommandHandler('start', start, private_filter),
     ]
 
     def register_commands(self, dispatcher: Dispatcher):

@@ -45,7 +45,7 @@ def cancel(update: Update, context: CallbackContext):
 
 TICKET = {
     'name': COMMAND,
-    'entry_points': [CommandHandler(COMMAND, ticket)],
+    'entry_points': [CommandHandler(COMMAND, ticket, Filters.private)],
     'states': {
         GET_TICKET:
         [MessageHandler(Filters.text & ~Filters.command, get_ticket)]

@@ -55,7 +55,7 @@ def cancel(update: Update, context: CallbackContext):
 
 
 SHORTLINK = {
-    'entry_points': [CommandHandler(COMMAND, short)],
+    'entry_points': [CommandHandler(COMMAND, short, Filters.private)],
     'states': {
         CREATE: [
             MessageHandler(Filters.text & Filters.entity(MessageEntity.URL),

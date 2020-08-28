@@ -122,15 +122,16 @@ BACA = {
     'name':
     COMMAND,
     'entry_points': [
-        CommandHandler(COMMAND, baca),
+        CommandHandler(COMMAND, baca, Filters.private),
         CommandHandler('start',
                        start,
-                       filters=Filters.regex(r'^\/start READ-[A-Z]{4}\d{4}$')),
-        CommandHandler(
-            'start',
-            start,
-            filters=Filters.regex(
-                r'^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$')),
+                       filters=Filters.regex(r'^\/start READ-[A-Z]{4}\d{4}$')
+                       & Filters.private),
+        CommandHandler('start',
+                       start,
+                       filters=Filters.regex(
+                           r'^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$')
+                       & Filters.private),
     ],
     'states': {
         GET_BOOK: [
