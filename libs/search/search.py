@@ -17,11 +17,18 @@ class Search:
             if not query:
                 return []
             self.logger.debug('Searching {}'.format(query))
-            best_q = process.extractBests(query, self.qna_q_dict)
-            best_a = process.extractBests(query, self.qna_a_dict)
+            best_q = process.extractBests(query,
+                                          self.qna_q_dict,
+                                          score_cutoff=50,
+                                          limit=20)
+            best_a = process.extractBests(query,
+                                          self.qna_a_dict,
+                                          score_cutoff=50)
             results: List[InlineQueryResult] = []
-            results += [self.qna[z].result_article for (x, y, z) in best_q]
-            results += [self.qna[z].result_article for (x, y, z) in best_a]
+            results += [self.qna[z].result_article
+                        for (x, y, z) in best_q] if best_q else []
+            results += [self.qna[z].result_article
+                        for (x, y, z) in best_a] if best_a else []
             return results
         except Exception as E:
             self.logger.exception(E)

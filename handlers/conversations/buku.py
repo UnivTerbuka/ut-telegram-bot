@@ -46,7 +46,7 @@ def cancel(update: Update, context: CallbackContext):
 
 BUKU = {
     'name': COMMAND,
-    'entry_points': [CommandHandler(COMMAND, buku)],
+    'entry_points': [CommandHandler(COMMAND, buku, Filters.private)],
     'states': {
         GET_BOOKS:
         [MessageHandler(Filters.text & ~Filters.regex(r'^/'), get_buku)]
