@@ -31,7 +31,8 @@ def get_data(data: dict):
 
 def answer(update: Update, code: str, context: CallbackContext = None):
     if Modul.is_valid(code):
-        chat_id = update.message.chat_id
+        message: Message = update.effective_message
+        chat_id = message.chat_id
         job_name = f'{chat_id}|BACA|{code}'
         if context.job_queue.get_jobs_by_name(job_name):
             update.effective_message.reply_text(
