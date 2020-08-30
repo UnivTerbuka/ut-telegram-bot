@@ -4,6 +4,7 @@ from telegram.ext import Dispatcher, ConversationHandler
 # Conversations
 from .baca import BACA
 from .buku import BUKU
+from .elearning import ELEARNING
 from .shortlink import SHORTLINK
 from .ticket import TICKET
 
@@ -14,6 +15,7 @@ class ConversationMixin(object):
     CONVERSATIONS: List[ConversationHandler] = [
         ConversationHandler(**BACA),
         ConversationHandler(**BUKU),
+        ConversationHandler(**ELEARNING),
         ConversationHandler(**SHORTLINK),
         ConversationHandler(**TICKET),
     ]
@@ -22,9 +24,8 @@ class ConversationMixin(object):
         try:
             if self.CONVERSATIONS:
                 for conversation in self.CONVERSATIONS:
-                    dispatcher.add_handler(
-                        conversation, group=self.CONVERSATIONS_GROUP
-                    )
+                    dispatcher.add_handler(conversation,
+                                           group=self.CONVERSATIONS_GROUP)
                 self.logger.info('Conversations added!')
             return True
         except Exception as e:
