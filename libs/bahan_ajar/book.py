@@ -11,7 +11,6 @@ from config import URL_LOGO, BOT_USERNAME
 from ..rbv import Modul
 from ..utils import format_html
 
-
 logger = getLogger(__name__)
 
 
@@ -46,7 +45,7 @@ class Book:
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, "READ")
         logger.debug('Berhasil membuat {}'.format(repr(self)))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.text
 
     @classmethod
@@ -73,9 +72,9 @@ class Book:
             f"Buku : {format_html.code(self.title)}",
             f"Penulis : {format_html.code(self.author)}",
             f"Kode : {format_html.code(self.modul)}",
+            format_html.href('\u200c', self.bookimages_url),
             format_html.href('Baca di rbv', self.rbv_url),
             format_html.href('Baca di telegram', self.depp_link_url),
-            format_html.href('\u200c', self.bookimages_url),
         ]
         return '\n'.join(texts)
 
