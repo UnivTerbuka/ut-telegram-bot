@@ -17,12 +17,10 @@ app.config.from_mapping(SQLALCHEMY_TRACK_MODIFICATIONS=False,
 with app.app_context():
     from core import get_blueprint
     from core.db import db  # NOQA
-
-NAME = os.environ.get('NAME')
-TOKEN = os.environ.get('TOKEN')
-
-bp = get_blueprint(TOKEN, NAME)
-app.register_blueprint(bp)
+    NAME = os.environ.get('NAME')
+    TOKEN = os.environ.get('TOKEN')
+    bp, bot = get_blueprint(TOKEN, NAME)
+    app.register_blueprint(bp)
 
 
 @app.route('/')

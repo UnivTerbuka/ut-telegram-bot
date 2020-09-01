@@ -59,9 +59,9 @@ class UniversitasTerbukaBot(object):
         # self.updater: QueueUpdater = QueueUpdater(self.bot,
         #                                           use_context=True,
         #                                           defaults=self.defaults)
-        self.updater: Updater = Updater(
-            TOKEN, use_context=True, defaults=self.defaults
-        )
+        self.updater: Updater = Updater(TOKEN,
+                                        use_context=True,
+                                        defaults=self.defaults)
         self.dp: Dispatcher = self.updater.dispatcher
         from handlers import Handlers, error_callback
         self.dp.add_error_handler(error_callback)
@@ -90,4 +90,4 @@ def get_blueprint(token, name):
         bot.process_update(update)
         return ''
 
-    return bp
+    return bp, bot
