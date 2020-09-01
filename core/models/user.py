@@ -13,9 +13,10 @@ class User(db.Model):
 
     # Debug time
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    updated_at = Column(
-        DateTime, server_default=func.now(), onupdate=func.now(), nullable=False
-    )
+    updated_at = Column(DateTime,
+                        server_default=func.now(),
+                        onupdate=func.now(),
+                        nullable=False)
 
     # Permanent settings
     admin = Column(Boolean, nullable=False, default=False)
