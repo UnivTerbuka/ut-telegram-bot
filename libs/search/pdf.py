@@ -20,9 +20,8 @@ class Pdf:
     caption: str = ''
 
     def __post_init__(self):
-        assert self.url.endswith('.pdf')
         self.caption = self.caption or self.title
-        self.text = href(self.caption, self.url)
+        self.text = "{}\n{}".format(self.caption, href('Download', self.url))
         self.reply_markup = InlineKeyboardMarkup(
             [[InlineKeyboardButton(text='Download', url=self.url)]])
 
