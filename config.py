@@ -1,5 +1,4 @@
 import os
-import sys
 
 
 def get_script_path():
@@ -10,7 +9,8 @@ ROOT_PATH = get_script_path()
 STATIC_PATH = os.path.join(ROOT_PATH, 'static')
 IMG_PATH = os.path.join(STATIC_PATH, 'images')
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0'
+    'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:80.0) Gecko/20100101 Firefox/80.0'  # NOQA
 }
 CALLBACK_SEPARATOR = '|'
 USERNAME_RBV = 'mahasiswa'
@@ -20,6 +20,7 @@ TOKEN = os.environ.get('TOKEN')
 BASE_URL = "https://{}.herokuapp.com/".format(NAME)
 IMG_URL = BASE_URL + 'images/'
 WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
-URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'
+URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'  # NOQA
 BOT_USERNAME = os.environ.get('BOT_USERNAME', 'UniversitasTerbukaBot')
 DEVS = [529004070]
+BLEACH_CONFIG = {'tags': ['a', 'b', 'i', 'u'], 'attributes': {'a': ['href']}}
