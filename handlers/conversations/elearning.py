@@ -30,5 +30,6 @@ ELEARNING = {
     'states': {
         SET_TOKEN:
         [MessageHandler(Filters.text & ~Filters.regex(r'^/'), set_token)]
-    }
+    },
+    'fallbacks': [CommandHandler('cancel', cancel)]
 }
