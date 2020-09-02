@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from requests import get as urlget
 from dataclasses import dataclass, field
-from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram import (InlineQueryResultArticle, InputTextMessageContent,
+                      InlineKeyboardButton, InlineKeyboardMarkup)
 from typing import Optional, List
 from uuid import uuid4
 from config import BLEACH_CONFIG, HEADERS
@@ -34,9 +35,17 @@ class Pengumuman:
                 self.pubdate,
                 '%a, %d %b %Y %H:%M:%S %z',
             )
-        self.date_str = self.pubdate.strftime('%d %m %Y')
-        texts = [href(self.title, self.link), self.description, self.date_str]
+        self.date_str = self.pubdate.strftime('%d/%m/%Y')
+        texts = [
+            href(self.title, self.link), f'Pada {self.date_str}',
+            self.description
+        ]
         self.text = '\n'.join(texts).strip()
+
+    @property
+    def reply_markup(self) -> InlineKeyboardMarkup:
+        return InlineKeyboardMarkup(
+            [[InlineKeyboardButton('Baca selengkapnya...', url=self.link)]])
 
     @property
     def result_article(self) -> InlineQueryResultArticle:
@@ -44,7 +53,8 @@ class Pengumuman:
             id=uuid4(),
             title=self.title,
             description=f'{self.date_str} oleh {self.creator}',
-            input_message_content=InputTextMessageContent(self.text))
+            input_message_content=InputTextMessageContent(self.text),
+            reply_markup=self.reply_markup)
 
 
 def get_pengumuman() -> List[Pengumuman]:
