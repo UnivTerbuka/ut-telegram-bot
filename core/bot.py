@@ -1,11 +1,8 @@
-import os
 from flask import Blueprint, request
 from telegram import Bot, Update, ParseMode
 from telegram.ext import Updater, Dispatcher, Defaults, messagequeue
-from telegram.utils.request import Request
-
-NAME = os.environ.get('NAME')
-TOKEN = os.environ.get('TOKEN')
+# from telegram.utils.request import Request
+from config import NAME, TOKEN, PERSISTENCE
 
 
 class QueueBot(Bot):
@@ -61,6 +58,7 @@ class UniversitasTerbukaBot(object):
         #                                           defaults=self.defaults)
         self.updater: Updater = Updater(TOKEN,
                                         use_context=True,
+                                        persistence=PERSISTENCE,
                                         defaults=self.defaults)
         self.dp: Dispatcher = self.updater.dispatcher
         from handlers import Handlers, error_callback
