@@ -30,7 +30,7 @@ class Pdf:
         return InlineQueryResultDocument(
             id=uuid4(),
             title=self.title,
-            description=self.topic,
+            description=f'Dokumen, {self.topic}',
             document_url=self.url,
             mime_type='application/pdf',
             input_message_content=InputTextMessageContent(

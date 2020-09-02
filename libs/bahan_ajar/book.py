@@ -92,7 +92,7 @@ class Book:
         return InlineQueryResultArticle(
             id=f"{self.id}|{self.modul}",
             title=self.title,
-            description=f"{self.modul} by {self.author}",
+            description=f"Bahan ajar, {self.modul} by {self.author}",
             thumb_url=URL_LOGO,
             input_message_content=InputTextMessageContent(
                 message_text=self.text,

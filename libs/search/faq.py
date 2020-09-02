@@ -29,7 +29,7 @@ class QnA:
         return InlineQueryResultArticle(
             id=uuid4(),
             title=self.question,
-            description=self.topic,
+            description=f"FaQ, {self.topic}",
             input_message_content=InputTextMessageContent(
                 str(self),
                 disable_web_page_preview=False if self.image else True))

@@ -52,7 +52,7 @@ class Pengumuman:
         return InlineQueryResultArticle(
             id=uuid4(),
             title=self.title,
-            description=f'{self.date_str} oleh {self.creator}',
+            description=f'Pengumuman, {self.date_str} oleh {self.creator}',
             input_message_content=InputTextMessageContent(self.text),
             reply_markup=self.reply_markup)
 
