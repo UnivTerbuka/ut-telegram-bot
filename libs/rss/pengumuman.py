@@ -1,15 +1,19 @@
 import bleach
+from bs4 import BeautifulSoup
+from datetime import datetime
 from requests import get as urlget
-from dataclasses import dataclass
-from html import unescape
+from dataclasses import dataclass, field
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from typing import Optional, List
 from uuid import uuid4
-from xml.etree import ElementTree
 from config import BLEACH_CONFIG, HEADERS
 from libs.utils.format_html import href
 
 URL = 'https://www.ut.ac.id/pengumuman/rss.xml'
+
+
+def add_domain(text: str) -> str:
+    return text.replace('href="', 'href="https://www.ut.ac.id')
 
 
 @dataclass
@@ -17,25 +21,29 @@ class Pengumuman:
     title: str
     link: str
     description: str
-    pubDate: Optional[str] = ''
+    pubdate: Optional[datetime] = field(default_factory=datetime.now)
     creator: Optional[str] = ''
 
     def __post_init__(self) -> None:
-        self.title = bleach.clean(unescape(self.title), tags=[])
-        self.description = bleach.clean(text=unescape(self.description),
-                                        **BLEACH_CONFIG)
-        texts = [
-            href(self.title, self.link),
-            self.description,
-        ]
-        self.text = '\n'.join(texts)
+        self.link = self.link.strip()
+        self.title = bleach.clean(self.title, tags=[], strip=True)
+        self.description = bleach.clean(text=self.description, **BLEACH_CONFIG)
+        self.description = add_domain(self.description)
+        if type(self.pubdate) == str:
+            self.pubdate = datetime.strptime(
+                self.pubdate,
+                '%a, %d %b %Y %H:%M:%S %z',
+            )
+        self.date_str = self.pubdate.strftime('%d %m %Y')
+        texts = [href(self.title, self.link), self.description, self.date_str]
+        self.text = '\n'.join(texts).strip()
 
     @property
     def result_article(self) -> InlineQueryResultArticle:
         return InlineQueryResultArticle(
             id=uuid4(),
             title=self.title,
-            description=f'{self.pubDate} oleh {self.creator}',
+            description=f'{self.date_str} oleh {self.creator}',
             input_message_content=InputTextMessageContent(self.text))
 
 
@@ -46,15 +54,15 @@ def get_pengumuman() -> List[Pengumuman]:
         return []
     if not res.ok:
         return []
-    pengumuman = ElementTree.fromstring(res.text)
+    pengumuman = BeautifulSoup(res.text, 'lxml')
     results: List[Pengumuman] = []
-    for item in pengumuman.xpath('/rss/channel/item'):
+    for item in pengumuman.find_all('item'):
         results.append(
             Pengumuman(
-                title=item.xpath("./title/text()")[0],
-                link=item.xpath("./link/text()")[0],
-                description=item.xpath("./description/text()")[0],
-                pubDate=item.xpath("./pubDate/text()")[0],
-                creator=item.xpath("./dc:creator/text()")[0],
+                title=str(item.find('title').text),
+                link=str(item.find('link').next),
+                description=str(item.find('description').text),
+                pubdate=str(item.find('pubdate').text),
+                creator=str(item.find('dc:creator').text),
             ))
     return results
