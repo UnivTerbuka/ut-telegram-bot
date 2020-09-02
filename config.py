@@ -23,4 +23,10 @@ WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
 URL_LOGO = 'https://upload.wikimedia.org/wikipedia/en/2/21/Universitas-terbuka-logo.jpg'  # NOQA
 BOT_USERNAME = os.environ.get('BOT_USERNAME', 'UniversitasTerbukaBot')
 DEVS = [529004070]
-BLEACH_CONFIG = {'tags': ['a', 'b', 'i', 'u'], 'attributes': {'a': ['href']}}
+BLEACH_CONFIG = {
+    'tags': ['a', 'b', 'i', 'u'],
+    'attributes': {
+        'a': ['href']
+    },
+    'strip': True
+}
