@@ -6,7 +6,7 @@ from telegram import (InlineQueryResultDocument, InputTextMessageContent,
                       InlineKeyboardButton, InlineKeyboardMarkup)
 from typing import List
 from uuid import uuid4
-from config import ROOT_PATH
+from config import STATIC_PATH
 from libs.utils.format_html import href
 
 FILENAME = 'pdf.yaml'
@@ -39,7 +39,7 @@ class Pdf:
 
 
 def get_pdf() -> List[Pdf]:
-    pdf_yaml = os.path.join(ROOT_PATH, FILENAME)
+    pdf_yaml = os.path.join(STATIC_PATH, FILENAME)
 
     with open(pdf_yaml, 'rb') as f:
         datas = yaml.load(f, Loader=yaml.FullLoader)

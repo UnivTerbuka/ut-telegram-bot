@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from typing import List
 from uuid import uuid4
-from config import ROOT_PATH
+from config import STATIC_PATH
 
 
 @dataclass
@@ -46,7 +46,7 @@ class Topic:
 
 
 def load_topics() -> List[Topic]:
-    faq_yaml = os.path.join(ROOT_PATH, 'faq.yaml')
+    faq_yaml = os.path.join(STATIC_PATH, 'faq.yaml')
 
     with open(faq_yaml, 'rb') as f:
         datas = yaml.load(f, Loader=yaml.FullLoader)
