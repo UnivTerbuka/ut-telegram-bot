@@ -15,7 +15,7 @@ def answer(update: Update, query: str):
         texts = []
         for book in books:
             texts.append(book.text)
-        update.effective_message.reply_text('\n'.join(texts))
+        update.effective_message.reply_text('\n\n'.join(texts))
     else:
         update.effective_message.reply_text(f'Buku `{query}` tidak ditemukan')
 

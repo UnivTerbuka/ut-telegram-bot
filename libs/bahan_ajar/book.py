@@ -71,7 +71,7 @@ class Book:
         texts = [
             f"Buku : {format_html.code(self.title)}",
             f"Penulis : {format_html.code(self.author)}",
-            f"Kode : {format_html.code(self.modul)}",
+            f"Kode : {format_html.code(self.modul)}" +
             format_html.href('\u200c', self.bookimages_url),
             format_html.href('Baca di rbv', self.rbv_url),
             format_html.href('Baca di telegram', self.depp_link_url),
