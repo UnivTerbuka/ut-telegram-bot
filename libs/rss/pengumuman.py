@@ -37,7 +37,7 @@ class Pengumuman:
             )
         self.date_str = self.pubdate.strftime('%d/%m/%Y')
         texts = [
-            href(self.title, self.link), f'Pada {self.date_str}',
+            href(self.title, self.link), f'Pengumuman tanggal {self.date_str}',
             self.description
         ]
         self.text = '\n'.join(texts).strip()
