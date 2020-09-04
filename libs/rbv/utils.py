@@ -1,13 +1,10 @@
 import os
-# import pytesseract
 from bs4 import BeautifulSoup, Tag
 from logging import getLogger
-# from PIL import Image
 from requests import Response
 from .base import SESSION, USERNAME, PASSWORD
+from .page import Page
 
-# TESSERACT_CMD = os.environ.get('TESSERACT_CMD')
-# pytesseract.pytesseract.tesseract_cmd = TESSERACT_CMD if TESSERACT_CMD else r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 logger = getLogger(__name__)
 
 
@@ -47,27 +44,7 @@ def fetch_page(url: str,
                 return fetch_page(url, retry)
             return
     soup = BeautifulSoup(res.text, "lxml")
-    # try:
-    #     captcha_image_url = soup.find('img')['src']
-    #     res = SESSION.get(DOMAIN + captcha_image_url)
-    #     if not res.ok:
-    #         if retry > 0:
-    #             retry -= 1
-    #             return fetch_page(url, retry)
-    #         return
-    #     with BytesIO() as img_bytes:
-    #         for chunk in res.iter_content(1024):
-    #             img_bytes.write(chunk)
-    #         img = Image.open(img_bytes)
-    #         captcha: str = pytesseract.image_to_string(img)
-    # except:
     captcha = get_chaptcha(soup)
-    # if captcha:
-    #     captcha = captcha.strip()
-    #     if '\n' in captcha:
-    #         captcha = captcha.split('\n')[0]
-    # else:
-    #     captcha = ''
     data = {
         '_submit_check': '1',
         'username': USERNAME,
@@ -95,18 +72,49 @@ def get_file(url, filepath, headers=None):
 
 
 def download(url, page, filepath, module_url, doc, subfolder):
-    headers = {'Referer': module_url}
     if os.path.isfile(filepath):
         return True
+    headers = {'Referer': module_url}
     if get_file(url, filepath, headers):
         return True
     res = fetch_page(module_url, 10)
     if not res or not res.ok:
         return False
     page = (page // 10 + 1) * 10
-    jsonp_url = f'http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}'
+    jsonp_url = f'http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}'  # NOQA
     res = SESSION.get(jsonp_url, headers=headers)
     if res.ok and get_file(url, filepath,
                            headers) and os.path.isfile(filepath):
         return True
     return False
+
+
+def get_txt(filepath: str) -> str:
+    val = ''
+    with open(filepath, 'r') as txt:
+        val = txt.read()
+    return val
+
+
+def fetch_page_txt(page_number: int, module_url: str, doc: str,
+                   subfolder: str) -> str:
+    if Page.exist(subfolder, doc, page_number):
+        return get_txt(Page.get_filepath(subfolder, doc, page_number))
+    headers = {'Referer': module_url}
+    page = (page_number // 10 + 1) * 10
+    jsonp_url = f'http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}'  # NOQA
+    res = SESSION.get(jsonp_url, headers=headers)
+    if not res.ok or not res.text:
+        return ''
+    if res.text == "Don't waste your time trying to access this file":
+        res = fetch_page(module_url, 10)
+        if not res or not res.ok:
+            return ''
+        return fetch_page_txt(page_number, module_url, doc, subfolder)
+    pages = Page.from_jsonp(res.text)
+    out = None
+    for page in pages:
+        page.save(subfolder, doc)
+        if page.number == page_number:
+            out = page
+    return out.txt if out else ''
