@@ -13,27 +13,22 @@ class CallbackMixin(object):
     logger: Logger = None
     CALLBACKS_GROUP: int = 0
     CALLBACKS: List[CallbackQueryHandler] = [
+        CallbackQueryHandler(buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
         CallbackQueryHandler(
-            buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
+            modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
+        CallbackQueryHandler(page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+$'),
         CallbackQueryHandler(
-            modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+$'),
-        CallbackQueryHandler(
-            page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+$'),
-        CallbackQueryHandler(
-            page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|\d+$'),
-        CallbackQueryHandler(
-            ticket, pattern=r'^TICKET\|[A-Z]\d{10}-\d{8}$'),
-        CallbackQueryHandler(
-            close),
+            page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|\d+$'),
+        CallbackQueryHandler(ticket, pattern=r'^TICKET\|[A-Z]\d{10}-\d{8}$'),
+        CallbackQueryHandler(close),
     ]
 
     def register_callbacks(self, dispatcher: Dispatcher):
         try:
             if self.CALLBACKS:
                 for callback in self.CALLBACKS:
-                    dispatcher.add_handler(
-                        callback, group=self.CALLBACKS_GROUP
-                    )
+                    dispatcher.add_handler(callback,
+                                           group=self.CALLBACKS_GROUP)
                 self.logger.info('Callbacks added!')
             return True
         except Exception as e:

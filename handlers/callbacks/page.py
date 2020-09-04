@@ -21,11 +21,11 @@ def page(update: Update, context: CallbackContext):
     callback_query.answer()
     # Validate data
     data = str(callback_query.data).split(CALLBACK_SEPARATOR)
-    if len(data) == 6:
-        _, subfolder, doc, end, current, number = data
+    if len(data) == 7:
+        _, subfolder, doc, end, current, txt, number = data
         end, current, number = int(end), int(current), int(number)
     else:
-        _, subfolder, doc, end, current = data
+        _, subfolder, doc, end, current, txt = data
         end, current = int(end), int(current)
         number = current // 10
 
@@ -46,20 +46,21 @@ def page(update: Update, context: CallbackContext):
     # Header buttons
     header = []
     if number > 0:
-        datas = f"PAGE,{subfolder},{doc},{end},{current},{number - 1}".replace(
-            ',', CALLBACK_SEPARATOR)
+        datas = f"PAGE,{subfolder},{doc},{end},{current},{txt},{number - 1}"
+        datas = datas.replace(',', CALLBACK_SEPARATOR)
         header.append(InlineKeyboardButton('Sebelumnya', callback_data=datas))
     if not limit:
-        datas = f"PAGE,{subfolder},{doc},{end},{current},{number + 1}".replace(
-            ',', CALLBACK_SEPARATOR)
+        datas = f"PAGE,{subfolder},{doc},{end},{current},{txt},{number + 1}"
+        datas = datas.replace(',', CALLBACK_SEPARATOR)
         header.append(InlineKeyboardButton('Selanjutnya', callback_data=datas))
 
     # Footer buttons
+
     foooter = [
         InlineKeyboardButton(
             'Kembali',
-            callback_data=f'MODUL,{subfolder},{doc},{end},{current}'.replace(
-                ',', CALLBACK_SEPARATOR)),
+            callback_data=f'MODUL,{subfolder},{doc},{end},{current},{txt}'.
+            replace(',', CALLBACK_SEPARATOR)),
         InlineKeyboardButton('Tutup', callback_data='CLOSE')
     ]
 

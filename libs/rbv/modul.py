@@ -1,6 +1,6 @@
+from __future__ import annotations
 import os
 from logging import getLogger
-
 from bs4 import BeautifulSoup
 from cachetools import cached, TTLCache
 from dacite import from_dict
@@ -8,10 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from telegram.utils.helpers import create_deep_linked_url
 from threading import RLock
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 from urllib.parse import urlparse, parse_qsl
 from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME
-from .utils import download, fetch_page
+from .utils import download, fetch_page, fetch_page_txt
 from ..utils import format_html
 
 LOCK = RLock()
@@ -26,6 +26,7 @@ class Modul:
     subfolder: Optional[str]
     doc: Optional[str]
     end: Optional[int]
+    form: Optional[str]
 
     def __post_init__(self):
         self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"  # NOQA
@@ -64,9 +65,14 @@ class Modul:
             return self.absurl(page)
         return
 
-    def abspath(self, page: int) -> str:
+    def get_page_text(self, page: int) -> str:
+        header = f'Buku {self.subfolder} Modul {self.doc}'
+        return header + fetch_page_txt(page, self.url, self.doc,
+                                       self.subfolder)
+
+    def abspath(self, page: int, ext: str = 'jpg') -> str:
         # /BUKU/MODUL-HALAMAN.jpg
-        filename = f"{self.doc}-{page}.jpg"
+        filename = f"{self.doc}-{page}.{ext}"
         Path(self.filepath).mkdir(parents=True, exist_ok=True)
         return os.path.join(self.filepath, filename)
 
@@ -76,28 +82,7 @@ class Modul:
 
     def deep_linked_page(self, page: int) -> str:
         return create_deep_linked_url(
-            BOT_USERNAME,
-            payload=f"READ-{self.subfolder}-{self.doc}-{page}"
-        )
-
-    @classmethod
-    def from_data(cls, data: Union[list, str]):
-        if type(data) == list:
-            datas = data
-        else:
-            datas = data.split(CALLBACK_SEPARATOR)
-
-        @cached(CACHE, lock=LOCK)
-        def get(subfolder, doc, end):
-            data = {
-                'subfolder': subfolder,
-                'doc': doc,
-                'end': end,
-            }
-            return from_dict(cls, data)
-
-        return (get(subfolder=datas[1], doc=datas[2],
-                    end=int(datas[3])), int(datas[4]))
+            BOT_USERNAME, payload=f"READ-{self.subfolder}-{self.doc}-{page}")
 
     def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder
@@ -112,9 +97,40 @@ class Modul:
         ]
         return '\n'.join(texts)
 
-    def callback_data(self, page: int = 1, name: str = 'MODUL') -> str:
-        datas = [name, self.subfolder, self.doc, str(self.end), str(page)]
+    def callback_data(self,
+                      page: int = 1,
+                      name: str = 'MODUL',
+                      txt: bool = False) -> str:
+        datas = [
+            name, self.subfolder, self.doc,
+            str(self.end),
+            str(page), 'txt' if txt else 'img'
+        ]
+        # Datas : MODUL|subfolder|doc|end|page|form
         return CALLBACK_SEPARATOR.join(datas)
+
+    @classmethod
+    def from_data(cls, data: Union[list, str]) -> Tuple[Modul, int]:
+        if type(data) == list:
+            datas = data
+        else:
+            datas = data.split(CALLBACK_SEPARATOR)
+        # Datas : MODUL|subfolder|doc|end|page|form
+
+        @cached(CACHE, lock=LOCK)
+        def get(subfolder, doc, end, form):
+            data = {
+                'subfolder': subfolder,
+                'doc': doc,
+                'end': end,
+                'form': form,
+            }
+            return from_dict(cls, data)
+
+        return (get(subfolder=datas[1],
+                    doc=datas[2],
+                    end=int(datas[3]),
+                    form=datas[5] if len(data) == 6 else 'img'), int(datas[4]))
 
     @staticmethod
     def is_valid(id: str) -> bool:
@@ -132,3 +148,7 @@ class Modul:
     def validate(cls, id: str) -> str:
         assert cls.is_valid(id)
         return id[0:8].upper()
+
+    @property
+    def is_text(self) -> bool:
+        return self.form == 'txt'
