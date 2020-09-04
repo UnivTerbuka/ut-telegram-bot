@@ -19,6 +19,7 @@ def page(update: Update, context: CallbackContext):
     if not callback_query or not callback_query.data:
         return -1
     callback_query.answer()
+
     # Validate data
     data = str(callback_query.data).split(CALLBACK_SEPARATOR)
     if len(data) == 7:
@@ -38,8 +39,8 @@ def page(update: Update, context: CallbackContext):
         if page_number > end:
             limit = True
             break
-        datas = f'MODUL,{subfolder},{doc},{end},{page_number}'.replace(
-            ',', CALLBACK_SEPARATOR)
+        datas = f'MODUL,{subfolder},{doc},{end},{page_number},{txt}'
+        datas = datas.replace(',', CALLBACK_SEPARATOR)
         keyboard.append(
             InlineKeyboardButton(str(page_number), callback_data=datas))
 

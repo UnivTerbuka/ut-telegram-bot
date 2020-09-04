@@ -14,12 +14,12 @@ def modul(context: CallbackContext):
     keyboard = []
     if page > 1:
         keyboard.append(
-            InlineKeyboardButton('Sebelumnya',
+            InlineKeyboardButton('Halaman Sebelumnya',
                                  callback_data=modul_.callback_data(page - 1,
                                                                     txt=txt)))
     if page < modul_.end:
         keyboard.append(
-            InlineKeyboardButton('Selanjutnya',
+            InlineKeyboardButton('Halaman Selanjutnya',
                                  callback_data=modul_.callback_data(page + 1,
                                                                     txt=txt)))
     footer = []
@@ -37,12 +37,12 @@ def modul(context: CallbackContext):
     if txt:
         header.append(
             InlineKeyboardButton('Versi Gambar',
-                                 callback_data=modul_.callback_data(page)))
+                                 callback_data=modul_.callback_data(
+                                     page, txt=False)))
     else:
         header.append(
             InlineKeyboardButton('Versi Teks [Beta]',
-                                 callback_data=modul_.callback_data(page,
-                                                                    txt=True)))
+                                 callback_data=modul_.callback_data(page)))
     menu = build_menu(
         buttons=keyboard,
         n_cols=2,
@@ -55,7 +55,7 @@ def modul(context: CallbackContext):
         chat_id=chat_id,
         message_id=message_id,
         reply_markup=InlineKeyboardMarkup(menu),
-        disable_web_page_preview=False,
+        disable_web_page_preview=txt,
     )
     if context.chat_data and 'modul' in context.chat_data:
         del context.chat_data['modul']

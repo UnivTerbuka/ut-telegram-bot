@@ -91,7 +91,7 @@ def download(url, page, filepath, module_url, doc, subfolder):
 
 def get_txt(filepath: str) -> str:
     val = ''
-    with open(filepath, 'r') as txt:
+    with open(filepath, 'r', encoding='utf-8') as txt:
         val = txt.read()
     return val
 

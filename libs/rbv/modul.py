@@ -66,7 +66,10 @@ class Modul:
         return
 
     def get_page_text(self, page: int) -> str:
-        header = f'Buku {self.subfolder} Modul {self.doc}'
+        header = 'Buku {} Modul {} Halaman {}\n'.format(
+            self.subfolder, self.doc, page)
+        header += "Klik kanan / tahan {}, untuk membagikan halaman\n".format(
+            format_html.href('Share', self.deep_linked_page(page)))
         return header + fetch_page_txt(page, self.url, self.doc,
                                        self.subfolder)
 
@@ -100,7 +103,7 @@ class Modul:
     def callback_data(self,
                       page: int = 1,
                       name: str = 'MODUL',
-                      txt: bool = False) -> str:
+                      txt: bool = True) -> str:
         datas = [
             name, self.subfolder, self.doc,
             str(self.end),
@@ -118,19 +121,16 @@ class Modul:
         # Datas : MODUL|subfolder|doc|end|page|form
 
         @cached(CACHE, lock=LOCK)
-        def get(subfolder, doc, end, form):
+        def get(subfolder, doc, end):
             data = {
                 'subfolder': subfolder,
                 'doc': doc,
                 'end': end,
-                'form': form,
             }
             return from_dict(cls, data)
 
-        return (get(subfolder=datas[1],
-                    doc=datas[2],
-                    end=int(datas[3]),
-                    form=datas[5] if len(data) == 6 else 'img'), int(datas[4]))
+        return (get(subfolder=datas[1], doc=datas[2],
+                    end=int(datas[3])), int(datas[4]))
 
     @staticmethod
     def is_valid(id: str) -> bool:
