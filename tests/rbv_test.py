@@ -4,7 +4,7 @@ from libs.rbv import Modul, Buku
 data = {
     'nama': 'Test modul',
     'url': '',
-    'subfolder': 'TEST1234',
+    'subfolder': 'Test1234',
     'doc': 'M99',
     'end': 999,
 }
@@ -18,8 +18,16 @@ class TestRbv:
         assert hasattr(modul, 'subfolder')
         assert hasattr(modul, 'doc')
         assert hasattr(modul, 'end')
+        assert hasattr(modul, 'form')
         assert type(modul.absurl(1)) == str
         assert type(modul.callback_data(1)) == str
+        assert modul.nama == 'Test modul'
+        assert modul.url.startswith(
+            'http://www.pustaka.ut.ac.id/reader/index.php')
+        assert modul.subfolder == 'TEST1234'
+        assert modul.doc == 'M99'
+        assert modul.end == 999
+        assert modul.form == 'img'
 
     def test_create_buku(self):
         modul = Modul(**data)

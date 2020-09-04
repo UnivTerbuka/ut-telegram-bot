@@ -26,7 +26,7 @@ class Modul:
     subfolder: Optional[str]
     doc: Optional[str]
     end: Optional[int]
-    form: Optional[str]
+    form: Optional[str] = 'img'
 
     def __post_init__(self):
         self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"  # NOQA
