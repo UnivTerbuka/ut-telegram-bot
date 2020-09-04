@@ -27,11 +27,11 @@ def modul(update: Update, context: CallbackContext):
 
     job_name = f"{chat_id}|{data}"
     if job_name in context.user_data['jobs']:
-        callback_query.answer('Sedang mengunduh halaman, harap bersabar..')
+        callback_query.answer('Sedang memuat halaman, harap bersabar..')
         return -1
     else:
         context.user_data['jobs'].append(job_name)
-        callback_query.answer('Mengunduh halaman...')
+        callback_query.answer()
         try:
             job = Job(callback=job_modul,
                       context=(chat_id, message_id, data),
@@ -40,7 +40,7 @@ def modul(update: Update, context: CallbackContext):
             job.run(context.dispatcher)
         except BadRequest:
             callback_query.edit_message_text(
-                'Mohon untuk tidak menekan tombol berkali-kali!',
+                'Mohon untuk tidak menekan tombol berkali-kali.',
                 reply_markup=back(data))
         except Exception as e:
             logger.exception(e)
