@@ -64,12 +64,14 @@ class Buku:
         return True
 
     @property
-    def baca_reply_markup(self) -> InlineKeyboardMarkup:
+    def deep_linked_url(self) -> str:
         id_ = Modul.validate(self.id)
+        return create_deep_linked_url(BOT_USERNAME, f"READ-{id_}")
+
+    @property
+    def baca_reply_markup(self) -> InlineKeyboardMarkup:
         keyboard = [[
-            InlineKeyboardButton('Baca di telegram',
-                                 url=create_deep_linked_url(
-                                     BOT_USERNAME, f"READ-{id_}"))
+            InlineKeyboardButton('Baca di telegram', url=self.deep_linked_url)
         ], [InlineKeyboardButton('Baca di rbv', url=self.url)]]
         return InlineKeyboardMarkup(keyboard)
 
@@ -81,13 +83,16 @@ class Buku:
             keyboard.append(
                 InlineKeyboardButton(nama,
                                      callback_data=modul.callback_data()))
-        menu = helpers.build_menu(
-            buttons=keyboard,
-            n_cols=2,
-            header_buttons=InlineKeyboardButton('Ruang Baca Virtual',
-                                                url=self.url),
-            footer_buttons=InlineKeyboardButton('Tutup',
-                                                callback_data='CLOSE'))
+        share_data = 'SHORT|' + self.id
+        footer = [
+            InlineKeyboardButton('Share', callback_data=share_data),
+            InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        ]
+        menu = helpers.build_menu(buttons=keyboard,
+                                  n_cols=2,
+                                  header_buttons=InlineKeyboardButton(
+                                      'Ruang Baca Virtual', url=self.url),
+                                  footer_buttons=footer)
         return InlineKeyboardMarkup(menu)
 
     @property

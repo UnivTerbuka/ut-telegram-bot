@@ -3,6 +3,12 @@ from telegram.ext import Job
 from typing import Tuple
 
 
+def make_button(text, callback_data=None, url=None) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([[
+        InlineKeyboardButton(text=text, callback_data=callback_data, url=url)
+    ]])
+
+
 def build_menu(buttons=None,
                n_cols=1,
                header_buttons=None,
@@ -40,10 +46,9 @@ def cancel_markup(data: str, buttons=None, n_cols=1, text: str = 'Batal'):
 def jobs2markup(jobs: Tuple[Job]) -> InlineKeyboardMarkup:
     keyboard = []
     for job in jobs:
-        button = InlineKeyboardButton(
-            str(job.name),
-            callback_data='CANCEL|{}'.format(job.name)
-        )
+        button = InlineKeyboardButton(str(job.name),
+                                      callback_data='CANCEL|{}'.format(
+                                          job.name))
         keyboard.append(button)
     menu = build_menu(keyboard, 2)
     return InlineKeyboardMarkup(menu)

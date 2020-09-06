@@ -6,6 +6,7 @@ from .buku import buku
 from .close import close
 from .modul import modul
 from .page import page
+from .short import short
 from .ticket import ticket
 
 
@@ -20,6 +21,7 @@ class CallbackMixin(object):
             page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
         CallbackQueryHandler(
             page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|\d+$'),
+        CallbackQueryHandler(short, pattern=r'^SHORT\|[A-Z]{4}\d+$'),
         CallbackQueryHandler(ticket, pattern=r'^TICKET\|[A-Z]\d{10}-\d{8}$'),
         CallbackQueryHandler(close),
     ]

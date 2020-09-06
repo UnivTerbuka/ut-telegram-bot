@@ -44,11 +44,10 @@ def lookup(url_ending: str,
     res = requests.get(POLR + 'lookup', params=params)
     result = ''
     try:
-        return res.json()['result']['long_url']
+        result = res.json()['result']['long_url']
     except Exception:
         result = ''
-    finally:
-        return result
+    return result
 
 
 def shorten(url: str,
@@ -69,5 +68,4 @@ def shorten(url: str,
         result = res.json()['result']
     except Exception:
         result = ''
-    finally:
-        return result
+    return result
