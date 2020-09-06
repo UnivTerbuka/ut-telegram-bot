@@ -1,6 +1,10 @@
 import os
 from telegram.ext import PicklePersistence
 
+if 'TOKEN' not in os.environ:
+    from dotenv import load_dotenv
+    load_dotenv()
+
 
 def get_script_path():
     return os.path.dirname(__file__)
@@ -19,6 +23,7 @@ USERNAME_RBV = 'mahasiswa'
 PASSWORD_RBV = 'utpeduli'
 NAME = os.environ.get('NAME')
 TOKEN = os.environ.get('TOKEN')
+POLR_KEY = os.environ.get('POLR')
 BASE_URL = "https://{}.herokuapp.com/".format(NAME)
 IMG_URL = BASE_URL + 'images/'
 WEBHOOK_URL = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
