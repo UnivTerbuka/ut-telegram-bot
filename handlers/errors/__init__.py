@@ -6,39 +6,52 @@ from telegram.utils.helpers import mention_html
 from config import DEVS
 
 
-def error_callback(update, context):
-    # add all the dev user_ids in this list. You can also add ids of channels or groups.
+def allert_devs(update, context, silent=True):
     devs = DEVS
-    # we want to notify the user of this problem. This will always work, but not notify users if the update is an
-    # callback or inline query, or a poll update. In case you want this, keep in mind that sending the message
-    # could fail
-    # if update.effective_message:
-    #     text = f"Hei. Maaf terjadi error / kesalahan <code>{context.error}</code> ketika memproses permintaan anda. Mohon bersabar...\n" \
-    #            "Saya akan memberitahu @hexatester tentang error ini. Terimakasih..."
-    #     update.effective_message.reply_text(text)
-    # This traceback is created with accessing the traceback object from the sys.exc_info, which is returned as the
-    # third value of the returned tuple. Then we use the traceback.format_tb to get the traceback as a string, which
-    # for a weird reason separates the line breaks in a list, but keeps the linebreaks itself. So just joining an
-    # empty string works fine.
+    if not silent and update.effective_message:
+        text = "Hei."\
+               f"Maaf terjadi error / kesalahan <code>{context.error}</code>"\
+               " ketika memproses permintaan anda. Mohon bersabar..." \
+               "\nSaya akan memberitahu @hexatester tentang error ini."\
+               "Terimakasih..."
+        update.effective_message.reply_text(text)
     trace = "".join(traceback.format_tb(sys.exc_info()[2]))
-    # lets try to get as much information from the telegram update as possible
     payload = ""
-    # normally, we always have an user. If not, its either a channel or a poll update.
     if update.effective_user:
-        payload += f' with the user {mention_html(update.effective_user.id, update.effective_user.first_name)}'
-    # there are more situations when you don't get a chat
+        payload += ' with the user ' + mention_html(
+            update.effective_user.id, update.effective_user.first_name)
     if update.effective_chat:
         payload += f' within the chat <i>{update.effective_chat.title}</i>'
         if update.effective_chat.username:
             payload += f' (@{update.effective_chat.username})'
-    # but only one where you have an empty payload by now: A poll (buuuh)
     if update.poll:
         payload += f' with the poll id {update.poll.id}.'
-    # lets put this in a "well" formatted text
-    text = f"Hey.\n The error <code>{context.error}</code> happened{payload}.\n\nThe full traceback:\n\n<code>{trace}" \
+    text = f"Hey.\n The error <code>{context.error}</code> happened{payload}."\
+           f"\n\nThe full traceback:\n\n<code>{trace}" \
            f"</code>"
-    # and send it to the dev(s)
     for dev_id in devs:
         context.bot.send_message(dev_id, text)
-    # we raise the error again, so the logger module catches it. If you don't use the logger module, use it.
-    raise context.error
+
+
+def error_callback(update, context):
+    try:
+        raise context.error
+    except Unauthorized:
+        # remove update.message.chat_id from conversation list
+        return
+    except BadRequest:
+        # handle malformed requests - read more below!
+        return allert_devs(update, context)
+    except TimedOut:
+        # handle slow connection problems
+        return
+    except NetworkError:
+        # handle other connection problems
+        return
+    except ChatMigrated:
+        # the chat_id of a group has changed, use e.new_chat_id instead
+        return
+    except TelegramError:
+        # handle all other telegram related errors
+        return allert_devs(update, context)
+    return allert_devs(update, context, silent=False)
