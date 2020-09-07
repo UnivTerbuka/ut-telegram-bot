@@ -24,14 +24,13 @@ Source code dari @UniversitasTerbukaBot dibuat untuk memudahkan mahasiswa Univer
 Buat migrasi
 
 ```bash
-python manage.py db init
-python manage.py db migrate
+alembic revision --autogenerate -m ""
 ```
 
 Jalankan migrasi
 
 ```bash
-python manage.py db upgrade
+alembic upgrade head
 ```
 
 ## Legal / Hukum

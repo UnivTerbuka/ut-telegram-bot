@@ -31,6 +31,7 @@ def allert_devs(update, context, silent=True):
            f"</code>"
     for dev_id in devs:
         context.bot.send_message(dev_id, text)
+    raise context.error
 
 
 def error_callback(update, context):

@@ -1,1 +1,3 @@
-from .bot import UniversitasTerbukaBot, get_blueprint
+from .bot import UniversitasTerbukaBot
+
+__all__ = ['UniversitasTerbukaBot']

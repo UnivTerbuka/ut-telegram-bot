@@ -1,11 +1,14 @@
-from telegram import Update, User
-from telegram.ext import CallbackContext
-from core.utils import action
+from telegram import Update
+from core.context import CoreContext
+from core.session import message_wrapper
 
 
-@action.typing
-def start(update: Update, context: CallbackContext):
-    user: User = update.effective_user
+@message_wrapper
+def start(update: Update, context: CoreContext):
+    user = update.effective_user
+    if context.user and not context.user.started:
+        context.user.started = True
+        context.session.commit()
     update.effective_message.reply_text(
         f'Selamat datang {user.full_name}\n\n'
         'Daftar Perintah\n'

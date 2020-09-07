@@ -1,7 +1,9 @@
-import os
 import logging
 from dotenv import load_dotenv
-from flask import Flask, redirect
+from flask import Flask, redirect, request
+
+from core.bot import UniversitasTerbukaBot
+from config import NAME, TOKEN
 load_dotenv()
 
 logging.basicConfig(
@@ -10,17 +12,14 @@ logging.basicConfig(
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 
-app.config.from_mapping(SQLALCHEMY_TRACK_MODIFICATIONS=False,
-                        SQLALCHEMY_DATABASE_URI=os.environ.get(
-                            'DATABASE_URL', 'sqlite:///app.sqlite'))
+bot = UniversitasTerbukaBot(TOKEN, NAME)
 
-with app.app_context():
-    from core import get_blueprint
-    from core.db import db  # NOQA
-    NAME = os.environ.get('NAME')
-    TOKEN = os.environ.get('TOKEN')
-    bp, bot = get_blueprint(TOKEN, NAME)
-    app.register_blueprint(bp)
+
+@app.route(f"/{TOKEN}", methods=['POST'])
+def webhook():
+    update = request.get_json()
+    bot.process_update(update)
+    return ''
 
 
 @app.route('/')
