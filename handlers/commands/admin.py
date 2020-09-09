@@ -15,13 +15,13 @@ MESSAGE = """Selamat datang admin!
 def admin(update: Update, context: CoreContext):
     if context.user.id not in DEVS:
         return
-    args = context.args
     message: Message = update.message
+    args = message.text.split(' ')
     if 'status' in args:
         count = context.session.query(User).count()
         message.reply_text(f'Pengguna aktif saat ini <code>{count}</code>')
     elif 'ban' in args:
-        ids = int(args[0])
+        ids = int(args[-1])
         session = context.session
         banned_user: User = session.query(User).get(ids)
         if banned_user:
