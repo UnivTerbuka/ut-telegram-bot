@@ -8,8 +8,8 @@ from .formulir import formulir
 from .donasi import donasi
 from .about import about
 from .cancel import cancel
+from .inline_help import inline_help
 from .start import start
-
 
 private_filter = Filters.private
 
@@ -24,6 +24,8 @@ class CommandMixin(object):
         CommandHandler('about', about, private_filter),
         CommandHandler('donasi', donasi, private_filter),
         CommandHandler('cancel', cancel, private_filter),
+        CommandHandler('start', inline_help,
+                       Filters.regex(r'/start inline-help')),
         CommandHandler('start', start, private_filter),
     ]
 
@@ -31,9 +33,8 @@ class CommandMixin(object):
         try:
             if self.COMMANDS:
                 for conversation in self.COMMANDS:
-                    dispatcher.add_handler(
-                        conversation, group=self.COMMANDS_GROUP
-                    )
+                    dispatcher.add_handler(conversation,
+                                           group=self.COMMANDS_GROUP)
                 self.logger.info('Commands added!')
             return True
         except Exception as e:
