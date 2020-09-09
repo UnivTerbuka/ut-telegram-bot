@@ -36,12 +36,12 @@ def modul(context: CallbackContext):
     # Switch text or image
     if txt:
         header.append(
-            InlineKeyboardButton('Versi Gambar ⭯',
+            InlineKeyboardButton('Versi Gambar 📖',
                                  callback_data=modul_.callback_data(
                                      page, txt=False)))
     else:
         header.append(
-            InlineKeyboardButton('Versi Teks ⭮',
+            InlineKeyboardButton('Versi Teks 📄',
                                  callback_data=modul_.callback_data(page)))
     menu = build_menu(
         buttons=keyboard,
