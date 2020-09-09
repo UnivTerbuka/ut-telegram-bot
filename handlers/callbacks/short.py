@@ -44,7 +44,7 @@ def short(update: Update, context: CallbackContext):
     modul = data[6:14]
 
     url = get_book(modul)
-    back = make_button('Kembali', callback_data='BUKU|' + modul)
+    back = make_button('< Kembali', callback_data='BUKU|' + modul)
     callback_query.edit_message_text(f'Share modul {modul} dengan link ' + url,
                                      reply_markup=back)
     return -1

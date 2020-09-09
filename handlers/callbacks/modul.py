@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def back(data: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton('Kembali', callback_data=data)]])
+        [[InlineKeyboardButton('< Kembali', callback_data=data)]])
 
 
 def modul(update: Update, context: CallbackContext):

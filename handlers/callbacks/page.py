@@ -59,10 +59,10 @@ def page(update: Update, context: CallbackContext):
 
     foooter = [
         InlineKeyboardButton(
-            'Kembali',
+            '< Kembali',
             callback_data=f'MODUL,{subfolder},{doc},{end},{current},{txt}'.
             replace(',', CALLBACK_SEPARATOR)),
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
     ]
 
     menu = build_menu(
