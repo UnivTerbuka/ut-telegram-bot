@@ -2,6 +2,7 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CommandHandler, Filters
 # Commands
+from .admin import admin
 from .registrasi import registrasi
 from .link import link
 from .formulir import formulir
@@ -18,6 +19,7 @@ class CommandMixin(object):
     logger: Logger = None
     COMMANDS_GROUP: int = 0
     COMMANDS: List[CommandHandler] = [
+        CommandHandler('admin', admin, private_filter),
         CommandHandler('link', link, private_filter),
         CommandHandler('formulir', formulir, private_filter),
         CommandHandler('registrasi', registrasi, private_filter),
