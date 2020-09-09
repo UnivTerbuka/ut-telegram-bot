@@ -100,16 +100,12 @@ def start(update: Update, context: CallbackContext):
         data = f'MODUL|{subfolder}|{doc}|{modul.end}|{page}'
         job_name = f"{chat_id}|{data}"
 
-        # job = Job(callback=job_modul,
-        #           context=(chat_id, message.message_id, data),
-        #           name=job_name,
-        #           repeat=False)
-        # job.run(context.dispatcher)
+        job = Job(callback=job_modul,
+                  context=(chat_id, message.message_id, data),
+                  name=job_name,
+                  repeat=False)
+        job.run(context.dispatcher)
 
-        context.job_queue.run_once(callback=job_modul,
-                                   when=0,
-                                   context=(chat_id, message.message_id, data),
-                                   name=job_name)
     except Exception as E:
         logger.exception(E)
         message.edit_text('Terjadi error.')
