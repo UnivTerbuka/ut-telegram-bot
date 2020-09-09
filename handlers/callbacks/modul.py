@@ -1,7 +1,7 @@
 import logging
 from telegram import (Update, CallbackQuery, InlineKeyboardButton,
                       InlineKeyboardMarkup)
-from telegram.ext import CallbackContext, Job
+from telegram.ext import CallbackContext, JobQueue
 from telegram.error import BadRequest
 from handlers.jobs.modul import modul as job_modul
 
@@ -26,11 +26,16 @@ def modul(update: Update, context: CallbackContext):
     job_name = f"{chat_id}|{data}"
     callback_query.answer()
     try:
-        job = Job(callback=job_modul,
-                  context=(chat_id, message_id, data),
-                  name=job_name,
-                  repeat=False)
-        job.run(context.dispatcher)
+        job_queue: JobQueue = context.job_queue
+        # job = Job(callback=job_modul,
+        #           context=(chat_id, message_id, data),
+        #           name=job_name,
+        #           repeat=False)
+        # job.run(context.dispatcher)
+        job_queue.run_once(callback=job_modul,
+                           when=0,
+                           context=(chat_id, message_id, data),
+                           name=job_name)
     except BadRequest:
         callback_query.edit_message_text(
             'Mohon untuk tidak menekan tombol berkali-kali.',
