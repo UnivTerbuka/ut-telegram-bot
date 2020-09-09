@@ -85,7 +85,7 @@ class Buku:
                                      callback_data=modul.callback_data()))
         share_data = 'SHORT|' + self.id
         footer = [
-            InlineKeyboardButton('Share 🢅', callback_data=share_data),
+            InlineKeyboardButton('Share 📋', callback_data=share_data),
             InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
         ]
         menu = helpers.build_menu(buttons=keyboard,
