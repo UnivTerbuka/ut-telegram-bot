@@ -29,7 +29,7 @@ def modul(context: CallbackContext):
     footer.append(InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'))
     header = []
     header.append(
-        InlineKeyboardButton(f'🡆 Ke halaman? ({page})',
+        InlineKeyboardButton(f'⬌ Ke halaman? ({page})',
                              callback_data=modul_.callback_data(page,
                                                                 'PAGE',
                                                                 txt=txt)))
