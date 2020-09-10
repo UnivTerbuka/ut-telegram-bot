@@ -7,6 +7,7 @@ from .registrasi import registrasi
 from .link import link
 from .formulir import formulir
 from .donasi import donasi
+from .eula import eula
 from .about import about
 from .cancel import cancel
 from .inline_help import inline_help
@@ -24,6 +25,7 @@ class CommandMixin(object):
         CommandHandler('formulir', formulir, private_filter),
         CommandHandler('registrasi', registrasi, private_filter),
         CommandHandler('about', about, private_filter),
+        CommandHandler('eula', eula, private_filter),
         CommandHandler('donasi', donasi, private_filter),
         CommandHandler('cancel', cancel, private_filter),
         CommandHandler('start', inline_help,

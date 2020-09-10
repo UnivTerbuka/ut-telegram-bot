@@ -13,7 +13,9 @@ def elearning(update: Update, context: CallbackContext):
     user: User = update.effective_user
     message: Message = update.effective_message
     if user.id not in DEVS:
-        message.reply_text('Coming soon. :D')
+        message.reply_text(
+            'Untuk saat ini hanya @hexatester yang dapat mengakses fitur ini, '
+            'karena masih dalam tahap pengembangan.')
         return -1
     message.reply_text('Masukan token elearning anda.')
     return SET_TOKEN

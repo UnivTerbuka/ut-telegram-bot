@@ -14,9 +14,11 @@ def start(update: Update, context: CoreContext):
         'Daftar Perintah\n'
         '/start - Memulai bot\n'
         '/baca - Baca buku\n'
+        '/elearning - Segera datang!\n'
         '/buku - Cari buku\n'
         '/tiket - Mengecek tiket <a href="http://hallo-ut.ut.ac.id/">hallo-ut</a>\n'  # NOQA
         '/shortlink - Memendekan url dengan <a href="https://sl.ut.ac.id/">sl-ut</a>\n'  # NOQA
         '/link - Daftar link UT\n'
         '/formulir - Daftar Formulir\n'
-        '/about - Tentang bot ini\n')
+        '/about - Tentang bot ini\n'
+        'Dengan menggunakan bot ini, berarti anda faham & setuju dengan /eula')
