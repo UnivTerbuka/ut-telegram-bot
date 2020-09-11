@@ -1,61 +1,70 @@
-import os
-import yaml
-from dacite import from_dict
-from dataclasses import dataclass, field
+import requests
+from bs4 import BeautifulSoup, Tag
+from dataclasses import dataclass
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from typing import List
 from uuid import uuid4
-from config import STATIC_PATH
+from ..utils import format_html
 
 
 @dataclass
-class QnA:
-    answer: str
+class Faq:
     question: str
-    image: str = ''
-    topic: str = '-'
+    answer: str
+    source: str
+    title: str = ''
 
-    def __str__(self):
-        img = f'<a href="{self.image}">\u200c</a>' if self.image else ''
-        return '\n{}Topik : {}\nQ: {}\n A: {}'.format(
-            img,
-            self.topic,
-            self.question,
-            self.answer,
-        )
+    def __post_init__(self) -> None:
+        self.title = self.question
+        if '.' in self.question:
+            try:
+                self.question.index('.', -12)
+            except ValueError:
+                left, _, right = self.question.partition('.')
+                self.title = left[:15] + '...' + right
+
+    def __str__(self) -> str:
+        text = ''
+        text += format_html.italic(self.question)
+        text += '\n\n'
+        text += self.answer
+        text += '\n'
+        text += format_html.href('Sumber', self.source)
+        return text
 
     @property
     def result_article(self) -> InlineQueryResultArticle:
         return InlineQueryResultArticle(
             id=uuid4(),
             title=self.question,
-            description=f"FaQ, {self.topic}",
+            description="FaQ, Informasi FaQ Hallo UT",
             input_message_content=InputTextMessageContent(
-                str(self),
-                disable_web_page_preview=False if self.image else True))
+                str(self), disable_web_page_preview=True))
 
 
-@dataclass
-class Topic:
-    topic: str
-    qna: List[QnA] = field(default_factory=list)
-
-    def __post_init__(self) -> None:
-        for qna in self.qna:
-            qna.topic = self.topic
+def parse_div_panel(panel: Tag, url: str) -> Faq:
+    a = panel.find('a')
+    body = panel.find('div', class_='panel-body')
+    return Faq(question=a.get_text(strip=True),
+               answer=body.get_text(strip=True),
+               source=url + a['href'])
 
 
-def load_topics() -> List[Topic]:
-    faq_yaml = os.path.join(STATIC_PATH, 'faq.yaml')
-
-    with open(faq_yaml, 'rb') as f:
-        datas = yaml.load(f, Loader=yaml.FullLoader)
-    return [from_dict(Topic, data) for data in datas if data]
-
-
-def get_qna() -> List[QnA]:
-    topics = load_topics()
-    qnas: List[QnA] = []
-    for topic in topics:
-        qnas.extend(topic.qna)
-    return qnas
+def get_faq(url='http://hallo-ut.ut.ac.id/informasi') -> List[Faq]:
+    res = requests.get(url)
+    if not res.ok:
+        return []
+    results: List[Faq] = list()
+    try:
+        soup = BeautifulSoup(res.text, 'lxml').find('div', {
+            'id': 'accordion2',
+            'class': 'panel-group'
+        })
+        for panel in soup.findAll('div', class_=['panel', 'panel-primary']):
+            try:
+                results.append(parse_div_panel(panel, url))
+            except Exception:
+                pass
+    except Exception:
+        pass
+    return results
