@@ -118,3 +118,27 @@ def fetch_page_txt(page_number: int, module_url: str, doc: str,
         if page.number == page_number:
             out = page
     return out.txt if out else ''
+
+
+def get_max_page(url: str,
+                 subfolder: str,
+                 doc: str,
+                 page_number: int = 1) -> int:
+    res = fetch_page(url, retry=1)
+    if not res or not res.ok:
+        return -1
+    max_page = None
+    soup = BeautifulSoup(res.text, 'lxml')
+    page = (page_number // 10 + 1) * 10
+    try:
+        max_page = int(soup.body.script.next.split(';')[0].split('=')[-1])
+    except ValueError:
+        headers = {'Referer': url}
+        jsonp_url = f'http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}'  # NOQA
+        res = SESSION.get(jsonp_url, headers=headers)
+        if not res.ok or not res.text:
+            return -1
+        pages = Page.from_jsonp(res.text)
+        max_page = pages[0].pages
+    finally:
+        return max_page

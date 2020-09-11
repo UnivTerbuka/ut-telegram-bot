@@ -1,7 +1,6 @@
 from __future__ import annotations
 import os
 from logging import getLogger
-from bs4 import BeautifulSoup
 from cachetools import cached, TTLCache
 from dacite import from_dict
 from dataclasses import dataclass
@@ -11,7 +10,7 @@ from threading import RLock
 from typing import Optional, Tuple, Union
 from urllib.parse import urlparse, parse_qsl
 from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME
-from .utils import download, fetch_page, fetch_page_txt
+from .utils import download, fetch_page_txt, get_max_page
 from ..utils import format_html
 
 LOCK = RLock()
@@ -49,11 +48,10 @@ class Modul:
                 logger.debug('Gagal mendapatkan modul {}'.format(repr(self)))
 
     def fetch(self) -> bool:
-        res = fetch_page(self.url, retry=10)
-        if not res or not res.ok:
+        max_page = get_max_page(self.url, self.subfolder, self.doc)
+        if max_page == -1:
             return False
-        soup = BeautifulSoup(res.text, 'lxml')
-        self.end = int(soup.body.script.next.split(';')[0].split('=')[-1])
+        self.end = max_page
         return True
 
     def get_page(self, page: int) -> str:
