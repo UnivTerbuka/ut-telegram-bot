@@ -1,9 +1,11 @@
+import bleach
 import requests
 from bs4 import BeautifulSoup, Tag
 from dataclasses import dataclass
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from typing import List
 from uuid import uuid4
+from config import BLEACH_CONFIG
 from ..utils import format_html
 
 
@@ -15,6 +17,7 @@ class Faq:
     title: str = ''
 
     def __post_init__(self) -> None:
+        self.answer = bleach.clean(self.answer, **BLEACH_CONFIG)
         self.title = self.question
         if '.' in self.question:
             try:
@@ -45,8 +48,11 @@ class Faq:
 def parse_div_panel(panel: Tag, url: str) -> Faq:
     a = panel.find('a')
     body = panel.find('div', class_='panel-body')
+    answer = ''
+    for ns in body.children:
+        answer += str(ns).strip().replace('<br/>', '\n')
     return Faq(question=a.get_text(strip=True),
-               answer=body.get_text(strip=True),
+               answer=answer,
                source=url + a['href'])
 
 
