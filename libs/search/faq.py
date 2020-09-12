@@ -57,6 +57,8 @@ def parse_contents(contents: Tag) -> str:
                 text += parse_contents(content)
             elif content.name == 'br':
                 text += '\n'
+            elif content.name == 'li':
+                text += '● ' + str(content) + '\n'
             else:
                 text += str(content) + '\n'
             continue
