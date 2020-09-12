@@ -8,6 +8,8 @@ from uuid import uuid4
 from config import BLEACH_CONFIG
 from ..utils import format_html
 
+ignored_tags = ['a', 'b', 'u', 'i', 's', 'code', 'pre']
+
 
 @dataclass
 class Faq:
@@ -45,14 +47,29 @@ class Faq:
                 str(self), disable_web_page_preview=True))
 
 
+def parse_contents(contents: Tag) -> str:
+    text = ''
+    for content in contents:
+        if isinstance(content, Tag):
+            if content.name in ignored_tags:
+                text += str(content)
+            elif content.name == 'ul':
+                text += parse_contents(content)
+            elif content.name == 'br':
+                text += '\n'
+            else:
+                text += str(content) + '\n'
+            continue
+        text += str(content)
+    return text.strip()
+
+
 def parse_div_panel(panel: Tag, url: str) -> Faq:
     a = panel.find('a')
     body = panel.find('div', class_='panel-body')
-    answer = ''
-    for ns in body.children:
-        answer += str(ns).strip().replace('<br/>', '\n')
+    answer = parse_contents(body)
     return Faq(question=a.get_text(strip=True),
-               answer=answer,
+               answer=answer or str(body),
                source=url + a['href'])
 
 
