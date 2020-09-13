@@ -1,7 +1,8 @@
-from telegram import Update, Message, User
+from telegram import Update, Message
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler)
 from core.context import CoreContext
+from core.decorator import only_users
 from core.session import message_wrapper
 from libs.elearning.utils import is_valid_token
 from config import DEVS
@@ -10,13 +11,12 @@ COMMAND = 'elearning'
 SET_TOKEN = range(1)
 
 
-def elearning(update: Update, context: CallbackContext):
-    user: User = update.effective_user
+@only_users(DEVS, 'Fitur masih dalam pengembangan.')
+@message_wrapper
+def elearning(update: Update, context: CoreContext):
     message: Message = update.effective_message
-    if user.id not in DEVS:
-        message.reply_text(
-            'Untuk saat ini hanya @hexatester yang dapat mengakses fitur ini, '
-            'karena masih dalam tahap pengembangan.')
+    if context.user.token:
+        message.reply_text('OK')
         return -1
     message.reply_text('Masukan token elearning anda.')
     return SET_TOKEN
