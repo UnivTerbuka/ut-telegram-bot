@@ -63,7 +63,7 @@ ELEARNING = {
         CommandHandler(COMMAND, elearning),
         CommandHandler('start',
                        start,
-                       filter=Filters.private
+                       filters=Filters.private
                        & Filters.regex(r'^\/start TOKEN-[a-z0-9]+$'))
     ],
     'states': {

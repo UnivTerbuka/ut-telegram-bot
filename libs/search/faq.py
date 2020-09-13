@@ -76,11 +76,11 @@ def parse_div_panel(panel: Tag, url: str) -> Faq:
 
 
 def get_faq(url='http://hallo-ut.ut.ac.id/informasi') -> List[Faq]:
-    res = requests.get(url)
-    if not res.ok:
-        return []
     results: List[Faq] = list()
     try:
+        res = requests.get(url)
+        if not res.ok:
+            return []
         soup = BeautifulSoup(res.text, 'lxml').find('div', {
             'id': 'accordion2',
             'class': 'panel-group'
