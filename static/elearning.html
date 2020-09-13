@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Masuk Elearning untuk @UniversitasTerbukaBot</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Masuk Elearning untuk @UniversitasTerbukaBot</h1>
+      <p>Login untuk fitur elearning di UniversitasTerbukaBot</p>
+      <p>Username & Password tidak akan disimpan!</p>
+      <form class="form-signin" @submit="onSubmit">
+        <img class="mb-4" src="/logo.jpg" alt="" width="72" height="72" />
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputUsername" class="sr-only">NIM</label>
+        <input
+          type="view"
+          id="inputUsername"
+          v-model="form.username"
+          class="form-control"
+          placeholder="Email address"
+          required
+          autofocus
+        />
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input
+          type="password"
+          id="inputPassword"
+          v-model="form.password"
+          class="form-control"
+          placeholder="Password"
+          required
+        />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+          Dapatkan Token
+        </button>
+      </form>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function link(token) {
+        return "https://t.me/UniversitasTerbukaBot?start=TOKEN-" + token;
+      }
+      var app = new Vue({
+        el: "#app",
+        data: () => {
+          return {
+            form: {
+              username: "",
+              password: "",
+            },
+          };
+        },
+        methods: {
+          onSubmit(evt) {
+            evt.preventDefault();
+            axios
+              .get("https://elearning.ut.ac.id/login/token.php", {
+                params: {
+                  username: this.form.username,
+                  password: this.form.password,
+                  service: "moodle_mobile_app",
+                },
+              })
+              .then(function (res) {
+                if (res.data.token) {
+                  window.location.replace(link(res.data.token));
+                } else {
+                  alert("Nim / password salah!");
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
