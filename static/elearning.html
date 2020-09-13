@@ -15,26 +15,37 @@
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     />
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <title>Masuk Elearning untuk @UniversitasTerbukaBot</title>
+    <title>Login Elearning @UniversitasTerbukaBot</title>
   </head>
-  <body>
-    <div id="app">
-      <h1>Masuk Elearning untuk @UniversitasTerbukaBot</h1>
-      <p>Login untuk fitur elearning di UniversitasTerbukaBot</p>
-      <p>Username & Password tidak akan disimpan!</p>
-      <form class="form-signin" @submit="onSubmit">
+  <body
+    class="text-center"
+    style="
+      display: flex;
+      align-items: center;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    "
+  >
+    <div id="app" style="margin: auto; padding: 15px">
+      <form
+        class="form-signin"
+        style="margin: auto; padding: 15px; max-width: 330px"
+        @submit="onSubmit"
+      >
         <img class="mb-4" src="/logo.jpg" alt="" width="72" height="72" />
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Login Elearning @UniversitasTerbukaBot</h1>
+        <p>Password tidak akan disimpan!</p>
         <label for="inputUsername" class="sr-only">NIM</label>
         <input
           type="view"
           id="inputUsername"
           v-model="form.username"
           class="form-control"
-          placeholder="Email address"
+          placeholder="NIM"
           required
           autofocus
         />
@@ -48,7 +59,7 @@
           required
         />
         <button class="btn btn-lg btn-primary btn-block" type="submit">
-          Dapatkan Token
+          Login
         </button>
       </form>
     </div>
