@@ -20,13 +20,14 @@ class UniversitasTerbukaBot(object):
         self.handlers = Handlers()
         self.handlers.register(self.dp)
         self.bot = self.updater.bot
+        self.update_queue = self.updater.update_queue
         if NAME:
             self.bot.setWebhook("https://{}.herokuapp.com/{}".format(
                 self.NAME, self.TOKEN))
 
     def process_update(self, update):
         update = Update.de_json(update, self.bot)
-        self.dp.process_update(update)
+        self.update_queue.put(update)
 
     def polling(self):
         self.updater.start_polling(clean=True)
