@@ -44,7 +44,7 @@ def message_wrapper(
         try:
             session = get_session()
             message: Message = update.effective_message
-            user = get_user(session, message.from_user)
+            user = get_user(session, update.effective_user)
             if user.banned:
                 message.chat.send_message('Anda dibanned!')
                 return result
