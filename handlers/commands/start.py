@@ -8,7 +8,7 @@ def start(update: Update, context: CoreContext):
     user = update.effective_user
     if context.user and not context.user.started:
         context.user.started = True
-        context.session.commit()
+        context.save()
     update.effective_message.reply_text(
         f'Selamat datang {user.full_name}\n\n'
         'Daftar Perintah\n'
@@ -22,3 +22,4 @@ def start(update: Update, context: CoreContext):
         '/formulir - Daftar Formulir\n'
         '/about - Tentang bot ini\n'
         'Dengan menggunakan bot ini, berarti anda faham & setuju dengan /eula')
+    return -1
