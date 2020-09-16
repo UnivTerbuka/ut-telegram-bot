@@ -20,6 +20,11 @@ def elearning(update: Update, context: CoreContext):
             'Silahkan login untuk mendapatkan token elearning\n' + DOMAIN +
             'elearning.html')
         return -1
+    if 'reset' in message.text:
+        message.reply_text('Token berhasil direset.')
+        context.user.token = None
+        context.session.commit()
+        return -1
     message.reply_text('Masukan token elearning anda.')
     return SET_TOKEN
 
