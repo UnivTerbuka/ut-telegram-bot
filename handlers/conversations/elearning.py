@@ -5,7 +5,7 @@ from core.context import CoreContext
 from core.decorator import only_users
 from core.session import message_wrapper
 from libs.elearning.utils import is_valid_token
-from config import DEVS
+from config import DEVS, DOMAIN
 
 COMMAND = 'elearning'
 SET_TOKEN = range(1)
@@ -15,8 +15,10 @@ SET_TOKEN = range(1)
 @message_wrapper
 def elearning(update: Update, context: CoreContext):
     message: Message = update.effective_message
-    if context.user.token:
-        message.reply_text('OK')
+    if not context.user.token:
+        message.reply_text(
+            'Silahkan login untuk mendapatkan token elearning\n' + DOMAIN +
+            'elearning.html')
         return -1
     message.reply_text('Masukan token elearning anda.')
     return SET_TOKEN
