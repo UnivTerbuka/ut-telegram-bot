@@ -7,10 +7,13 @@ from .registrasi import registrasi
 from .link import link
 from .formulir import formulir
 from .donasi import donasi
+from .elearning import elearning
+from .courses import courses
 from .eula import eula
 from .about import about
 from .cancel import cancel
 from .inline_help import inline_help
+from .start_elearning import start_elearning
 from .start import start
 
 private_filter = Filters.private
@@ -25,11 +28,17 @@ class CommandMixin(object):
         CommandHandler('formulir', formulir, private_filter),
         CommandHandler('registrasi', registrasi, private_filter),
         CommandHandler('about', about, private_filter),
+        CommandHandler('elearning', elearning, private_filter),
+        CommandHandler('kursus', courses, private_filter),
         CommandHandler('eula', eula, private_filter),
         CommandHandler('donasi', donasi, private_filter),
         CommandHandler('cancel', cancel, private_filter),
+        CommandHandler('start',
+                       start_elearning,
+                       filters=Filters.private
+                       & Filters.regex(r'^\/start TOKEN-[a-z0-9]+$')),
         CommandHandler('start', inline_help,
-                       Filters.regex(r'/start inline-help')),
+                       Filters.regex(r'^/start inline-help$')),
         CommandHandler('start', start, private_filter),
     ]
 

@@ -4,6 +4,7 @@ from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
 from .buku import buku
 from .close import close
+from .course import course
 from .modul import modul
 from .page import page
 from .short import short
@@ -14,6 +15,7 @@ class CallbackMixin(object):
     logger: Logger = None
     CALLBACKS_GROUP: int = 0
     CALLBACKS: List[CallbackQueryHandler] = [
+        CallbackQueryHandler(course, pattern=r'^COURSE\|\d+$'),
         CallbackQueryHandler(buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
         CallbackQueryHandler(
             modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
