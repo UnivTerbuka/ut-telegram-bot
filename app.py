@@ -13,6 +13,7 @@ logging.basicConfig(
 app = Flask(__name__, static_url_path='', static_folder='static')
 
 bot = UniversitasTerbukaBot(TOKEN, NAME)
+bot.start_dispatcher_thread()
 
 
 @app.route(f"/{TOKEN}", methods=['POST'])

@@ -1,5 +1,6 @@
 from telegram import Update, ParseMode
 from telegram.ext import Updater, Dispatcher, Defaults
+from threading import Thread
 from config import NAME, TOKEN, PERSISTENCE
 
 
@@ -24,6 +25,10 @@ class UniversitasTerbukaBot(object):
         if NAME:
             self.bot.setWebhook("https://{}.herokuapp.com/{}".format(
                 self.NAME, self.TOKEN))
+
+    def start_dispatcher_thread(self):
+        self.thread = Thread(target=self.dp.start, name='dispatcher')
+        self.thread.start()
 
     def process_update(self, update):
         update = Update.de_json(update, self.bot)
