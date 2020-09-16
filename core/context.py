@@ -12,7 +12,6 @@ class CoreContext(CallbackContext):
     def __init__(self, dispatcher: Dispatcher):
         super(CoreContext, self).__init__(dispatcher)
         self._message = None
-        self._moodle = None
         self._session = None
         self._user = None
 
@@ -24,8 +23,10 @@ class CoreContext(CallbackContext):
     def moodle(self) -> Optional[Moodle]:
         if not self.user or not self.user.token:
             return None
-        self._moodle = Moodle(MOODLE_URL, self.user.token)
-        return self._moodle
+        if 'moodle' in self.user_data:
+            return self.user_data['moodle']
+        self.user_data['moodle'] = Moodle(MOODLE_URL, self.user.token)
+        return self.user_data['moodle']
 
     @property
     def session(self) -> Session:
