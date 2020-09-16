@@ -50,16 +50,15 @@ def start(update: Update, context: CoreContext):
     try:
         token = message.text.split('-')[-1]
     except Exception:
-        token = ''
-    if not token:
         return -1
-    if is_valid_token(token):
-        if context.user.token == token:
-            message.reply_text('Token sudah diatur (masih sama).')
-        else:
-            message.reply_text('Berhasil mengatur token elearning')
-    else:
+    if not is_valid_token(token):
         message.reply_text('Token tidak valid!')
+    elif context.user.token == token:
+        message.reply_text('Token sudah diatur (masih sama).')
+    else:
+        context.user.token = token
+        context.session.commit()
+        message.reply_text('Berhasil mengatur token elearning')
     return -1
 
 
