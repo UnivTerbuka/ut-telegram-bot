@@ -3,7 +3,6 @@ from moodle import Moodle
 from sqlalchemy.orm import Session
 from telegram import Message, Update
 from telegram.ext import CallbackContext, Dispatcher
-from typing import Optional
 from core.models import User
 from config import MOODLE_URL
 
@@ -20,9 +19,7 @@ class CoreContext(CallbackContext):
         return self._message
 
     @property
-    def moodle(self) -> Optional[Moodle]:
-        if not self.user or not self.user.token:
-            return None
+    def moodle(self) -> Moodle:
         if 'moodle' in self.user_data:
             return self.user_data['moodle']
         self.user_data['moodle'] = Moodle(MOODLE_URL, self.user.token)
