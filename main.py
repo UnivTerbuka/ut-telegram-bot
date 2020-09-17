@@ -4,8 +4,9 @@ from core.bot import UniversitasTerbukaBot
 from dotenv import load_dotenv
 load_dotenv()
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 if __name__ == "__main__":
     # Set these variable to the appropriate values
