@@ -1,6 +1,7 @@
+import bleach
 from moodle.core.course import Course, CourseBTC, CoursesBTC
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR, BLEACH_CONFIG
 from ..utils import format_html
 from ..utils.helpers import build_menu
 
@@ -27,6 +28,7 @@ def course_buttons(courses: CoursesBTC,
 
 
 def course_text(course: Course) -> str:
-    text = 'Kursus\n'
-    text += format_html.code(course.fullname) + '\n'
+    text = format_html.bold(course.fullname) + '\n'
+    text += format_html.italic(course.format) + '\n\n'
+    text += bleach.clean(course.summary, **BLEACH_CONFIG)
     return text
