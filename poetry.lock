@@ -64,7 +64,7 @@ description = "An easy safelist-based HTML-sanitizing tool."
 name = "bleach"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "3.1.5"
+version = "3.2.0"
 
 [package.dependencies]
 packaging = "*"
@@ -357,7 +357,7 @@ description = "Client for moodle webservice"
 name = "moodlepy"
 optional = false
 python-versions = ">=3.7,<4.0"
-version = "0.8.0"
+version = "0.8.1"
 
 [package.dependencies]
 dacite = ">=1.5.1,<2.0.0"
@@ -822,8 +822,8 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.9.1.tar.gz", hash = "sha256:73cc4d115b96f79c7d77c1c7f7a0a8d4c57860d1041df407dd1aae7f07a77fd7"},
 ]
 bleach = [
-    {file = "bleach-3.1.5-py2.py3-none-any.whl", hash = "sha256:2bce3d8fab545a6528c8fa5d9f9ae8ebc85a56da365c7f85180bfe96a35ef22f"},
-    {file = "bleach-3.1.5.tar.gz", hash = "sha256:3c4c520fdb9db59ef139915a5db79f8b51bc2a7257ea0389f30c846883430a4b"},
+    {file = "bleach-3.2.0-py2.py3-none-any.whl", hash = "sha256:769483204d247465c0b001ead257fb86bba6944bce6fe1b6759c812cceb54e3d"},
+    {file = "bleach-3.2.0.tar.gz", hash = "sha256:f9e0205cc57b558c21bdfc11034f9d96b14c4052c25be60885d94f4277c792e0"},
 ]
 cachetools = [
     {file = "cachetools-4.1.1-py3-none-any.whl", hash = "sha256:513d4ff98dd27f85743a8dc0e92f55ddb1b49e060c2d5961512855cda2c01a98"},
@@ -1040,8 +1040,8 @@ mccabe = [
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 moodlepy = [
-    {file = "moodlepy-0.8.0-py3-none-any.whl", hash = "sha256:cf0f1a6a75bab7ef3a7727176054406549bc8f17e31a794fc447974ef766c895"},
-    {file = "moodlepy-0.8.0.tar.gz", hash = "sha256:fe021b0a6412f0a153a235be75ebc9ff224bf5eb381bf2e3d030abb68da18811"},
+    {file = "moodlepy-0.8.1-py3-none-any.whl", hash = "sha256:7354c8e6b513aa3f2235fdff5fe4328bb86ea0f4d0de7c4ca14413d4d6488641"},
+    {file = "moodlepy-0.8.1.tar.gz", hash = "sha256:069e65807d5595a8478e9bdef478e3a09249684b89513bd58f42d361671fcf9f"},
 ]
 more-itertools = [
     {file = "more-itertools-8.5.0.tar.gz", hash = "sha256:6f83822ae94818eae2612063a5101a7311e68ae8002005b5e05f03fd74a86a20"},
