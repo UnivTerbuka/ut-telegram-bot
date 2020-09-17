@@ -2,4 +2,4 @@ from core import __version__
 
 
 def test_version():
-    assert __version__ == '4.12.0'
+    assert __version__ == '4.12.1'
