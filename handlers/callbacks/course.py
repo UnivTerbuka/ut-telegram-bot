@@ -15,7 +15,8 @@ def course(update: Update, context: CoreContext):
     datas = context.query.data.split('|')
     course_id = int(datas[-1])
     try:
-        course = context.moodle.core.course.get_courses([course_id])[0]
+        course = context.moodle.core.course.get_courses_by_field(
+            'id', course_id)[0]
     except Exception as e:
         logger.debug('Error {}'.format(repr(e)))
         context.query.edit_message_text('Gagal mendapatkan kursus')
