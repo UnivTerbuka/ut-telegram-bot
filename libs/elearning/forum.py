@@ -19,7 +19,11 @@ def forum_buttons(forums: List[Forum]) -> InlineKeyboardMarkup:
                 text=text,
                 callback_data=f"FORUM|{forum.course}|{forum.id}",
             ))
-    keyboard = build_menu(buttons=buttons)
+    keyboard = build_menu(
+        buttons=buttons,
+        n_cols=2,
+        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),
+    )
     return InlineKeyboardMarkup(keyboard)
 
 

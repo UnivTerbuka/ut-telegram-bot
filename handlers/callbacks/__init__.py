@@ -5,6 +5,8 @@ from telegram.ext import Dispatcher, CallbackQueryHandler
 from .buku import buku
 from .close import close
 from .course import course
+from .forum import forum
+from .forums import forums
 from .modul import modul
 from .page import page
 from .short import short
@@ -16,6 +18,8 @@ class CallbackMixin(object):
     CALLBACKS_GROUP: int = 0
     CALLBACKS: List[CallbackQueryHandler] = [
         CallbackQueryHandler(course, pattern=r'^COURSE\|\d+$'),
+        CallbackQueryHandler(forum, pattern=r'^FORUM\|\d+\|\d+$'),
+        CallbackQueryHandler(forums, pattern=r'^FORUMS\|\d+$'),
         CallbackQueryHandler(buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
         CallbackQueryHandler(
             modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
