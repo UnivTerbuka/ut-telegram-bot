@@ -357,7 +357,7 @@ description = "Client for moodle webservice"
 name = "moodlepy"
 optional = false
 python-versions = ">=3.7,<4.0"
-version = "0.9.0"
+version = "0.11.0"
 
 [package.dependencies]
 dacite = ">=1.5.1,<2.0.0"
@@ -795,7 +795,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "1bb92d32a1a946341054a1f22a3b9c776029dd7d9f7716172f677df4ff8f4c6f"
+content-hash = "4527470abae18fd3c56cd70f77dfd4456ea67535d5a451de88ccbf0a0a02cb94"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -1040,8 +1040,8 @@ mccabe = [
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 moodlepy = [
-    {file = "moodlepy-0.9.0-py3-none-any.whl", hash = "sha256:6e38492b660c91e7f45c85a15748bc5a6a9e68173bc69f6c73173c4f447ad8c1"},
-    {file = "moodlepy-0.9.0.tar.gz", hash = "sha256:17e6123224976b52e80a5ab3b3a40d5337ae1181808651b17dabaca3e64200af"},
+    {file = "moodlepy-0.11.0-py3-none-any.whl", hash = "sha256:5ec27f8ae47c3f5a4b6c1e6c33c3946046d8f594fdf1b4d392580bfdb6d46f75"},
+    {file = "moodlepy-0.11.0.tar.gz", hash = "sha256:7d85d54cc3fac82b2059b3ac2cef9fc5a990c1e64b768464e79879f7a09aa118"},
 ]
 more-itertools = [
     {file = "more-itertools-8.5.0.tar.gz", hash = "sha256:6f83822ae94818eae2612063a5101a7311e68ae8002005b5e05f03fd74a86a20"},
