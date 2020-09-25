@@ -4,11 +4,16 @@ from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
 from .buku import buku
 from .close import close
+from .completion import completion
+from .content import content
+from .contents import contents
 from .course import course
 from .forum import forum
 from .forums import forums
 from .modul import modul
+from .module import module
 from .page import page
+from .resource import resource
 from .short import short
 from .ticket import ticket
 
@@ -20,6 +25,11 @@ class CallbackMixin(object):
         CallbackQueryHandler(course, pattern=r'^COURSE\|\d+$'),
         CallbackQueryHandler(forum, pattern=r'^FORUM\|\d+\|\d+$'),
         CallbackQueryHandler(forums, pattern=r'^FORUMS\|\d+$'),
+        CallbackQueryHandler(content, pattern=r'^CONTENT\|\d+\|\d+$'),
+        CallbackQueryHandler(contents, pattern=r'^CONTENTS\|\d+$'),
+        CallbackQueryHandler(module, pattern=r'^MODULE\|\d+$'),
+        CallbackQueryHandler(resource, pattern=r'^RESOURCE\|\d+\|\d+$'),
+        CallbackQueryHandler(completion, pattern=r'^COMPLETION\|\d+\|\d+$'),
         CallbackQueryHandler(buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
         CallbackQueryHandler(
             modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
