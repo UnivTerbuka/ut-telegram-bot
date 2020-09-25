@@ -7,6 +7,7 @@ from telegram.error import (BadRequest, RetryAfter, TimedOut, Unauthorized,
                             NetworkError)
 from telegram.ext import CallbackContext
 from typing import Any, Callable, Optional
+from moodle import MoodleException
 from core.context import CoreContext
 from core.db import get_session
 from core.exceptions import RollbackException
@@ -135,4 +136,6 @@ def ignore_exception(exception):
     if type(exception) is NetworkError:
         return True
 
+    if type(exception) is MoodleException:
+        return False
     return False

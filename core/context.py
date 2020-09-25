@@ -1,5 +1,5 @@
 from __future__ import annotations
-from moodle import Moodle
+from moodle import Mdl
 from sqlalchemy.orm import Session
 from telegram import Chat, Message, Update, CallbackQuery
 from telegram.ext import CallbackContext, Dispatcher
@@ -25,10 +25,10 @@ class CoreContext(CallbackContext):
         return self._message
 
     @property
-    def moodle(self) -> Moodle:
+    def moodle(self) -> Mdl:
         if 'moodle' in self.user_data:
             return self.user_data['moodle']
-        self.user_data['moodle'] = Moodle(MOODLE_URL, self.user.token)
+        self.user_data['moodle'] = Mdl(MOODLE_URL, self.user.token)
         return self.user_data['moodle']
 
     @property

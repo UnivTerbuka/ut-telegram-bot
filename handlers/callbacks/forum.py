@@ -1,5 +1,8 @@
 from logging import getLogger
 from telegram import Update
+
+from moodle.mod.forum import BaseForum
+
 from core.context import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
@@ -17,7 +20,7 @@ def forum(update: Update, context: CoreContext):
     # FORUM|course_id|forum_id
     course_id = int(datas[1])
     try:
-        forums = context.moodle.mod.forum.get_forums_by_courses([course_id])
+        forums = BaseForum(context.moodle).get_forums_by_courses([course_id])
         if not forums:
             context.query.edit_message_text('Forum tidak ditemukan.')
             return -1
