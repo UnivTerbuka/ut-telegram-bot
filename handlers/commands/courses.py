@@ -5,15 +5,13 @@ from typing import List
 from moodle.core.course import BaseCourse
 
 from core.context import CoreContext
-from core.decorator import only_users, assert_token
+from core.decorator import assert_token
 from core.session import message_wrapper
-from config import DEVS
 from libs.utils.helpers import build_menu, make_data
 
 logger = getLogger(__name__)
 
 
-@only_users(DEVS, 'Fitur masih dalam pengembangan.')
 @message_wrapper
 @assert_token
 def courses(update: Update, context: CoreContext):

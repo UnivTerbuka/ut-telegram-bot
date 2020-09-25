@@ -3,13 +3,10 @@ from telegram import Update, Message
 from moodle.core.webservice import BaseWebservice
 
 from core.context import CoreContext
-from core.decorator import only_users
 from core.session import message_wrapper
-from config import DEVS
 from libs.elearning.utils import is_valid_token
 
 
-@only_users(DEVS)
 @message_wrapper
 def start_elearning(update: Update, context: CoreContext):
     message: Message = update.effective_message
@@ -27,9 +24,10 @@ def start_elearning(update: Update, context: CoreContext):
     message.reply_text(
         f'Selamat datang {site_info.fullname}.'
         '\nSekarang Anda bisa menggunakan /elearning'
+        '\n<b>Fitur ini masih dalam proses pengembangan.</b>'
         '\nMohon untuk tidak mem-forward pesan dari fitur ini ke chat lain, '
         'karena ada kemungkinan pesan mengandung token Anda!\n'
         'Jika token Anda tersebar, segera Set Ulang di Elearning > Dasbor > '
         'Preferensi > Akun Pengguna > Kunci Keamanan > Set Ulang '
-        '(Baris Moodle mobile web service)', )
+        '(Kolom Operasi & Baris Moodle mobile web service)', )
     return -1

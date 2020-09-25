@@ -4,14 +4,12 @@ from telegram import Update
 from moodle.core.webservice import BaseWebservice
 
 from core.context import CoreContext
-from core.decorator import only_users, assert_token
+from core.decorator import assert_token
 from core.session import message_wrapper
-from config import DEVS
 
 logger = getLogger(__name__)
 
 
-@only_users(DEVS, 'Fitur masih dalam pengembangan.')
 @message_wrapper
 @assert_token
 def elearning(update: Update, context: CoreContext):
