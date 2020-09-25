@@ -1,7 +1,7 @@
 from __future__ import annotations
 from moodle import Moodle
 from sqlalchemy.orm import Session
-from telegram import Message, Update, CallbackQuery
+from telegram import Chat, Message, Update, CallbackQuery
 from telegram.ext import CallbackContext, Dispatcher
 from core.models import User
 from config import MOODLE_URL
@@ -10,10 +10,15 @@ from config import MOODLE_URL
 class CoreContext(CallbackContext):
     def __init__(self, dispatcher: Dispatcher):
         super(CoreContext, self).__init__(dispatcher)
+        self._chat = None
         self._message = None
         self._session = None
         self._query = None
         self._user = None
+
+    @property
+    def chat(self) -> Chat:
+        return self._chat
 
     @property
     def message(self) -> Message:
@@ -49,6 +54,7 @@ class CoreContext(CallbackContext):
                   session: Session, user: User) -> CoreContext:
         self = cls(context.dispatcher)
 
+        self._chat = update.effective_chat
         self._message = update.effective_message
         self._query = update.callback_query
 
