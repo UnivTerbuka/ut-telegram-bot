@@ -1,6 +1,8 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Job
-from typing import Tuple
+from typing import Tuple, Union
+
+from config import CALLBACK_SEPARATOR
 
 
 def make_button(text, callback_data=None, url=None) -> InlineKeyboardMarkup:
@@ -52,3 +54,7 @@ def jobs2markup(jobs: Tuple[Job]) -> InlineKeyboardMarkup:
         keyboard.append(button)
     menu = build_menu(keyboard, 2)
     return InlineKeyboardMarkup(menu)
+
+
+def make_data(*args: Union[str, int], sep: str = CALLBACK_SEPARATOR) -> str:
+    return sep.join(map(str, args))
