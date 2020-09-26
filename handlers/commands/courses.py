@@ -22,9 +22,12 @@ def courses(update: Update, context: CoreContext):
         return -1
     buttons: List[InlineKeyboardButton] = list()
     for course in courses:
-        text = course.shortname or course.fullname
+        name = course.fullname or course.shortname
+        text = name[:30]
+        if len(name) > 30:
+            text += '...'
         if course.progress:
-            text += f" {course.progress}%"
+            text += f" ({course.progress}%)"
         data = make_data('COURSE', course.id)
         button = InlineKeyboardButton(text, callback_data=data)
         buttons.append(button)
