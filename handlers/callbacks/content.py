@@ -1,6 +1,7 @@
 from bleach import clean as clean_html
 from logging import getLogger
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.constants import MAX_MESSAGE_LENGTH
 from typing import List
 
 from moodle import MoodleException
@@ -20,9 +21,10 @@ logger = getLogger(__name__)
 def content(update: Update, context: CoreContext):
     context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
-    # CONTENT|course_id|section_id
+    # CONTENT|course_id|section_id|page
     course_id = int(datas[1])
     section_id = int(datas[2])
+    page = int(datas[3])
     try:
         options = [ContentOption('sectionid', str(section_id))]
         sections = BaseCourse(context.moodle).get_contents(course_id, options)
@@ -81,14 +83,29 @@ def content(update: Update, context: CoreContext):
                 button = InlineKeyboardButton(button_text, callback_data=data)
                 buttons.append(button)
             keyboard.append(buttons)
+    if len(text) > MAX_MESSAGE_LENGTH:
+        MESSAGE_LENGTH = len(text)
+        header = list()
+        if page > 0:
+            data = make_data('CONTENT', course_id, section_id, page - 1)
+            button = InlineKeyboardButton('Sebelumnya', callback_data=data)
+            header.append(button)
+        if MESSAGE_LENGTH >= (page + 1) * MAX_MESSAGE_LENGTH:
+            data = make_data('CONTENT', course_id, section_id, page + 1)
+            button = InlineKeyboardButton('Selanjutnya', callback_data=data)
+            header.append(button)
+        if header:
+            keyboard.insert(0, header)
     footer = [
         InlineKeyboardButton('Kembali',
-                             callback_data=make_data('CONTENTS', course_id)),
+                             callback_data=make_data('COURSE', course_id)),
         InlineKeyboardButton('Tutup', callback_data='CLOSE')
     ]
     if completions:
         keyboard.append(completions)
     keyboard.append(footer)
     context.query.edit_message_text(
-        text, reply_markup=InlineKeyboardMarkup(keyboard))
+        text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
+        reply_markup=InlineKeyboardMarkup(keyboard),
+    )
     return -1

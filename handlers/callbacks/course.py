@@ -20,17 +20,30 @@ def course(update: Update, context: CoreContext):
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # COURSE|course_id
     course_id = int(datas[-1])
-    courses = BaseCourse(context.moodle).get_courses_by_field('id', course_id)
+
+    moodle_course = BaseCourse(context.moodle)
+    courses = moodle_course.get_courses_by_field('id', course_id)
     if not courses:
         context.query.edit_message_text('Kursus tidak ditemukan.')
         return -1
     course_ = courses[0]
-    buttons = [
-        InlineKeyboardButton('Daftar Sesi',
-                             callback_data=make_data('CONTENTS', course_id)),
-        InlineKeyboardButton('Daftar Forum',
-                             callback_data=make_data('FORUMS', course_id))
-    ]
+
+    try:
+        sections = moodle_course.get_contents(course_.id)
+    except Exception:
+        pass
+
+    buttons = list()
+    if sections:
+        for section in sections:
+            if section.uservisible:
+                data = make_data('CONTENT', course_id, section.id, 0)
+                button = InlineKeyboardButton(section.name, callback_data=data)
+                buttons.append(button)
+    else:
+        data = make_data('FORUMS', course_id)
+        button = InlineKeyboardButton('Daftar Forum', callback_data=data)
+        buttons.append(button)
     keyboard = build_menu(
         buttons,
         footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),

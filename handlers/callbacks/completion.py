@@ -23,7 +23,7 @@ def completion(update: Update, context: CoreContext):
     cmplt = BaseCompletion(context.moodle)
     res = cmplt.update_activity_completion_status_manually(module_id, 1)
     logger.debug(repr(res))
-    back_data = make_data('CONTENTS', course_id)
+    back_data = make_data('COURSE', course_id)
     keyboard = [[
         InlineKeyboardButton('Kembali', callback_data=back_data),
         InlineKeyboardButton('Tutup', callback_data='Tutup')

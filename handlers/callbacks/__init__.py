@@ -6,7 +6,6 @@ from .buku import buku
 from .close import close
 from .completion import completion
 from .content import content
-from .contents import contents
 from .course import course
 from .forum import forum
 from .forums import forums
@@ -25,8 +24,7 @@ class CallbackMixin(object):
         CallbackQueryHandler(course, pattern=r'^COURSE\|\d+$'),
         CallbackQueryHandler(forum, pattern=r'^FORUM\|\d+\|\d+$'),
         CallbackQueryHandler(forums, pattern=r'^FORUMS\|\d+$'),
-        CallbackQueryHandler(content, pattern=r'^CONTENT\|\d+\|\d+$'),
-        CallbackQueryHandler(contents, pattern=r'^CONTENTS\|\d+$'),
+        CallbackQueryHandler(content, pattern=r'^CONTENT\|\d+\|\d+\|\d+$'),
         CallbackQueryHandler(module, pattern=r'^MODULE\|\d+$'),
         CallbackQueryHandler(resource, pattern=r'^RESOURCE\|\d+\|\d+$'),
         CallbackQueryHandler(completion, pattern=r'^COMPLETION\|\d+\|\d+$'),

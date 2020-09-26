@@ -37,11 +37,10 @@ def module(update: Update, context: CoreContext):
     button = InlineKeyboardButton(course_module.name, callback_data=data)
     buttons.append(button)
 
+    back_data = make_data('CONTENT', course_module.course,
+                          course_module.section, 0)
     footer = [
-        InlineKeyboardButton('Kembali',
-                             callback_data=make_data('CONTENTS',
-                                                     course_module.course,
-                                                     course_module.section)),
+        InlineKeyboardButton('Kembali', callback_data=back_data),
         InlineKeyboardButton('Tutup', callback_data='CLOSE')
     ]
     keyboard = build_menu(buttons, footer_buttons=footer)
