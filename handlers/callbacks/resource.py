@@ -16,6 +16,7 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def resource(update: Update, context: CoreContext):
+    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # RESOURCE|course_id|resource_id
     course_id = int(datas[1])
@@ -26,10 +27,9 @@ def resource(update: Update, context: CoreContext):
         if res.id == resource_id:
             break
     if res.id == resource_id:
-        context.query.answer()
         base_res.view_resource(res.id)
     else:
-        context.query.answer('File tidak ditemukan.')
+        context.query.edit_message_text('Dokumen tidak ditemukan!')
         return -1
     buttons = []
     for file in res.introfiles:
