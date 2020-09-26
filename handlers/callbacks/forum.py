@@ -58,3 +58,6 @@ def forum(update: Update, context: CoreContext):
     context.query.edit_message_text(
         text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
+
+
+forum_pattern = r'^FORUM\|\d+\|\d+$'

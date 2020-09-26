@@ -2,41 +2,38 @@ from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
-from .buku import buku
-from .close import close
-from .completion import completion
-from .content import content
-from .course import course
-from .forum import forum
-from .forums import forums
-from .modul import modul
-from .module import module
-from .page import page
-from .resource import resource
-from .short import short
-from .ticket import ticket
+from .buku import buku, buku_pattern
+from .close import close, close_pattern
+from .completion import completion, completion_pattern
+from .content import content, content_pattern
+from .course import course, course_pattern
+from .forum import forum, forum_pattern
+from .forums import forums, forums_pattern
+from .modul import modul, modul_pattern
+from .module import module, module_pattern
+from .page import page, page_pattern
+from .resource import resource, resource_pattern
+from .short import short, short_pattern
+from .ticket import ticket, ticket_pattern
 
 
 class CallbackMixin(object):
     logger: Logger = None
     CALLBACKS_GROUP: int = 0
     CALLBACKS: List[CallbackQueryHandler] = [
-        CallbackQueryHandler(course, pattern=r'^COURSE\|\d+$'),
-        CallbackQueryHandler(forum, pattern=r'^FORUM\|\d+\|\d+$'),
-        CallbackQueryHandler(forums, pattern=r'^FORUMS\|\d+$'),
-        CallbackQueryHandler(content, pattern=r'^CONTENT\|\d+\|\d+\|\d+$'),
-        CallbackQueryHandler(module, pattern=r'^MODULE\|\d+$'),
-        CallbackQueryHandler(resource, pattern=r'^RESOURCE\|\d+\|\d+$'),
-        CallbackQueryHandler(completion, pattern=r'^COMPLETION\|\d+\|\d+$'),
-        CallbackQueryHandler(buku, pattern=r'^BUKU\|[A-Z]{4}\d+$'),
-        CallbackQueryHandler(
-            modul, pattern=r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
-        CallbackQueryHandler(
-            page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'),
-        CallbackQueryHandler(
-            page, pattern=r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|\d+$'),
-        CallbackQueryHandler(short, pattern=r'^SHORT\|[A-Z]{4}\d+$'),
-        CallbackQueryHandler(ticket, pattern=r'^TICKET\|[A-Z]\d{10}-\d{8}$'),
+        CallbackQueryHandler(close, pattern=close_pattern),
+        CallbackQueryHandler(course, pattern=course_pattern),
+        CallbackQueryHandler(forum, pattern=forum_pattern),
+        CallbackQueryHandler(forums, pattern=forums_pattern),
+        CallbackQueryHandler(content, pattern=content_pattern),
+        CallbackQueryHandler(module, pattern=module_pattern),
+        CallbackQueryHandler(resource, pattern=resource_pattern),
+        CallbackQueryHandler(completion, pattern=completion_pattern),
+        CallbackQueryHandler(buku, pattern=buku_pattern),
+        CallbackQueryHandler(modul, pattern=modul_pattern),
+        CallbackQueryHandler(page, pattern=page_pattern),
+        CallbackQueryHandler(short, pattern=short_pattern),
+        CallbackQueryHandler(ticket, pattern=ticket_pattern),
         CallbackQueryHandler(close),
     ]
 

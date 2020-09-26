@@ -39,3 +39,6 @@ def forums(update: Update, context: CoreContext):
         reply_markup=forum_buttons(forums_),
     )
     return -1
+
+
+forums_pattern = r'^FORUMS\|\d+$'

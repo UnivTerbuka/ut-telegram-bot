@@ -53,3 +53,6 @@ def course(update: Update, context: CoreContext):
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1
+
+
+course_pattern = r'^COURSE\|\d+$'

@@ -48,3 +48,6 @@ def module(update: Update, context: CoreContext):
     context.query.edit_message_text(
         text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
+
+
+module_pattern = r'^MODULE\|\d+$'

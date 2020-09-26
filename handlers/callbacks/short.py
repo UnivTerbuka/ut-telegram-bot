@@ -48,3 +48,6 @@ def short(update: Update, context: CallbackContext):
     callback_query.edit_message_text(f'Share modul {modul} dengan link ' + url,
                                      reply_markup=back)
     return -1
+
+
+short_pattern = r'^SHORT\|[A-Z]{4}\d+$'

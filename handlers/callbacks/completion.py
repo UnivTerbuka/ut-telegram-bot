@@ -33,3 +33,6 @@ def completion(update: Update, context: CoreContext):
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1
+
+
+completion_pattern = r'^COMPLETION\|\d+\|\d+$'

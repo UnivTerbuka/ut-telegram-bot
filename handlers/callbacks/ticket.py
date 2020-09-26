@@ -17,3 +17,6 @@ def ticket(update: Update, context: CallbackContext):
     except BadRequest:
         callback_query.answer('Tidak ada perubahan data.')
     return -1
+
+
+ticket_pattern = r'^TICKET\|[A-Z]\d{10}-\d{8}$'

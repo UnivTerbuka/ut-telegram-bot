@@ -59,3 +59,6 @@ def resource(update: Update, context: CoreContext):
     context.query.edit_message_text(
         text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
+
+
+resource_pattern = r'^RESOURCE\|\d+\|\d+$'

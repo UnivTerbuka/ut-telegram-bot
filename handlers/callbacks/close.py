@@ -9,3 +9,6 @@ def close(update: Update, context: CallbackContext):
     callback_query.answer()
     callback_query.edit_message_text('Terimakasih. :D')
     return -1
+
+
+close_pattern = r'CLOSE'

@@ -21,3 +21,6 @@ def buku(update: Update, context: CallbackContext):
     callback_query.edit_message_text(buku_.text,
                                      reply_markup=buku_.reply_markup)
     return -1
+
+
+buku_pattern = r'^BUKU\|[A-Z]{4}\d+$'

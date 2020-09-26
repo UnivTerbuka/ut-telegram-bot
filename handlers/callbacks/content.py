@@ -109,3 +109,6 @@ def content(update: Update, context: CoreContext):
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1
+
+
+content_pattern = r'^CONTENT\|\d+\|\d+\|\d+$'

@@ -44,3 +44,6 @@ def modul(update: Update, context: CallbackContext):
         raise e
     finally:
         return -1
+
+
+modul_pattern = r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'

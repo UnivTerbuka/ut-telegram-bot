@@ -73,3 +73,6 @@ def page(update: Update, context: CallbackContext):
     )
     callback_query.edit_message_reply_markup(InlineKeyboardMarkup(menu))
     return -1
+
+
+page_pattern = r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|?\d*$'
