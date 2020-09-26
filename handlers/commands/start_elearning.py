@@ -23,11 +23,5 @@ def start_elearning(update: Update, context: CoreContext):
     site_info = BaseWebservice(context.moodle).get_site_info()
     message.reply_text(
         f'Selamat datang {site_info.fullname}.'
-        '\nSekarang Anda bisa menggunakan /elearning'
-        '\n<b>Fitur ini masih dalam proses pengembangan.</b>'
-        '\nMohon untuk tidak mem-forward pesan dari fitur ini ke chat lain, '
-        'karena ada kemungkinan pesan mengandung token Anda!\n'
-        'Jika token Anda tersebar, segera Set Ulang di Elearning > Dasbor > '
-        'Preferensi > Akun Pengguna > Kunci Keamanan > Set Ulang '
-        '(Kolom Operasi & Baris Moodle mobile web service)', )
+        '\nSekarang Anda bisa menggunakan /elearning', )
     return -1

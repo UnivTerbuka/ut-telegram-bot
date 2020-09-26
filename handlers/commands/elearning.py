@@ -9,6 +9,22 @@ from core.session import message_wrapper
 
 logger = getLogger(__name__)
 
+msg = '''
+
+Perintah yang dapat digunakan
+/kursus - Untuk melihat kursus elearning
+
+<b>Fitur ini masih dalam proses pengembangan.</b>
+Mohon untuk tidak mem-forward pesan dari fitur ini ke chat lain,
+karena ada kemungkinan pesan mengandung token Anda (khususnya dokumen)!
+
+Jika token Anda tersebar, segera Set Ulang di
+Elearning > Dasbor > Preferensi > Akun Pengguna > Kunci Keamanan > Set Ulang
+(Kolom Operasi & Baris Moodle mobile web service)
+
+Untuk keluar dari fitur ini : <pre>/elearning reset</pre>
+'''
+
 
 @message_wrapper
 @assert_token
@@ -21,8 +37,6 @@ def elearning(update: Update, context: CoreContext):
             context.user.name))
         return -1
     info = BaseWebservice(context.moodle).get_site_info()
-    text = 'Selamat datang ' + info.fullname + '\n'
-    text += 'Perintah yang bisa dipakai\n'
-    text += '/kursus - Untuk melihat daftar kursus'
+    text = f'Selamat datang {info.fullname}' + msg
     context.message.reply_text(text)
     return -1
