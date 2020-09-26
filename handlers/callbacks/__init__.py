@@ -7,6 +7,8 @@ from .close import close, close_pattern
 from .completion import completion, completion_pattern
 from .content import content, content_pattern
 from .course import course, course_pattern
+from .discussions import discussions, discussions_pattern
+from .folder import folder, folder_pattern
 from .forum import forum, forum_pattern
 from .forums import forums, forums_pattern
 from .modul import modul, modul_pattern
@@ -29,6 +31,8 @@ class CallbackMixin(object):
         CallbackQueryHandler(module, pattern=module_pattern),
         CallbackQueryHandler(resource, pattern=resource_pattern),
         CallbackQueryHandler(completion, pattern=completion_pattern),
+        CallbackQueryHandler(discussions, pattern=discussions_pattern),
+        CallbackQueryHandler(folder, pattern=folder_pattern),
         CallbackQueryHandler(buku, pattern=buku_pattern),
         CallbackQueryHandler(modul, pattern=modul_pattern),
         CallbackQueryHandler(page, pattern=page_pattern),
