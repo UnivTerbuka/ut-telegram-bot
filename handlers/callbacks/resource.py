@@ -7,7 +7,7 @@ from moodle.mod.resource import BaseResource
 from core.context import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
-from libs.utils.helpers import build_menu
+from libs.utils.helpers import build_menu, make_data
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG
 
 logger = getLogger(__name__)
@@ -46,7 +46,11 @@ def resource(update: Update, context: CoreContext):
             button = InlineKeyboardButton(
                 file.filename, switch_inline_query_current_chat=file.fileurl)
         buttons.append(button)
-    footer = [InlineKeyboardButton('Tutup', callback_data='Tutup')]
+    back_data = make_data('COURSE', course_id)
+    footer = [
+        InlineKeyboardButton('Kembali', callback_data=back_data),
+        InlineKeyboardButton('Tutup', callback_data='Tutup')
+    ]
     keyboard = build_menu(buttons, footer_buttons=footer)
 
     text = res.name + '\n\n'
