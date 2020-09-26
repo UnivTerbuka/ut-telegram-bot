@@ -33,7 +33,8 @@ def module(update: Update, context: CoreContext):
     text = course_module.name + '\n'
     buttons: List[InlineKeyboardButton] = list()
 
-    data = make_data(course_module.modname.upper(), course_module.instance)
+    data = make_data(course_module.modname.upper(), course_module.course,
+                     course_module.instance)
     button = InlineKeyboardButton(course_module.name, callback_data=data)
     buttons.append(button)
 
