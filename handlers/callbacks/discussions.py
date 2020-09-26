@@ -40,3 +40,6 @@ def discussions(update: Update, context: CoreContext):
     context.query.edit_message_text(
         'Daftar diskusi', reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
+
+
+discussions_pattern = r'^DISCUSSIONS\|\d+\|\d+\|\d+$'
