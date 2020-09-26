@@ -1,30 +1,36 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Job
-from typing import Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from config import CALLBACK_SEPARATOR
 
 
-def make_button(text, callback_data=None, url=None) -> InlineKeyboardMarkup:
+def make_button(text,
+                callback_data: str = None,
+                url: str = None) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([[
         InlineKeyboardButton(text=text, callback_data=callback_data, url=url)
     ]])
 
 
-def build_menu(buttons=None,
-               n_cols=1,
-               header_buttons=None,
-               footer_buttons=None):
-    menu = []
+def build_menu(
+    buttons: Optional[List[InlineKeyboardButton]] = None,
+    n_cols: int = 1,
+    header_buttons: Union[List[InlineKeyboardButton],
+                          InlineKeyboardButton] = None,
+    footer_buttons: Union[List[InlineKeyboardButton],
+                          InlineKeyboardButton] = None
+) -> List[List[InlineKeyboardButton]]:
+    menu = list()
     if buttons:
         menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
     if header_buttons:
-        if type(header_buttons) == list:
+        if type(header_buttons) is list:
             menu.insert(0, header_buttons)
         else:
             menu.insert(0, [header_buttons])
     if footer_buttons:
-        if type(footer_buttons) == list:
+        if type(footer_buttons) is list:
             menu.append(footer_buttons)
         else:
             menu.append([footer_buttons])
