@@ -28,19 +28,17 @@ def course(update: Update, context: CoreContext):
         return -1
     course_ = courses[0]
 
+    buttons = list()
     try:
         sections = moodle_course.get_contents(course_.id)
-    except Exception:
-        pass
-
-    buttons = list()
-    if sections:
         for section in sections:
             if section.uservisible:
                 data = make_data('CONTENT', course_id, section.id, 0)
                 button = InlineKeyboardButton(section.name, callback_data=data)
                 buttons.append(button)
-    else:
+    except Exception:
+        pass
+    if not buttons:
         data = make_data('FORUMS', course_id)
         button = InlineKeyboardButton('Daftar Forum', callback_data=data)
         buttons.append(button)
