@@ -14,7 +14,7 @@ logger = getLogger(__name__)
 
 @message_wrapper
 @assert_token
-def completion(update: Update, context: CoreContext):
+def update_completion(update: Update, context: CoreContext):
     context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # COMPLETION|course_id|module_id
@@ -35,4 +35,4 @@ def completion(update: Update, context: CoreContext):
     return -1
 
 
-completion_pattern = r'^COMPLETION\|\d+\|\d+$'
+update_completion_pattern = r'^COMPLETION\|\d+\|\d+$'

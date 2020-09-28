@@ -4,7 +4,6 @@ from telegram.ext import Dispatcher, CallbackQueryHandler
 # Callbacks
 from .buku import buku, buku_pattern
 from .close import close, close_pattern
-from .completion import completion, completion_pattern
 from .content import content, content_pattern
 from .course import course, course_pattern
 from .discussion import discussion, discussion_pattern
@@ -18,6 +17,8 @@ from .page import page, page_pattern
 from .resource import resource, resource_pattern
 from .short import short, short_pattern
 from .ticket import ticket, ticket_pattern
+from .update_completion import update_completion, update_completion_pattern
+from .vew_lesson import view_lesson, view_lesson_pattern
 
 
 class CallbackMixin(object):
@@ -31,7 +32,8 @@ class CallbackMixin(object):
         CallbackQueryHandler(content, pattern=content_pattern),
         CallbackQueryHandler(module, pattern=module_pattern),
         CallbackQueryHandler(resource, pattern=resource_pattern),
-        CallbackQueryHandler(completion, pattern=completion_pattern),
+        CallbackQueryHandler(update_completion, pattern=update_completion_pattern),
+        CallbackQueryHandler(view_lesson, pattern=view_lesson_pattern),
         CallbackQueryHandler(discussion, pattern=discussion_pattern),
         CallbackQueryHandler(discussions, pattern=discussions_pattern),
         CallbackQueryHandler(folder, pattern=folder_pattern),
