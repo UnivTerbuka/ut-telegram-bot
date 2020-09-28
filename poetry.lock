@@ -355,16 +355,20 @@ version = "0.6.1"
 
 [[package]]
 category = "main"
-description = "Client for moodle webservice"
+description = ""
 name = "moodlepy"
 optional = false
-python-versions = ">=3.7,<4.0"
-version = "0.14.0"
+python-versions = "^3.7"
+version = "0.14.1"
 
 [package.dependencies]
-dacite = ">=1.5.1,<2.0.0"
-requests = ">=2.24.0,<3.0.0"
+dacite = "^1.5.1"
+requests = "^2.24.0"
 
+[package.source]
+reference = "bb3908f62072c47d106357e18db50b09b24f2655"
+type = "git"
+url = "https://github.com/hexatester/moodlepy.git"
 [[package]]
 category = "dev"
 description = "More routines for operating on iterables, beyond itertools"
@@ -798,7 +802,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "accf0bb140b75f11615a5114e123461d997d9451bf0e3e0edf3bf28b0bb8cd8b"
+content-hash = "d6fe75b7afe2907b839e3887b39866846e037e909a3d2a0dc7682e245f274a82"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -1042,10 +1046,7 @@ mccabe = [
     {file = "mccabe-0.6.1-py2.py3-none-any.whl", hash = "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42"},
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
-moodlepy = [
-    {file = "moodlepy-0.14.0-py3-none-any.whl", hash = "sha256:0ab03250ff49cc128f38f91a9f218c36470dda8d0fde285df78c609397ba2f53"},
-    {file = "moodlepy-0.14.0.tar.gz", hash = "sha256:e57b1e90f2e1efd1a164dd1fdb0ed5a0a125fee3a6ec363ad75eb86917cd0a9d"},
-]
+moodlepy = []
 more-itertools = [
     {file = "more-itertools-8.5.0.tar.gz", hash = "sha256:6f83822ae94818eae2612063a5101a7311e68ae8002005b5e05f03fd74a86a20"},
     {file = "more_itertools-8.5.0-py3-none-any.whl", hash = "sha256:9b30f12df9393f0d28af9210ff8efe48d10c94f73e5daf886f10c4b0b0b4f03c"},
