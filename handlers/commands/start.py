@@ -2,6 +2,21 @@ from telegram import Update
 from core.context import CoreContext
 from core.session import message_wrapper
 
+msg = '''
+
+Daftar Perintah
+/start - Memulai bot
+/baca - Baca buku
+/elearning - Akses tuton (elearning.ut.ac.id)
+/buku - Cari buku
+/tiket - Mengecek tiket <a href="http://hallo-ut.ut.ac.id/">hallo-ut</a>
+/shortlink - Memendekan url dengan <a href="https://sl.ut.ac.id/">sl-ut</a>
+/link - Daftar link UT
+/formulir - Daftar Formulir
+/about - Tentang bot ini
+'Dengan menggunakan bot ini, berarti anda faham & setuju dengan /eula'
+'''
+
 
 @message_wrapper
 def start(update: Update, context: CoreContext):
@@ -9,17 +24,5 @@ def start(update: Update, context: CoreContext):
     if context.user and not context.user.started:
         context.user.started = True
         context.save()
-    update.effective_message.reply_text(
-        f'Selamat datang {user.full_name}\n\n'
-        'Daftar Perintah\n'
-        '/start - Memulai bot\n'
-        '/baca - Baca buku\n'
-        '/elearning - Segera datang!\n'
-        '/buku - Cari buku\n'
-        '/tiket - Mengecek tiket <a href="http://hallo-ut.ut.ac.id/">hallo-ut</a>\n'  # NOQA
-        '/shortlink - Memendekan url dengan <a href="https://sl.ut.ac.id/">sl-ut</a>\n'  # NOQA
-        '/link - Daftar link UT\n'
-        '/formulir - Daftar Formulir\n'
-        '/about - Tentang bot ini\n'
-        'Dengan menggunakan bot ini, berarti anda faham & setuju dengan /eula')
+    context.message.reply_text(f'Selamat datang {user.full_name}' + msg)
     return -1
