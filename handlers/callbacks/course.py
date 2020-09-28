@@ -7,7 +7,7 @@ from core.context import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
 from libs.elearning.course import course_text
-from libs.utils.helpers import build_menu, make_data
+from libs.utils.helpers import build_menu, make_data, make_button
 from config import CALLBACK_SEPARATOR
 
 logger = getLogger(__name__)
@@ -22,22 +22,29 @@ def course(update: Update, context: CoreContext):
     course_id = int(datas[-1])
 
     moodle_course = BaseCourse(context.moodle)
-    courses = moodle_course.get_courses_by_field('id', course_id)
+    try:
+        courses = moodle_course.get_courses_by_field('id', course_id)
+    except Exception as e:
+        logger.exception(e)
+        reply_markup = make_button('Coba lagi', context.query.data)
+        context.query.edit_message_text(
+            'Gagal mendapatkan kursus.',
+            reply_markup=reply_markup,
+        )
+        raise e
     if not courses:
         context.query.edit_message_text('Kursus tidak ditemukan.')
         return -1
     course_ = courses[0]
 
     buttons = list()
-    try:
-        sections = moodle_course.get_contents(course_.id)
-        for section in sections:
-            if section.uservisible:
-                data = make_data('CONTENT', course_id, section.id, 0)
-                button = InlineKeyboardButton(section.name, callback_data=data)
-                buttons.append(button)
-    except Exception:
-        pass
+    sections = moodle_course.get_contents(course_.id)
+    for section in sections:
+        if not section.uservisible:
+            continue
+        data = make_data('CONTENT', course_id, section.id, 0)
+        button = InlineKeyboardButton(section.name, callback_data=data)
+        buttons.append(button)
     if not buttons:
         data = make_data('FORUMS', course_id)
         button = InlineKeyboardButton('Daftar Forum', callback_data=data)
