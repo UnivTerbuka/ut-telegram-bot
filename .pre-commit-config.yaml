@@ -1,8 +1,9 @@
 repos:
-  - repo: https://github.com/pre-commit/mirrors-yapf/
-    rev: v0.30.0
+  - repo: https://github.com/ambv/black
+    rev: stable
     hooks:
-      - id: yapf
+      - id: black
+        language_version: python3.7
         files: ^(core|handlers|libs|tests)/.*\.py$
         args:
           - --diff
