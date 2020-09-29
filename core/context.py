@@ -1,13 +1,15 @@
 from __future__ import annotations
 from moodle import Mdl
 from sqlalchemy.orm import Session
-from telegram import Chat, Message, Update, CallbackQuery
+from telegram import Bot, Chat, Message, Update, CallbackQuery
 from telegram.ext import CallbackContext, Dispatcher
 from core.models import User
 from config import MOODLE_URL
 
 
 class CoreContext(CallbackContext):
+    bot: Bot
+
     def __init__(self, dispatcher: Dispatcher):
         super(CoreContext, self).__init__(dispatcher)
         self._chat = None
