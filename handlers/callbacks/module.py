@@ -31,7 +31,12 @@ def module(update: Update, context: CoreContext):
 
     course_module = cm.cm
     text = course_module.name + '\n'
+    text += '<i>Fitur masih dikembangkan, tolong tekan tombol Buka di elearning</i>'
     buttons: List[InlineKeyboardButton] = list()
+
+    url = f'https://elearning.ut.ac.id/mod/{course_module.modname}/view.php?id={module_id}'
+    button = InlineKeyboardButton('Buka di elearning', url)
+    buttons.append(button)
 
     data = make_data(course_module.modname.upper(), course_module.course,
                      course_module.instance)
