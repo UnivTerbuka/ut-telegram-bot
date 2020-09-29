@@ -43,7 +43,7 @@ def forum(update: Update, context: CoreContext):
     text = forum_text(fo)
     header = InlineKeyboardButton(
         fo.name,
-        url=f'https://elearning.ut.ac.id/mod/forum/view.php?id={fo.id}')
+        url=f'https://elearning.ut.ac.id/mod/forum/view.php?id={fo.cmid}')
     back_data = make_data('COURSE', course_id)
     footer = [
         InlineKeyboardButton('Kembali', callback_data=back_data),
