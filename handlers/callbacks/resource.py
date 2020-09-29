@@ -1,15 +1,44 @@
+import os
+import requests
+from bleach import clean as clean_html
 from logging import getLogger
 from telegram import Update
+from telegram.error import BadRequest
 
-from moodle.mod.resource import BaseResource
+from moodle.mod.resource import BaseResource, File, Resource
 
 from core.context import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
+from libs.utils import format_html
 from libs.utils.helpers import make_button
-from config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR, BLEACH_CONFIG, RES_PATH
 
 logger = getLogger(__name__)
+
+
+def forward_file(file: File, res: Resource, context: CoreContext):
+    try:
+        context.chat.send_document(file.fileurl)
+        return
+    except BadRequest:
+        pass
+    filename = f'{res.id}-{file.filename}'
+    filepath = os.path.join(RES_PATH, filename)
+    if os.path.isfile(filepath):
+        context.chat.send_document(document=open(filepath, 'rb'))
+        return
+    try:
+        with requests.get(file.fileurl, stream=True) as r:
+            r.raise_for_status()
+            with open(filepath, 'wb') as f:
+                for chunk in r.iter_content(8192):
+                    f.write(chunk)
+    except Exception as e:
+        logger.exception(e)
+        return
+    context.chat.send_document(document=open(filepath, 'rb'))
+    return
 
 
 @message_wrapper
@@ -39,17 +68,23 @@ def resource(update: Update, context: CoreContext):
         context.query.edit_message_text('Dokumen tidak ditemukan!')
         return -1
 
-    def send_file(file):
+    text = res.name + '\n'
+    text += clean_html(res.intro, **BLEACH_CONFIG) + '\n\n'
+    files = list(res.introfiles)
+    files.extend(list(res.contentfiles))
+
+    if not files:
+        context.send_message(text)
+        return -1
+    for file in files:
         url = file.fileurl
         if not file.isexternalfile:
-            url += '?token=' + context.moodle.token
-        context.chat.send_document(url)
-
-    for file in res.introfiles:
-        send_file(file)
-    for file in res.contentfiles:
-        send_file(file)
-
+            url += '?token' + context.moodle.token
+        file.fileurl = url
+        text += format_html.href(file.filename, url) + '\n'
+    context.bot.send_message(context.chat.id, text)
+    for file in files:
+        forward_file(file, res, context)
     return -1
 
 

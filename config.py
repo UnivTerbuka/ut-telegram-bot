@@ -13,6 +13,7 @@ def get_script_path():
 ROOT_PATH = get_script_path()
 STATIC_PATH = os.path.join(ROOT_PATH, 'static')
 IMG_PATH = os.path.join(STATIC_PATH, 'images')
+RES_PATH = os.path.join(STATIC_PATH, 'resources')
 PERSISTENCE = PicklePersistence('data.persist')
 HEADERS = {
     'User-Agent':
