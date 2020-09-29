@@ -60,7 +60,7 @@ def url(update: Update, context: CoreContext):
     ]
 
     keyboard = build_menu(buttons, footer_buttons=footer)
-    context.bot.send_message(
+    context.chat.send_message(
         text,
         reply_markup=InlineKeyboardMarkup(keyboard),
         disable_web_page_preview=disable_preview,
