@@ -56,8 +56,8 @@ def discussion(update: Update, context: CoreContext):
             header.append(button)
     back_data = make_data('DISCUSSIONS', course_id, forum_id, 1)
     footer = [
-        InlineKeyboardButton('Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        InlineKeyboardButton('< Kembali', callback_data=back_data),
+        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
     ]
     keyboard = build_menu(header_buttons=header, footer_buttons=footer)
 

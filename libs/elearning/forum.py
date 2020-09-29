@@ -22,7 +22,7 @@ def forum_buttons(forums: List[Forum]) -> InlineKeyboardMarkup:
     keyboard = build_menu(
         buttons=buttons,
         n_cols=2,
-        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
     )
     return InlineKeyboardMarkup(keyboard)
 

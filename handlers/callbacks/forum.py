@@ -46,8 +46,8 @@ def forum(update: Update, context: CoreContext):
         url=f'https://elearning.ut.ac.id/mod/forum/view.php?id={fo.cmid}')
     back_data = make_data('COURSE', course_id)
     footer = [
-        InlineKeyboardButton('Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        InlineKeyboardButton('< Kembali', callback_data=back_data),
+        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
     ]
     keyboard = build_menu(
         buttons,

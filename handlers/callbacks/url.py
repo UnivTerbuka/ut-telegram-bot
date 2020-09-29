@@ -55,8 +55,8 @@ def url(update: Update, context: CoreContext):
     # TODO : Use CONTENT
     back_button = make_data('COURSE', course_id)
     footer = [
-        InlineKeyboardButton('Kembali', callback_data=back_button),
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        InlineKeyboardButton('< Kembali', callback_data=back_button),
+        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
     ]
 
     keyboard = build_menu(buttons, footer_buttons=footer)

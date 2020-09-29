@@ -47,7 +47,7 @@ def courses(update: Update, context: CoreContext):
         buttons.append(button)
     keyboard = build_menu(
         buttons=buttons,
-        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
     )
     message.edit_text(
         'Daftar kursus yang diikuti',

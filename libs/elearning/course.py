@@ -22,7 +22,7 @@ def course_buttons(courses: CoursesBTC,
             ))
     keyboard = build_menu(
         buttons=buttons,
-        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
     )
     return InlineKeyboardMarkup(keyboard)
 

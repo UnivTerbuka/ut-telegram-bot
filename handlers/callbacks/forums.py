@@ -28,7 +28,7 @@ def forums(update: Update, context: CoreContext):
         if not forums_:
             context.query.edit_text(
                 text=f'Tidak ada forum untuk {course.shortname}.',
-                reply_markup=make_button('Kembali', f"COURSE|{course_id}"))
+                reply_markup=make_button('< Kembali', f"COURSE|{course_id}"))
             return -1
     except Exception as e:
         logger.debug('Error {}'.format(repr(e)))

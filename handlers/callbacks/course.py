@@ -51,7 +51,7 @@ def course(update: Update, context: CoreContext):
         buttons.append(button)
     keyboard = build_menu(
         buttons,
-        footer_buttons=InlineKeyboardButton('Tutup', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
     )
     context.query.edit_message_text(
         text=course_text(course_),

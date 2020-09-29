@@ -25,8 +25,8 @@ def view_lesson(update: Update, context: CoreContext):
     logger.debug(repr(res))
     back_data = make_data('COURSE', course_id)
     keyboard = [[
-        InlineKeyboardButton('Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup', callback_data='Tutup')
+        InlineKeyboardButton('< Kembali', callback_data=back_data),
+        InlineKeyboardButton('Tutup ❌', callback_data='Tutup ❌')
     ]]
     context.query.edit_message_text(
         'Berhasil ✅' if res else 'Gagal ❌',
