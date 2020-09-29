@@ -3,6 +3,7 @@ from logging import getLogger
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import MAX_MESSAGE_LENGTH
 from typing import List
+from urllib.parse import unquote
 
 from moodle import MoodleException
 from moodle.core.course import BaseCourse, ContentOption
@@ -14,6 +15,7 @@ from libs.utils.helpers import make_data
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG
 
 logger = getLogger(__name__)
+SUPPORTED_MOD = ['forum', 'resource', 'lesson', 'url']
 
 
 @message_wrapper
@@ -38,7 +40,7 @@ def content(update: Update, context: CoreContext):
     for section in sections:
         text += clean_html(section.summary, **BLEACH_CONFIG)
         for module in section.modules:
-            if module.modname == 'label':
+            if module.modname == 'label' and not module.completion:
                 continue
             num += 1
             button_text = ''
@@ -51,7 +53,7 @@ def content(update: Update, context: CoreContext):
                         button_text += str(num)
                         data = make_data('COMPLETION', course_id, module.id)
                         button = InlineKeyboardButton(
-                            f"{num} ❌",
+                            f"{num} ☑️",
                             callback_data=data,
                         )
                         completions.append(button)
@@ -61,26 +63,19 @@ def content(update: Update, context: CoreContext):
                     button_text += '✅ '
                 elif state == 2:
                     # complete pass
-                    button_text += '☑️ '
+                    button_text += '✔️ '
                 elif state == 3:
                     # complete fail
                     button_text += '❎ '
-            if module.modname == 'forum':
+            button_text += unquote(module.name)
+            if module.modname in SUPPORTED_MOD:
                 # FORUM|course_id|forum_id
-                button_text += module.name
-                data = make_data('FORUM', course_id, module.instance)
-                button = InlineKeyboardButton(button_text, callback_data=data)
-                buttons.append(button)
-            elif module.modname == 'resource':
-                # RESOURCE|course_id|resource_id
-                button_text += module.name
-                data = make_data('RESOURCE', course_id, module.instance)
+                data = make_data(module.modname.upper(), course_id, module.instance)
                 button = InlineKeyboardButton(button_text, callback_data=data)
                 buttons.append(button)
             else:
-                button_text += module.name
-                data = make_data('MODULE', module.id)
-                button = InlineKeyboardButton(button_text, callback_data=data)
+                url = f'https://elearning.ut.ac.id/mod/{module.modname}/view.php?id={module.id}'
+                button = InlineKeyboardButton(button_text, url)
                 buttons.append(button)
             keyboard.append(buttons)
     if len(text) > MAX_MESSAGE_LENGTH:
