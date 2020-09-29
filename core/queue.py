@@ -50,10 +50,29 @@ class CoreQueueBot(Bot):
             pass
 
     @queuedmessage
-    def send_message(self, *args, **kwargs):
+    def send_message(self,
+                     chat_id,
+                     text,
+                     parse_mode=None,
+                     disable_web_page_preview=None,
+                     disable_notification=False,
+                     reply_to_message_id=None,
+                     reply_markup=None,
+                     timeout=None,
+                     **kwargs):
         '''Wrapped method would accept new `queued` and `isgroup` OPTIONAL arguments'''
         # self.add_defaults(kwargs)
-        return super(CoreQueueBot, self).send_message(*args, **kwargs)
+        return super(CoreQueueBot, self).send_message(
+            chat_id,
+            text,
+            parse_mode,
+            disable_web_page_preview,
+            disable_notification,
+            reply_to_message_id,
+            reply_markup,
+            timeout,
+            **kwargs
+        )
 
 
 class CoreUpdater(Updater):
