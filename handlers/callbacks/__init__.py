@@ -18,6 +18,7 @@ from .resource import resource, resource_pattern
 from .short import short, short_pattern
 from .ticket import ticket, ticket_pattern
 from .update_completion import update_completion, update_completion_pattern
+from .url import url, url_pattern
 from .vew_lesson import view_lesson, view_lesson_pattern
 
 
@@ -37,6 +38,7 @@ class CallbackMixin(object):
         CallbackQueryHandler(discussion, pattern=discussion_pattern),
         CallbackQueryHandler(discussions, pattern=discussions_pattern),
         CallbackQueryHandler(folder, pattern=folder_pattern),
+        CallbackQueryHandler(url, pattern=url_pattern),
         CallbackQueryHandler(buku, pattern=buku_pattern),
         CallbackQueryHandler(modul, pattern=modul_pattern),
         CallbackQueryHandler(page, pattern=page_pattern),
