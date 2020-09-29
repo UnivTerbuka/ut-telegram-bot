@@ -91,19 +91,27 @@ def content(update: Update, context: CoreContext):
             header.append(button)
         if header:
             keyboard.insert(0, header)
+    back_data = make_data('COURSE', course_id)
+    down_data = context.query.data.rstrip('|') + '|'
     footer = [
-        InlineKeyboardButton('Kembali',
-                             callback_data=make_data('COURSE', course_id)),
-        InlineKeyboardButton('Tutup', callback_data='CLOSE')
+        InlineKeyboardButton('< Kembali', callback_data=back_data),
+        InlineKeyboardButton('⬇️ Turunkan', callback_data=down_data),
+        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
     ]
     if completions:
         keyboard.append(completions)
     keyboard.append(footer)
-    context.query.edit_message_text(
-        text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
-        reply_markup=InlineKeyboardMarkup(keyboard),
-    )
+    if len(datas) > 4:
+        context.chat.send_message(
+            text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
+            reply_markup=InlineKeyboardMarkup(keyboard),
+        )
+    else:
+        context.query.edit_message_text(
+            text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
+            reply_markup=InlineKeyboardMarkup(keyboard),
+        )
     return -1
 
 
-content_pattern = r'^CONTENT\|\d+\|\d+\|\d+$'
+content_pattern = r'^CONTENT\|\d+\|\d+\|\d+\|?$'
