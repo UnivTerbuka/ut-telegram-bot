@@ -4,6 +4,7 @@ from dacite import from_dict
 from telegram import Update, Message
 from telegram.ext import (CallbackContext, Filters, CommandHandler,
                           MessageHandler, Job)
+from telegram.utils.promise import Promise
 from core.utils import action
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
@@ -83,8 +84,8 @@ def start(update: Update, context: CallbackContext):
 
     subfolder, doc, page = groups
     page = int(page)
-    message: Message = update.effective_message.reply_text(
-        'Mencari halaman...')
+    message = update.effective_message.reply_text('Mencari halaman...')
+    message: Message = message.result() if isinstance(message, Promise) else message
     try:
         buku: Buku = from_dict(Buku, {'id': subfolder})
         if not buku:

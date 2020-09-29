@@ -5,6 +5,7 @@ from telegram import (
     InlineKeyboardMarkup,
     Message,
 )
+from telegram.utils.promise import Promise
 from typing import List
 
 from moodle.core.course import BaseCourse
@@ -20,7 +21,8 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def courses(update: Update, context: CoreContext):
-    message: Message = context.message.reply_text('Mendapatkan kursus...')
+    message = context.message.reply_text('Mendapatkan kursus...')
+    message: Message = message.result() if isinstance(message, Promise) else message
     try:
         courses = BaseCourse(
             context.moodle).get_enrolled_courses_by_timeline_classification(
