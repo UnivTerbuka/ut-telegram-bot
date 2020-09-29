@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{matrix.os}}
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.7]
         os: [ubuntu-latest, windows-latest]
         include:
           - os: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest --cov=./
+        pytest --cov=./ --ignore=src
     - name: Submit coverage
       uses: codecov/codecov-action@v1
       with:
