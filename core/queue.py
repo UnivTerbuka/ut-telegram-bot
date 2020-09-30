@@ -23,7 +23,7 @@ class CoreQueueBot(Bot):
         ):
             # ... get kwargs
             argspec = inspect.getfullargspec(inspect.unwrap(method))
-            kwarg_names = argspec.args[-len(argspec.defaults or []) :]  # NOQA
+            kwarg_names = argspec.args[-len(argspec.defaults or []) :]
             # ... check if Defaults has a attribute that matches the kwarg name
             needs_default = [
                 kwarg_name

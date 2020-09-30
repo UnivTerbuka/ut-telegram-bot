@@ -28,10 +28,10 @@ class CoreContext(CallbackContext):
 
     @property
     def moodle(self) -> Mdl:
-        if 'moodle' in self.user_data:
-            return self.user_data['moodle']
-        self.user_data['moodle'] = Mdl(MOODLE_URL, self.user.token)
-        return self.user_data['moodle']
+        if "moodle" in self.user_data:
+            return self.user_data["moodle"]
+        self.user_data["moodle"] = Mdl(MOODLE_URL, self.user.token)
+        return self.user_data["moodle"]
 
     @property
     def query(self) -> CallbackQuery:
@@ -52,8 +52,9 @@ class CoreContext(CallbackContext):
             self.session.commit()
 
     @classmethod
-    def from_data(cls, update: Update, context: CallbackContext,
-                  session: Session, user: User) -> CoreContext:
+    def from_data(
+        cls, update: Update, context: CallbackContext, session: Session, user: User
+    ) -> CoreContext:
         self = cls(context.dispatcher)
 
         self._chat = update.effective_chat

@@ -16,13 +16,10 @@ class User(Base):
     data: dict = Column(JSONType)
 
     # Debug time
-    created_at: datetime = Column(DateTime,
-                                  server_default=func.now(),
-                                  nullable=False)
-    updated_at: datetime = Column(DateTime,
-                                  server_default=func.now(),
-                                  onupdate=func.now(),
-                                  nullable=False)
+    created_at: datetime = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at: datetime = Column(
+        DateTime, server_default=func.now(), onupdate=func.now(), nullable=False
+    )
 
     # Flags
     started: bool = Column(Boolean, nullable=False, default=False)

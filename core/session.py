@@ -3,8 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from telegram import Message, Update
 from telegram import User as TgUser
-from telegram.error import (BadRequest, RetryAfter, TimedOut, Unauthorized,
-                            NetworkError)
+from telegram.error import BadRequest, RetryAfter, TimedOut, Unauthorized, NetworkError
 from telegram.ext import CallbackContext
 from typing import Any, Callable, Optional
 from moodle import MoodleException
@@ -29,7 +28,7 @@ def job_wrapper(func: Callable) -> Callable:
             if not ignore_exception(e):
                 raise e
         finally:
-            if 'session' in locals():
+            if "session" in locals():
                 session.close()
             return result
 
@@ -47,10 +46,9 @@ def message_wrapper(
             message: Message = update.effective_message
             user = get_user(session, update.effective_user)
             if user.banned:
-                message.chat.send_message('Anda dibanned!')
+                message.chat.send_message("Anda dibanned!")
                 return result
-            core_context = CoreContext.from_data(update, context, session,
-                                                 user)
+            core_context = CoreContext.from_data(update, context, session, user)
             result = func(update, core_context)
         except RollbackException as e:
             session.rollback()
@@ -59,7 +57,7 @@ def message_wrapper(
             if not ignore_exception(e):
                 allert_devs(update, context)
         finally:
-            if 'session' in locals():
+            if "session" in locals():
                 session.close()
             return result
 
@@ -92,36 +90,39 @@ def get_user(session: Session, tg_user: TgUser) -> User:
 def ignore_exception(exception):
     """Check whether we can safely ignore this exception."""
     if type(exception) is BadRequest:
-        if (exception.message.startswith("Query is too old")
-                or exception.message.startswith(
-                    "Have no rights to send a message")
-                or exception.message.startswith("Message_id_invalid")
-                or exception.message.startswith(
-                    "Message identifier not specified")
-                or exception.message.startswith("Schedule_date_invalid")
-                or exception.message.startswith("Message to edit not found")
-                or exception.message.startswith("Chat_write_forbidden")
-                or exception.message.startswith("Chat not found")
-                or exception.message.startswith(
-                    "Message is not modified: specified new message content")):
+        if (
+            exception.message.startswith("Query is too old")
+            or exception.message.startswith("Have no rights to send a message")
+            or exception.message.startswith("Message_id_invalid")
+            or exception.message.startswith("Message identifier not specified")
+            or exception.message.startswith("Schedule_date_invalid")
+            or exception.message.startswith("Message to edit not found")
+            or exception.message.startswith("Chat_write_forbidden")
+            or exception.message.startswith("Chat not found")
+            or exception.message.startswith(
+                "Message is not modified: specified new message content"
+            )
+        ):
             return True
 
     if type(exception) is Unauthorized:
-        if exception.message.lower(
-        ) == "forbidden: bot was blocked by the user":
+        if exception.message.lower() == "forbidden: bot was blocked by the user":
             return True
         if exception.message.lower() == "forbidden: message_author_required":
             return True
-        if (exception.message.lower() ==
-                "forbidden: bot is not a member of the supergroup chat"):
+        if (
+            exception.message.lower()
+            == "forbidden: bot is not a member of the supergroup chat"
+        ):
             return True
         if exception.message.lower() == "forbidden: user is deactivated":
             return True
-        if exception.message.lower(
-        ) == "forbidden: bot was kicked from the group chat":
+        if exception.message.lower() == "forbidden: bot was kicked from the group chat":
             return True
-        if (exception.message.lower() ==
-                "forbidden: bot was kicked from the supergroup chat"):
+        if (
+            exception.message.lower()
+            == "forbidden: bot was kicked from the supergroup chat"
+        ):
             return True
         if exception.message.lower() == "forbidden: chat_write_forbidden":
             return True
