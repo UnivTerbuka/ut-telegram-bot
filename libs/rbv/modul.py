@@ -25,27 +25,30 @@ class Modul:
     subfolder: Optional[str]
     doc: Optional[str]
     end: Optional[int]
-    form: Optional[str] = 'img'
+    form: Optional[str] = "img"
 
     def __post_init__(self):
-        self.url = self.url if self.url else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"  # NOQA
+        self.url = (
+            self.url
+            if self.url
+            else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"
+        )  # NOQA
         query = urlparse(self.url).query
         data = dict(parse_qsl(query))
         if not self.subfolder:
-            self.subfolder = data.get('subfolder', 'DUMP')
+            self.subfolder = data.get("subfolder", "DUMP")
         self.subfolder = self.subfolder.upper()
         if not self.doc:
-            self.doc = data.get('doc', 'DUMP')
-        if self.doc.endswith('.pdf'):
-            self.doc = self.doc.rstrip('.pdf')
+            self.doc = data.get("doc", "DUMP")
+        if self.doc.endswith(".pdf"):
+            self.doc = self.doc.rstrip(".pdf")
         self.doc = self.doc.upper()
         self.filepath = os.path.join(IMG_PATH, self.subfolder)
         if not self.end:
             if self.fetch():
-                logger.debug('Berhasil mendapatkan modul {}'.format(
-                    repr(self)))
+                logger.debug("Berhasil mendapatkan modul {}".format(repr(self)))
             else:
-                logger.debug('Gagal mendapatkan modul {}'.format(repr(self)))
+                logger.debug("Gagal mendapatkan modul {}".format(repr(self)))
 
     def fetch(self) -> bool:
         max_page = get_max_page(self.url, self.subfolder, self.doc)
@@ -58,20 +61,18 @@ class Modul:
         if page < 0 or page > self.end:
             return
         url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"  # NOQA
-        if download(url, page, self.abspath(page), self.url, self.doc,
-                    self.subfolder):
+        if download(url, page, self.abspath(page), self.url, self.doc, self.subfolder):
             return self.absurl(page)
         return
 
     def get_page_text(self, page: int) -> str:
-        header = 'Buku {} Modul {} Halaman {}\n'.format(
-            self.subfolder, self.doc, page)
+        header = "Buku {} Modul {} Halaman {}\n".format(self.subfolder, self.doc, page)
         header += "Klik kanan / tahan {}, untuk membagikan halaman\n".format(
-            format_html.href('Share', self.deep_linked_page(page)))
-        return header + fetch_page_txt(page, self.url, self.doc,
-                                       self.subfolder)
+            format_html.href("Share", self.deep_linked_page(page))
+        )
+        return header + fetch_page_txt(page, self.url, self.doc, self.subfolder)
 
-    def abspath(self, page: int, ext: str = 'jpg') -> str:
+    def abspath(self, page: int, ext: str = "jpg") -> str:
         # /BUKU/MODUL-HALAMAN.jpg
         filename = f"{self.doc}-{page}.{ext}"
         Path(self.filepath).mkdir(parents=True, exist_ok=True)
@@ -83,7 +84,8 @@ class Modul:
 
     def deep_linked_page(self, page: int) -> str:
         return create_deep_linked_url(
-            BOT_USERNAME, payload=f"READ-{self.subfolder}-{self.doc}-{page}")
+            BOT_USERNAME, payload=f"READ-{self.subfolder}-{self.doc}-{page}"
+        )
 
     def message_page(self, page: int) -> str:
         nama = self.nama if self.nama else self.subfolder
@@ -91,21 +93,23 @@ class Modul:
         share = self.deep_linked_page(page)
         texts = [
             f"Buku : {format_html.code(nama)}",
-            format_html.href('\u200c', img),
+            format_html.href("\u200c", img),
             f"Modul : {format_html.href(self.doc, self.url)}",
             f"Halaman {page} dari {self.end} halaman.",
-            f"Klik kanan / tahan {format_html.href('Share', share)}, untuk membagikan halaman"  # NOQA
+            f"Klik kanan / tahan {format_html.href('Share', share)}, untuk membagikan halaman",  # NOQA
         ]
-        return '\n'.join(texts)
+        return "\n".join(texts)
 
-    def callback_data(self,
-                      page: int = 1,
-                      name: str = 'MODUL',
-                      txt: bool = True) -> str:
+    def callback_data(
+        self, page: int = 1, name: str = "MODUL", txt: bool = True
+    ) -> str:
         datas = [
-            name, self.subfolder, self.doc,
+            name,
+            self.subfolder,
+            self.doc,
             str(self.end),
-            str(page), 'txt' if txt else 'img'
+            str(page),
+            "txt" if txt else "img",
         ]
         # Datas : MODUL|subfolder|doc|end|page|form
         return CALLBACK_SEPARATOR.join(datas)
@@ -121,20 +125,19 @@ class Modul:
         @cached(CACHE, lock=LOCK)
         def get(subfolder, doc, end):
             data = {
-                'subfolder': subfolder,
-                'doc': doc,
-                'end': end,
+                "subfolder": subfolder,
+                "doc": doc,
+                "end": end,
             }
             return from_dict(cls, data)
 
-        return (get(subfolder=datas[1], doc=datas[2],
-                    end=int(datas[3])), int(datas[4]))
+        return (get(subfolder=datas[1], doc=datas[2], end=int(datas[3])), int(datas[4]))
 
     @staticmethod
     def is_valid(id: str) -> bool:
-        if ' ' in id:
+        if " " in id:
             return False
-        if '\n' in id:
+        if "\n" in id:
             return False
         if not id[0:4].isalpha():
             return False
@@ -149,4 +152,4 @@ class Modul:
 
     @property
     def is_text(self) -> bool:
-        return self.form == 'txt'
+        return self.form == "txt"

@@ -21,7 +21,7 @@ class Search:
         try:
             if not query:
                 return []
-            self.logger.debug('Searching {}'.format(query))
+            self.logger.debug("Searching {}".format(query))
             results: List[Type[InlineQueryResult]] = []
             results.extend(self.best_faq(query))
             results.extend(self.best_qna(query))
@@ -31,32 +31,26 @@ class Search:
             self.logger.exception(E)
             return []
 
-    def best_faq(self,
-                 query: str,
-                 score_cutoff=55) -> List[Type[InlineQueryResult]]:
-        best_faq = process.extractBests(query,
-                                        self.faq_q_dict,
-                                        score_cutoff=score_cutoff,
-                                        limit=10)
-        return [self.faq[z].result_article
-                for (x, y, z) in best_faq] if best_faq else []
+    def best_faq(self, query: str, score_cutoff=55) -> List[Type[InlineQueryResult]]:
+        best_faq = process.extractBests(
+            query, self.faq_q_dict, score_cutoff=score_cutoff, limit=10
+        )
+        return (
+            [self.faq[z].result_article for (x, y, z) in best_faq] if best_faq else []
+        )
 
-    def best_qna(self,
-                 query: str,
-                 score_cutoff: int = 55) -> List[Type[InlineQueryResult]]:
-        best_q = process.extractBests(query,
-                                      self.qna_q_dict,
-                                      score_cutoff=score_cutoff,
-                                      limit=10)
-        return [self.qna[z].result_article
-                for (x, y, z) in best_q] if best_q else []
+    def best_qna(
+        self, query: str, score_cutoff: int = 55
+    ) -> List[Type[InlineQueryResult]]:
+        best_q = process.extractBests(
+            query, self.qna_q_dict, score_cutoff=score_cutoff, limit=10
+        )
+        return [self.qna[z].result_article for (x, y, z) in best_q] if best_q else []
 
-    def best_pdf(self,
-                 query: str,
-                 score_cutoff: int = 50) -> List[Type[InlineQueryResult]]:
-        best_f = process.extractBests(query,
-                                      self.pdf_t_dict,
-                                      score_cutoff=score_cutoff,
-                                      limit=5)
-        return [self.pdf[z].result_document
-                for (x, y, z) in best_f] if best_f else []
+    def best_pdf(
+        self, query: str, score_cutoff: int = 50
+    ) -> List[Type[InlineQueryResult]]:
+        best_f = process.extractBests(
+            query, self.pdf_t_dict, score_cutoff=score_cutoff, limit=5
+        )
+        return [self.pdf[z].result_document for (x, y, z) in best_f] if best_f else []

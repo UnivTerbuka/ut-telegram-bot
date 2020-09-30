@@ -15,14 +15,10 @@ def query_to_dict(text: str, url=True) -> dict:
 
 def simplify_html(soup: Union[Tag, str]) -> str:
     if not soup:
-        return ''
+        return ""
     soup = soup if isinstance(soup, Tag) else BeautifulSoup(soup, HTML_PARSER)
-    tags = {
-        '<div>': '',
-        '</div>': '\n',
-        '<br>': '\n'
-    }
-    string = ''
+    tags = {"<div>": "", "</div>": "\n", "<br>": "\n"}
+    string = ""
     for children in soup.children:
         string += str(children).strip()
     for tag in tags:

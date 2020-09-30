@@ -12,12 +12,12 @@ from config import STATIC_PATH
 class QnA:
     answer: str
     question: str
-    image: str = ''
-    topic: str = '-'
+    image: str = ""
+    topic: str = "-"
 
     def __str__(self):
-        img = f'<a href="{self.image}">\u200c</a>' if self.image else ''
-        return '\n{}Topik : {}\nQ: {}\n A: {}'.format(
+        img = f'<a href="{self.image}">\u200c</a>' if self.image else ""
+        return "\n{}Topik : {}\nQ: {}\n A: {}".format(
             img,
             self.topic,
             self.question,
@@ -31,8 +31,9 @@ class QnA:
             title=self.question,
             description=f"QnA, {self.topic}",
             input_message_content=InputTextMessageContent(
-                str(self),
-                disable_web_page_preview=False if self.image else True))
+                str(self), disable_web_page_preview=False if self.image else True
+            ),
+        )
 
 
 @dataclass
@@ -46,9 +47,9 @@ class Topic:
 
 
 def load_topics() -> List[Topic]:
-    faq_yaml = os.path.join(STATIC_PATH, 'faq.yaml')
+    faq_yaml = os.path.join(STATIC_PATH, "faq.yaml")
 
-    with open(faq_yaml, 'rb') as f:
+    with open(faq_yaml, "rb") as f:
         datas = yaml.load(f, Loader=yaml.FullLoader)
     return [from_dict(Topic, data) for data in datas if data]
 

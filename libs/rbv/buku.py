@@ -18,8 +18,8 @@ logger = getLogger(__name__)
 
 
 def parse_th(th: Tag):
-    a: Tag = th.find('a')
-    return {'nama': a.text, 'url': READER_URL + a.attrs.get('href', '')}
+    a: Tag = th.find("a")
+    return {"nama": a.text, "url": READER_URL + a.attrs.get("href", "")}
 
 
 @dataclass
@@ -32,20 +32,20 @@ class Buku:
         self.id = self.id.upper()
         self.modul = self.modul if self.modul else []
         self.path = os.path.join(IMG_PATH, self.id)
-        self.config_path = os.path.join(IMG_PATH, f'{self.id}.json')
+        self.config_path = os.path.join(IMG_PATH, f"{self.id}.json")
         if os.path.isfile(self.config_path):
-            with open(self.config_path, 'r') as f:
+            with open(self.config_path, "r") as f:
                 datas: dict = json.load(f)
             for data in datas:
                 self.modul.append(from_dict(Modul, datas[data]))
-            logger.debug('Buku dari cache {}'.format(repr(self)))
+            logger.debug("Buku dari cache {}".format(repr(self)))
         elif self.initial and self.fetch() and self.modul:
             datas = {}
             for modul in self.modul:
                 datas[modul.doc] = asdict(modul)
-            with open(self.config_path, 'w') as f:
+            with open(self.config_path, "w") as f:
                 json.dump(datas, f)
-            logger.debug('Berhasil mendapatkan buku {}'.format(repr(self)))
+            logger.debug("Berhasil mendapatkan buku {}".format(repr(self)))
 
     def get_modul(self, doc: str) -> Optional[Modul]:
         for modul in self.modul:
@@ -56,10 +56,10 @@ class Buku:
         res = fetch_page(self.url, RETRY)
         if not res or not res.ok:
             return False
-        soup = BeautifulSoup(res.text, 'lxml')
-        for th in soup.find_all('th'):
+        soup = BeautifulSoup(res.text, "lxml")
+        for th in soup.find_all("th"):
             data = parse_th(th)
-            data['subfolder'] = self.id
+            data["subfolder"] = self.id
             self.modul.append(from_dict(Modul, data))
         return True
 
@@ -70,9 +70,10 @@ class Buku:
 
     @property
     def baca_reply_markup(self) -> InlineKeyboardMarkup:
-        keyboard = [[
-            InlineKeyboardButton('Baca di telegram', url=self.deep_linked_url)
-        ], [InlineKeyboardButton('Baca di rbv', url=self.url)]]
+        keyboard = [
+            [InlineKeyboardButton("Baca di telegram", url=self.deep_linked_url)],
+            [InlineKeyboardButton("Baca di rbv", url=self.url)],
+        ]
         return InlineKeyboardMarkup(keyboard)
 
     @property
@@ -81,18 +82,19 @@ class Buku:
         for modul in self.modul:
             nama = modul.nama if modul.nama else modul.doc
             keyboard.append(
-                InlineKeyboardButton(nama,
-                                     callback_data=modul.callback_data()))
-        share_data = 'SHORT|' + self.id
+                InlineKeyboardButton(nama, callback_data=modul.callback_data())
+            )
+        share_data = "SHORT|" + self.id
         footer = [
-            InlineKeyboardButton('Share 📋', callback_data=share_data),
-            InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+            InlineKeyboardButton("Share 📋", callback_data=share_data),
+            InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
         ]
-        menu = helpers.build_menu(buttons=keyboard,
-                                  n_cols=2,
-                                  header_buttons=InlineKeyboardButton(
-                                      'Ruang Baca Virtual', url=self.url),
-                                  footer_buttons=footer)
+        menu = helpers.build_menu(
+            buttons=keyboard,
+            n_cols=2,
+            header_buttons=InlineKeyboardButton("Ruang Baca Virtual", url=self.url),
+            footer_buttons=footer,
+        )
         return InlineKeyboardMarkup(menu)
 
     @property

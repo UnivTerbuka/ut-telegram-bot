@@ -29,28 +29,31 @@ class Page:
     def from_jsonp(cls, jsonp: str) -> List[Page]:
         jsonp = jsonp[1:-1]
         pages_data = json.loads(jsonp)
-        return [from_dict(cls, page_data)
-                for page_data in pages_data] if pages_data else []
+        return (
+            [from_dict(cls, page_data) for page_data in pages_data]
+            if pages_data
+            else []
+        )
 
     def save(self, subfolder: str, doc: str) -> None:
         filepath = self.get_filepath(subfolder, doc, self.number)
         if os.path.isfile(filepath):
             return
-        with open(filepath, 'w', encoding='utf-8') as txt:
+        with open(filepath, "w", encoding="utf-8") as txt:
             txt.write(self.txt)
 
     @property
     def txt(self) -> str:
-        if hasattr(self, 'texts'):
-            return getattr(self, 'texts', '')
+        if hasattr(self, "texts"):
+            return getattr(self, "texts", "")
         now = 0
-        out = ''
+        out = ""
         for (height, hLines, vline, fills, font, texts) in self.text:
             if height != now:
-                out += '\n'
+                out += "\n"
                 now = height
             out += str(texts)
-        setattr(self, 'texts', out)
+        setattr(self, "texts", out)
         return out
 
     @classmethod
