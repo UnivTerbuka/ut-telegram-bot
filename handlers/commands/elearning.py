@@ -3,9 +3,7 @@ from telegram import Update
 
 from moodle.core.webservice import BaseWebservice
 
-from core.context import CoreContext
-from core.decorator import assert_token
-from core.session import message_wrapper
+from core import CoreContext, assert_token, message_wrapper
 
 logger = getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import os
 import logging
-from core.bot import UniversitasTerbukaBot
+from core import UniversitasTerbukaBot
 from dotenv import load_dotenv
 load_dotenv()
 

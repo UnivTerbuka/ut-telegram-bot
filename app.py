@@ -2,7 +2,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, redirect, request
 
-from core.bot import UniversitasTerbukaBot
+from core import UniversitasTerbukaBot
 from config import NAME, TOKEN
 load_dotenv()
 

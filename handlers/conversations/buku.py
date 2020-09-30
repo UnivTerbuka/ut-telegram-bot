@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler
-from core.utils import action
 from libs.bahan_ajar import BahanAjar
 
 COMMAND = "buku"
@@ -19,7 +18,6 @@ def answer(update: Update, query: str):
         update.effective_message.reply_text(f"Buku `{query}` tidak ditemukan")
 
 
-@action.typing
 def buku(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
@@ -29,14 +27,12 @@ def buku(update: Update, context: CallbackContext):
     return GET_BOOKS
 
 
-@action.typing
 def get_buku(update: Update, context: CallbackContext):
     query: str = update.effective_message.text
     answer(update, query)
     return -1
 
 
-@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f"/{COMMAND} telah dibatalkan")
     return -1

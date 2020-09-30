@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-from core.utils import action
 
 MESSAGE = """
 Langkah langkah Registrasi Online Calon Mahasiswa UT
@@ -34,6 +33,5 @@ C. Registrasi Data Pribadi
 """
 
 
-@action.typing
 def registrasi(update: Update, context: CallbackContext):
     update.effective_message.reply_text(MESSAGE)

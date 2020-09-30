@@ -4,9 +4,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
 from moodle.mod.folder import BaseFolder
 
-from core.context import CoreContext
-from core.decorator import assert_token
-from core.session import message_wrapper
+from core import CoreContext, assert_token, message_wrapper
 from libs.utils.helpers import build_menu
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG
 

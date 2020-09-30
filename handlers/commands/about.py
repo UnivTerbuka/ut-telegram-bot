@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-from core.utils import action
 from libs.utils import format_html
 
 MESSAGE = """
@@ -23,6 +22,5 @@ Dan menggunakan library :
 )
 
 
-@action.typing
 def about(update: Update, context: CallbackContext):
     update.effective_message.reply_text(MESSAGE)
