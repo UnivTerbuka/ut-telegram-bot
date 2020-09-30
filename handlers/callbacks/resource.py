@@ -32,12 +32,11 @@ def forward_file(file: File, res: Resource, context: CoreContext):
         with requests.get(file.fileurl, stream=True) as r:
             r.raise_for_status()
             with open(filepath, 'wb') as f:
-                for chunk in r.iter_content(8192):
+                for chunk in r.iter_content(chunk_size=1024):
                     f.write(chunk)
+        context.chat.send_document(document=open(filepath, 'rb'))
     except Exception as e:
         logger.exception(e)
-        return
-    context.chat.send_document(document=open(filepath, 'rb'))
     return
 
 
