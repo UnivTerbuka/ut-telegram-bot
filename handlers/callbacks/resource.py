@@ -78,7 +78,7 @@ def resource(update: Update, context: CoreContext):
     for file in files:
         url = file.fileurl
         if not file.isexternalfile:
-            url += '?token' + context.moodle.token
+            url += '?token=' + context.moodle.token
         file.fileurl = url
         text += format_html.href(file.filename, url) + '\n'
     context.bot.send_message(context.chat.id, text)
