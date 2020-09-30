@@ -4,7 +4,7 @@ from telegram.utils.request import Request
 from threading import Thread
 from config import NAME, TOKEN, PERSISTENCE
 
-from .queue import CoreQueueBot, CoreUpdater
+from . import CoreQueueBot, CoreUpdater
 
 
 class UniversitasTerbukaBot(object):
@@ -12,27 +12,32 @@ class UniversitasTerbukaBot(object):
         super(UniversitasTerbukaBot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME = NAME
-        self.defaults = Defaults(parse_mode=ParseMode.HTML,
-                                 disable_web_page_preview=True)
+        self.defaults = Defaults(
+            parse_mode=ParseMode.HTML, disable_web_page_preview=True
+        )
         self.request = Request(con_pool_size=8)
         self.bot = CoreQueueBot(TOKEN, request=self.request, defaults=self.defaults)
-        self.updater: Updater = CoreUpdater(bot=self.bot,
-                                            use_context=True,
-                                            persistence=PERSISTENCE,
-                                            defaults=self.defaults)
+        self.updater: Updater = CoreUpdater(
+            bot=self.bot,
+            use_context=True,
+            persistence=PERSISTENCE,
+            defaults=self.defaults,
+        )
         self.dp: Dispatcher = self.updater.dispatcher
         from handlers import Handlers, error_callback
+
         self.dp.add_error_handler(error_callback)
         self.handlers = Handlers()
         self.handlers.register(self.dp)
         # self.bot = self.updater.bot
         self.update_queue = self.updater.update_queue
         if NAME:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(
-                self.NAME, self.TOKEN))
+            self.bot.setWebhook(
+                "https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN)
+            )
 
     def start_dispatcher_thread(self):
-        self.thread = Thread(target=self.dp.start, name='dispatcher')
+        self.thread = Thread(target=self.dp.start, name="dispatcher")
         self.thread.start()
 
     def process_update(self, update):
