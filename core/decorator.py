@@ -3,11 +3,11 @@ from telegram import Update, User
 from telegram.ext import CallbackContext
 from typing import Any, Callable, List
 
-from core.context import CoreContext
+from . import CoreContext
 from config import DOMAIN
 
 
-def only_users(users: List[int], msg: str = ''):
+def only_users(users: List[int], msg: str = ""):
     def decorator(
         func: Callable[[Update, CallbackContext], Any]
     ) -> Callable[[Update, CallbackContext], Any]:
@@ -31,7 +31,7 @@ def assert_token(
     @wraps(func)
     def wrapper(update: Update, context: CoreContext) -> Any:
         if context.user.token is None:
-            msg = 'Silahkan login di\n' + DOMAIN + 'elearning.html'
+            msg = "Silahkan login di\n" + DOMAIN + "elearning.html"
             if context.query:
                 context.query.answer()
                 context.query.edit_message_text(msg)
