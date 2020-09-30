@@ -2,7 +2,8 @@ from telegram import Update
 
 from moodle.core.webservice import BaseWebservice
 
-from core import CoreContext, message_wrapper
+from core import CoreContext
+from core.session import message_wrapper
 from libs.elearning.utils import is_valid_token
 
 

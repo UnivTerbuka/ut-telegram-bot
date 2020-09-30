@@ -5,7 +5,9 @@ from urllib.parse import unquote
 
 from moodle.mod.url import BaseUrl
 
-from core import CoreContext, assert_token, message_wrapper
+from core import CoreContext
+from core.decorator import assert_token
+from core.session import message_wrapper
 from libs.utils import format_html
 from libs.utils.helpers import build_menu, make_data
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG

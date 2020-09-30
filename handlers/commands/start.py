@@ -1,5 +1,6 @@
 from telegram import Update
-from core import CoreContext, message_wrapper
+from core import CoreContext
+from core.session import message_wrapper
 
 msg = """
 

@@ -4,7 +4,9 @@ from typing import List
 
 from moodle.core.course import BaseCourse
 
-from core import CoreContext, assert_token, message_wrapper
+from core import CoreContext
+from core.decorator import assert_token
+from core.session import message_wrapper
 from libs.utils.helpers import build_menu, make_data
 from config import CALLBACK_SEPARATOR, MOODLE_D
 

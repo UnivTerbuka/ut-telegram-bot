@@ -3,7 +3,9 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
 from moodle.mod.forum import BaseForum
 
-from core import CoreContext, assert_token, message_wrapper
+from core import CoreContext
+from core.decorator import assert_token
+from core.session import message_wrapper
 from config import CALLBACK_SEPARATOR
 from libs.elearning.forum import forum_text
 from libs.utils.helpers import build_menu, make_data

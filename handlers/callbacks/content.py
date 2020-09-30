@@ -8,7 +8,9 @@ from urllib.parse import unquote
 from moodle import MoodleException
 from moodle.core.course import BaseCourse, ContentOption
 
-from core import CoreContext, assert_token, message_wrapper
+from core import CoreContext
+from core.decorator import assert_token
+from core.session import message_wrapper
 from libs.utils.helpers import make_data
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG, MOODLE_D
 

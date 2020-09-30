@@ -1,7 +1,8 @@
 from telegram import Update, Message
 
-from core import CoreContext, message_wrapper
+from core import CoreContext
 from core.models import User
+from core.session import message_wrapper
 
 from config import DEVS
 
