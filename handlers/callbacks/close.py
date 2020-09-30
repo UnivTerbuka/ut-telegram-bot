@@ -7,8 +7,8 @@ from core.utils import action
 def close(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer()
-    callback_query.edit_message_text('Terimakasih. :D')
+    callback_query.edit_message_text("Terimakasih. :D")
     return -1
 
 
-close_pattern = r'CLOSE'
+close_pattern = r"CLOSE"

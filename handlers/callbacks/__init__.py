@@ -1,6 +1,7 @@
 from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, CallbackQueryHandler
+
 # Callbacks
 from .buku import buku, buku_pattern
 from .close import close, close_pattern
@@ -51,9 +52,8 @@ class CallbackMixin(object):
         try:
             if self.CALLBACKS:
                 for callback in self.CALLBACKS:
-                    dispatcher.add_handler(callback,
-                                           group=self.CALLBACKS_GROUP)
-                self.logger.info('Callbacks added!')
+                    dispatcher.add_handler(callback, group=self.CALLBACKS_GROUP)
+                self.logger.info("Callbacks added!")
             return True
         except Exception as e:
             self.logger.exception(e)

@@ -16,17 +16,17 @@ def admin(update: Update, context: CoreContext):
     if context.user.id not in DEVS:
         return
     message: Message = update.message
-    args = message.text.split(' ')
-    if 'status' in args:
+    args = message.text.split(" ")
+    if "status" in args:
         count = context.session.query(User).count()
-        message.reply_text(f'Pengguna aktif saat ini <code>{count}</code>')
-    elif 'ban' in args:
+        message.reply_text(f"Pengguna aktif saat ini <code>{count}</code>")
+    elif "ban" in args:
         ids = int(args[-1])
         session = context.session
         banned_user: User = session.query(User).get(ids)
         if banned_user:
             banned_user.banned = True
             session.commit()
-            message.reply_text(f'{ids} dibanned')
+            message.reply_text(f"{ids} dibanned")
         else:
-            message.reply_text(f'{ids} tidak ditemukan')
+            message.reply_text(f"{ids} tidak ditemukan")

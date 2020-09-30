@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from core.utils import action
 
-MESSAGE = '''
+MESSAGE = """
 Daftar Formulir yang dapat di-download kemudian dicetak untuk diisi
 
 <a href="https://ut.ac.id/sites/all/files/images/2020/juli/Formulir_Data_Pribadi_Mahasiswa_UT_F1-E_AM01-RK10-RII.6_09_Maret_2020_Universitas_Terbuka.pdf">Formulir Data Pribadi Mahasiswa Universitas Terbuka (F-1E AM01-RK10-RII.6)</a>
@@ -13,7 +13,7 @@ Daftar Formulir yang dapat di-download kemudian dicetak untuk diisi
 <a href="https://ut.ac.id/sites/all/files/images/2019/agustus/Form_SIPAS_Pernyataan_2019.docx">Formulir Surat Pernyataan Mahasiswa Layanan Sipas Universitas Terbuka</a>
 
 <a href="https://www.ut.ac.id/formulir">Sumber</a>
-'''
+"""
 
 
 @action.typing

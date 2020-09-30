@@ -23,17 +23,17 @@ def course(update: Update, context: CoreContext):
 
     moodle_course = BaseCourse(context.moodle)
     try:
-        courses = moodle_course.get_courses_by_field('id', course_id)
+        courses = moodle_course.get_courses_by_field("id", course_id)
     except Exception as e:
         logger.exception(e)
-        reply_markup = make_button('Coba lagi', context.query.data)
+        reply_markup = make_button("Coba lagi", context.query.data)
         context.query.edit_message_text(
-            'Gagal mendapatkan kursus.',
+            "Gagal mendapatkan kursus.",
             reply_markup=reply_markup,
         )
         raise e
     if not courses:
-        context.query.edit_message_text('Kursus tidak ditemukan.')
+        context.query.edit_message_text("Kursus tidak ditemukan.")
         return -1
     course_ = courses[0]
 
@@ -42,16 +42,16 @@ def course(update: Update, context: CoreContext):
     for section in sections:
         if not section.uservisible:
             continue
-        data = make_data('CONTENT', course_id, section.id, 0)
+        data = make_data("CONTENT", course_id, section.id, 0)
         button = InlineKeyboardButton(section.name, callback_data=data)
         buttons.append(button)
     if not buttons:
-        data = make_data('FORUMS', course_id)
-        button = InlineKeyboardButton('Daftar Forum', callback_data=data)
+        data = make_data("FORUMS", course_id)
+        button = InlineKeyboardButton("Daftar Forum", callback_data=data)
         buttons.append(button)
     keyboard = build_menu(
         buttons,
-        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     )
     context.query.edit_message_text(
         text=course_text(course_),
@@ -60,4 +60,4 @@ def course(update: Update, context: CoreContext):
     return -1
 
 
-course_pattern = r'^COURSE\|\d+$'
+course_pattern = r"^COURSE\|\d+$"

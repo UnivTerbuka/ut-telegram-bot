@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from core.utils import action
 
-MESSAGE = '''
+MESSAGE = """
 <a href="https://www.ut.ac.id/">Universitas Terbuka</a>
 
 <a href="https://www.ut.ac.id/jaminan-kualitas/akreditasi-ban-pt">Akreditasi BAN-PT</a>
@@ -19,7 +19,7 @@ MESSAGE = '''
 
 <a href="http://hallo-ut.ut.ac.id/">Layanan Informasi dan Bantuan</a>
 <a href="https://www.ut.ac.id/contact-center">Contact Center</a>
-'''
+"""
 
 
 @action.typing

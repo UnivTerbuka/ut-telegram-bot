@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext
 from core.utils import action
 from libs.utils import format_html
 
-MESSAGE = '''
+MESSAGE = """
 Developers :
 Habib Rohman - @hexatester - {linkedin}
 
@@ -16,11 +16,11 @@ Dan menggunakan library :
 * <a href="https://www.crummy.com/software/BeautifulSoup/">beautifulsoup4</a>
 * <a href="https://2.python-requests.org/en/master/">requests</a>
 * {dll}
-'''.format(linkedin=format_html.href(
-    "LinkedIn", "https://sl.ut.ac.id/hexatester-linkedin"),
-           python=format_html.href("Bahasa Pemrograman Python",
-                                   "https://sl.ut.ac.id/python"),
-           dll=format_html.href("dll", "https://sl.ut.ac.id/ut-bot-req"))
+""".format(
+    linkedin=format_html.href("LinkedIn", "https://sl.ut.ac.id/hexatester-linkedin"),
+    python=format_html.href("Bahasa Pemrograman Python", "https://sl.ut.ac.id/python"),
+    dll=format_html.href("dll", "https://sl.ut.ac.id/ut-bot-req"),
+)
 
 
 @action.typing

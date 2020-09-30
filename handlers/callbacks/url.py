@@ -42,21 +42,21 @@ def url(update: Update, context: CoreContext):
         buttons.append(button)
         name = format_html.href(name, url_.externalurl)
 
-    text = name + '\n'
+    text = name + "\n"
     text += clean_html(url_.intro, **BLEACH_CONFIG)
 
     for file in url_.introfiles:
         url = file.fileurl
         if not file.isexternalfile:
-            url += '?token=' + context.moodle.token
+            url += "?token=" + context.moodle.token
         button = InlineKeyboardButton(file.filename, url)
         buttons.append(button)
 
     # TODO : Use CONTENT
-    back_button = make_data('COURSE', course_id)
+    back_button = make_data("COURSE", course_id)
     footer = [
-        InlineKeyboardButton('< Kembali', callback_data=back_button),
-        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+        InlineKeyboardButton("< Kembali", callback_data=back_button),
+        InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     ]
 
     keyboard = build_menu(buttons, footer_buttons=footer)
@@ -68,4 +68,4 @@ def url(update: Update, context: CoreContext):
     return -1
 
 
-url_pattern = r'^URL\|\d+\|\d+$'
+url_pattern = r"^URL\|\d+\|\d+$"

@@ -26,34 +26,33 @@ def module(update: Update, context: CoreContext):
     except Exception:
         pass
     if not cm:
-        context.query.edit_message_text('Data tidak ditemukan.')
+        context.query.edit_message_text("Data tidak ditemukan.")
         return -1
 
     course_module = cm.cm
-    text = course_module.name + '\n'
-    text += '<i>Fitur masih dikembangkan, tolong tekan tombol Buka di elearning</i>'
+    text = course_module.name + "\n"
+    text += "<i>Fitur masih dikembangkan, tolong tekan tombol Buka di elearning</i>"
     buttons: List[InlineKeyboardButton] = list()
 
-    url = f'https://elearning.ut.ac.id/mod/{course_module.modname}/view.php?id={module_id}'
-    button = InlineKeyboardButton('Buka di elearning', url)
+    url = f"https://elearning.ut.ac.id/mod/{course_module.modname}/view.php?id={module_id}"
+    button = InlineKeyboardButton("Buka di elearning", url)
     buttons.append(button)
 
-    data = make_data(course_module.modname.upper(), course_module.course,
-                     course_module.instance)
+    data = make_data(
+        course_module.modname.upper(), course_module.course, course_module.instance
+    )
     button = InlineKeyboardButton(course_module.name, callback_data=data)
     buttons.append(button)
 
-    back_data = make_data('CONTENT', course_module.course,
-                          course_module.section, 0)
+    back_data = make_data("CONTENT", course_module.course, course_module.section, 0)
     footer = [
-        InlineKeyboardButton('< Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+        InlineKeyboardButton("< Kembali", callback_data=back_data),
+        InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     ]
     keyboard = build_menu(buttons, footer_buttons=footer)
 
-    context.query.edit_message_text(
-        text, reply_markup=InlineKeyboardMarkup(keyboard))
+    context.query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
 
 
-module_pattern = r'^MODULE\|\d+$'
+module_pattern = r"^MODULE\|\d+$"

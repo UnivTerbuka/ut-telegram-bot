@@ -12,10 +12,10 @@ from core.context import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
 from libs.utils.helpers import make_data
-from config import CALLBACK_SEPARATOR, BLEACH_CONFIG
+from config import CALLBACK_SEPARATOR, BLEACH_CONFIG, MOODLE_D
 
 logger = getLogger(__name__)
-SUPPORTED_MOD = ['forum', 'resource', 'lesson', 'url']
+SUPPORTED_MOD = ["forum", "resource", "lesson", "url"]
 
 
 @message_wrapper
@@ -28,22 +28,22 @@ def content(update: Update, context: CoreContext):
     section_id = int(datas[2])
     page = int(datas[3])
     try:
-        options = [ContentOption('sectionid', str(section_id))]
+        options = [ContentOption("sectionid", str(section_id))]
         sections = BaseCourse(context.moodle).get_contents(course_id, options)
     except MoodleException as me:
         logger.exception(me.message)
         return -1
     num = 0
-    text = ''
+    text = ""
     completions: List[InlineKeyboardButton] = list()
     keyboard: List[List[InlineKeyboardButton]] = list()
     for section in sections:
         text += clean_html(section.summary, **BLEACH_CONFIG)
         for module in section.modules:
-            if module.modname == 'label' and not module.completion:
+            if module.modname == "label" and not module.completion:
                 continue
             num += 1
-            button_text = ''
+            button_text = ""
             buttons: List[InlineKeyboardButton] = list()
             if module.completion and module.completion != 0:
                 state = module.completiondata.state
@@ -51,22 +51,22 @@ def content(update: Update, context: CoreContext):
                     # incomplete
                     if module.completion == 1:
                         button_text += str(num)
-                        data = make_data('COMPLETION', course_id, module.id)
+                        data = make_data("COMPLETION", course_id, module.id)
                         button = InlineKeyboardButton(
                             f"{num} ☑️",
                             callback_data=data,
                         )
                         completions.append(button)
-                    button_text += '❌ '
+                    button_text += "❌ "
                 elif state == 1:
                     # complete
-                    button_text += '✅ '
+                    button_text += "✅ "
                 elif state == 2:
                     # complete pass
-                    button_text += '✔️ '
+                    button_text += "✔️ "
                 elif state == 3:
                     # complete fail
-                    button_text += '❎ '
+                    button_text += "❎ "
             button_text += unquote(module.name)
             if module.modname in SUPPORTED_MOD:
                 # FORUM|course_id|forum_id
@@ -74,7 +74,7 @@ def content(update: Update, context: CoreContext):
                 button = InlineKeyboardButton(button_text, callback_data=data)
                 buttons.append(button)
             else:
-                url = f'https://elearning.ut.ac.id/mod/{module.modname}/view.php?id={module.id}'
+                url = MOODLE_D + f"mod/{module.modname}/view.php?id={module.id}"
                 button = InlineKeyboardButton(button_text, url)
                 buttons.append(button)
             keyboard.append(buttons)
@@ -82,36 +82,36 @@ def content(update: Update, context: CoreContext):
         MESSAGE_LENGTH = len(text)
         header = list()
         if page > 0:
-            data = make_data('CONTENT', course_id, section_id, page - 1)
-            button = InlineKeyboardButton('Sebelumnya', callback_data=data)
+            data = make_data("CONTENT", course_id, section_id, page - 1)
+            button = InlineKeyboardButton("Sebelumnya", callback_data=data)
             header.append(button)
         if MESSAGE_LENGTH >= (page + 1) * MAX_MESSAGE_LENGTH:
-            data = make_data('CONTENT', course_id, section_id, page + 1)
-            button = InlineKeyboardButton('Selanjutnya', callback_data=data)
+            data = make_data("CONTENT", course_id, section_id, page + 1)
+            button = InlineKeyboardButton("Selanjutnya", callback_data=data)
             header.append(button)
         if header:
             keyboard.insert(0, header)
-    back_data = make_data('COURSE', course_id)
-    down_data = context.query.data.rstrip('|') + '|'
+    back_data = make_data("COURSE", course_id)
+    down_data = context.query.data.rstrip("|") + "|"
     footer = [
-        InlineKeyboardButton('< Kembali', callback_data=back_data),
-        InlineKeyboardButton('⬇️ Turunkan', callback_data=down_data),
-        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+        InlineKeyboardButton("< Kembali", callback_data=back_data),
+        InlineKeyboardButton("⬇️ Turunkan", callback_data=down_data),
+        InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     ]
     if completions:
         keyboard.append(completions)
     keyboard.append(footer)
     if len(datas) > 4:
         context.chat.send_message(
-            text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
+            text[MAX_MESSAGE_LENGTH * page : MAX_MESSAGE_LENGTH * (page + 1)],
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
     else:
         context.query.edit_message_text(
-            text[MAX_MESSAGE_LENGTH * page:MAX_MESSAGE_LENGTH * (page + 1)],
+            text[MAX_MESSAGE_LENGTH * page : MAX_MESSAGE_LENGTH * (page + 1)],
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
     return -1
 
 
-content_pattern = r'^CONTENT\|\d+\|\d+\|\d+\|?$'
+content_pattern = r"^CONTENT\|\d+\|\d+\|\d+\|?$"

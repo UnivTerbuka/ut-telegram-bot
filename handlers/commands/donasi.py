@@ -1,10 +1,10 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-MESSAGE = '''
+MESSAGE = """
 Untuk donasi, kritik, saran, dan sebagainya silahkan PM @hexatester
 Terimakasih
-'''
+"""
 
 
 def donasi(update: Update, context: CallbackContext):

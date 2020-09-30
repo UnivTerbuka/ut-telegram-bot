@@ -11,12 +11,11 @@ def ticket(update: Update, context: CallbackContext):
         data: str = callback_query.data
         nomor = data.split(CALLBACK_SEPARATOR)[1]
         tiket: Ticket = Ticket.from_nomor(nomor)
-        callback_query.edit_message_text(str(tiket),
-                                         reply_markup=tiket.reply_markup)
-        callback_query.answer('Data berhasil direfresh.')
+        callback_query.edit_message_text(str(tiket), reply_markup=tiket.reply_markup)
+        callback_query.answer("Data berhasil direfresh.")
     except BadRequest:
-        callback_query.answer('Tidak ada perubahan data.')
+        callback_query.answer("Tidak ada perubahan data.")
     return -1
 
 
-ticket_pattern = r'^TICKET\|[A-Z]\d{10}-\d{8}$'
+ticket_pattern = r"^TICKET\|[A-Z]\d{10}-\d{8}$"

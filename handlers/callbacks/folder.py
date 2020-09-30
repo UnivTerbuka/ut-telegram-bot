@@ -24,7 +24,7 @@ def folder(update: Update, context: CoreContext):
     base_folder = BaseFolder(context.moodle)
     folders = base_folder.get_folders_by_courses([course_id])
     if not folders:
-        context.query.edit_message_text('Data tidak ditemukan!')
+        context.query.edit_message_text("Data tidak ditemukan!")
         return -1
     for folder in folders:
         if folder.id == folder_id:
@@ -39,12 +39,11 @@ def folder(update: Update, context: CoreContext):
                 switch_inline_query_current_chat=file.fileurl,
             )
         buttons.append(button)
-    text = folder.name + '\n\n'
+    text = folder.name + "\n\n"
     text += clean_html(folder.intro, **BLEACH_CONFIG)
     keyboard = build_menu(buttons)
-    context.query.edit_message_text(
-        text, reply_markup=InlineKeyboardMarkup(keyboard))
+    context.query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
 
 
-folder_pattern = r'^FOLDER\|\d+\|\d+$'
+folder_pattern = r"^FOLDER\|\d+\|\d+$"

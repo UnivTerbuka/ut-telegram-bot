@@ -1,5 +1,10 @@
-from telegram import (Update, InlineQuery, InlineQueryResultArticle,
-                      InlineQueryResultDocument, InputTextMessageContent)
+from telegram import (
+    Update,
+    InlineQuery,
+    InlineQueryResultArticle,
+    InlineQueryResultDocument,
+    InputTextMessageContent,
+)
 from urllib.parse import unquote
 
 from core.context import CoreContext
@@ -14,27 +19,27 @@ def pluginfile(update: Update, context: CoreContext):
     query: InlineQuery = update.inline_query
     url: str = query.query
     # https://elearning.ut.ac.id/webservice/pluginfile.php/12345/mod_resource/content/0/File.pdf
-    urls = url.split('/')
+    urls = url.split("/")
     resource_id = urls[5]
     resource_title = unquote(urls[-1]).title()
-    resource_url = url + '?token=' + context.moodle.token
+    resource_url = url + "?token=" + context.moodle.token
     results = list()
-    if url.endswith('.pdf'):
+    if url.endswith(".pdf"):
         result = InlineQueryResultDocument(
             id=resource_id,
             document_url=resource_url,
             title=resource_title,
-            mime_type='application/pdf',
-            description='File elearning.',
+            mime_type="application/pdf",
+            description="File elearning.",
         )
         results.append(result)
-    elif url.endswith('.zip'):
+    elif url.endswith(".zip"):
         result = InlineQueryResultDocument(
             id=resource_id,
             document_url=resource_url,
             title=resource_title,
-            mime_type='application/zip',
-            description='File elearning.',
+            mime_type="application/zip",
+            description="File elearning.",
         )
         results.append(result)
     else:
@@ -45,17 +50,17 @@ def pluginfile(update: Update, context: CoreContext):
                 format_html.href(resource_title, resource_url),
                 disable_web_page_preview=False,
             ),
-            description='File elearning.',
+            description="File elearning.",
         )
         results.append(result)
     query.answer(
         results,
         cache_time=600,
         is_personal=True,
-        switch_pm_text='Bantuan',
-        switch_pm_parameter='inline-help',
+        switch_pm_text="Bantuan",
+        switch_pm_parameter="inline-help",
     )
     return -1
 
 
-pluginfile_pattern = r'^https:\/\/elearning\.ut\.ac\.id\/webservice\/pluginfile\.php\/\d+\/mod_resource\/content\/\d\/\S+$'  # NOQA
+pluginfile_pattern = r"^https:\/\/elearning\.ut\.ac\.id\/webservice\/pluginfile\.php\/\d+\/mod_resource\/content\/\d\/\S+$"  # NOQA

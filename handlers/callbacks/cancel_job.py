@@ -9,7 +9,7 @@ def cancel_job(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer()
     data: str = callback_query.data
-    job_name = data.lstrip('CANCEL|')
+    job_name = data.lstrip("CANCEL|")
     jobs: Tuple[Job] = context.job_queue.get_jobs_by_name(job_name)
     if jobs:
         for job in jobs:
@@ -17,7 +17,7 @@ def cancel_job(update: Update, context: CallbackContext):
                 pass
             else:
                 job.schedule_removal()
-        callback_query.edit_message_text('Berhasil.')
+        callback_query.edit_message_text("Berhasil.")
     else:
-        callback_query.edit_message_text('OK.')
+        callback_query.edit_message_text("OK.")
     return -1

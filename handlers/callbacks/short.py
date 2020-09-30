@@ -12,13 +12,13 @@ from libs.utils.helpers import make_button
 logger = getLogger(__name__)
 LOCK = RLock()
 CACHE = TTLCache(20, 5 * 60)
-BOT_USERNAME = 'UniversitasTerbukaBot'
-DOMAIN = 'https://sl.ut.ac.id/'
+BOT_USERNAME = "UniversitasTerbukaBot"
+DOMAIN = "https://sl.ut.ac.id/"
 
 
 def ending(book: str, i: int) -> str:
-    prefix = 'BACA-BACA-BACA'[:i]
-    return prefix + '-' + book if prefix else book
+    prefix = "BACA-BACA-BACA"[:i]
+    return prefix + "-" + book if prefix else book
 
 
 @cached(CACHE, lock=LOCK)
@@ -44,10 +44,11 @@ def short(update: Update, context: CallbackContext):
     modul = data[6:14]
 
     url = get_book(modul)
-    back = make_button('< Kembali', callback_data='BUKU|' + modul)
-    callback_query.edit_message_text(f'Share modul {modul} dengan link ' + url,
-                                     reply_markup=back)
+    back = make_button("< Kembali", callback_data="BUKU|" + modul)
+    callback_query.edit_message_text(
+        f"Share modul {modul} dengan link " + url, reply_markup=back
+    )
     return -1
 
 
-short_pattern = r'^SHORT\|[A-Z]{4}\d+$'
+short_pattern = r"^SHORT\|[A-Z]{4}\d+$"

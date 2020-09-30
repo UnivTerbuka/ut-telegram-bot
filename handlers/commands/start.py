@@ -2,7 +2,7 @@ from telegram import Update
 from core.context import CoreContext
 from core.session import message_wrapper
 
-msg = '''
+msg = """
 
 Daftar Perintah
 /start - Memulai bot
@@ -15,7 +15,7 @@ Daftar Perintah
 /formulir - Daftar Formulir
 /about - Tentang bot ini
 'Dengan menggunakan bot ini, berarti anda faham & setuju dengan /eula'
-'''
+"""
 
 
 @message_wrapper
@@ -24,5 +24,5 @@ def start(update: Update, context: CoreContext):
     if context.user and not context.user.started:
         context.user.started = True
         context.save()
-    context.message.reply_text(f'Selamat datang {user.full_name}' + msg)
+    context.message.reply_text(f"Selamat datang {user.full_name}" + msg)
     return -1

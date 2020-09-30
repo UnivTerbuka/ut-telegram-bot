@@ -1,5 +1,4 @@
-from telegram import (Update, CallbackQuery, InlineKeyboardButton,
-                      InlineKeyboardMarkup)
+from telegram import Update, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
 from config import CALLBACK_SEPARATOR
 from libs.utils.helpers import build_menu
@@ -39,30 +38,31 @@ def page(update: Update, context: CallbackContext):
         if page_number > end:
             limit = True
             break
-        datas = f'MODUL,{subfolder},{doc},{end},{page_number},{txt}'
-        datas = datas.replace(',', CALLBACK_SEPARATOR)
-        keyboard.append(
-            InlineKeyboardButton(str(page_number), callback_data=datas))
+        datas = f"MODUL,{subfolder},{doc},{end},{page_number},{txt}"
+        datas = datas.replace(",", CALLBACK_SEPARATOR)
+        keyboard.append(InlineKeyboardButton(str(page_number), callback_data=datas))
 
     # Header buttons
     header = []
     if number > 0:
         datas = f"PAGE,{subfolder},{doc},{end},{current},{txt},{number - 1}"
-        datas = datas.replace(',', CALLBACK_SEPARATOR)
-        header.append(InlineKeyboardButton('Sebelumnya', callback_data=datas))
+        datas = datas.replace(",", CALLBACK_SEPARATOR)
+        header.append(InlineKeyboardButton("Sebelumnya", callback_data=datas))
     if not limit:
         datas = f"PAGE,{subfolder},{doc},{end},{current},{txt},{number + 1}"
-        datas = datas.replace(',', CALLBACK_SEPARATOR)
-        header.append(InlineKeyboardButton('Selanjutnya', callback_data=datas))
+        datas = datas.replace(",", CALLBACK_SEPARATOR)
+        header.append(InlineKeyboardButton("Selanjutnya", callback_data=datas))
 
     # Footer buttons
 
     foooter = [
         InlineKeyboardButton(
-            '< Kembali',
-            callback_data=f'MODUL,{subfolder},{doc},{end},{current},{txt}'.
-            replace(',', CALLBACK_SEPARATOR)),
-        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+            "< Kembali",
+            callback_data=f"MODUL,{subfolder},{doc},{end},{current},{txt}".replace(
+                ",", CALLBACK_SEPARATOR
+            ),
+        ),
+        InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     ]
 
     menu = build_menu(
@@ -75,4 +75,4 @@ def page(update: Update, context: CallbackContext):
     return -1
 
 
-page_pattern = r'^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|?\d*$'
+page_pattern = r"^PAGE\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)\|?\d*$"

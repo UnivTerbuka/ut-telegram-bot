@@ -1,6 +1,5 @@
 import logging
-from telegram import (Update, CallbackQuery, InlineKeyboardButton,
-                      InlineKeyboardMarkup)
+from telegram import Update, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext, Job
 from telegram.error import BadRequest
 from handlers.jobs.modul import modul as job_modul
@@ -13,7 +12,8 @@ logger = logging.getLogger(__name__)
 
 def back(data: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton('< Kembali', callback_data=data)]])
+        [[InlineKeyboardButton("< Kembali", callback_data=data)]]
+    )
 
 
 def modul(update: Update, context: CallbackContext):
@@ -26,24 +26,27 @@ def modul(update: Update, context: CallbackContext):
     job_name = f"{chat_id}|{data}"
     callback_query.answer()
     try:
-        job = Job(callback=job_modul,
-                  context=(chat_id, message_id, data),
-                  name=job_name,
-                  repeat=False)
+        job = Job(
+            callback=job_modul,
+            context=(chat_id, message_id, data),
+            name=job_name,
+            repeat=False,
+        )
         job.run(context.dispatcher)
     except BadRequest:
         callback_query.edit_message_text(
-            'Mohon untuk tidak menekan tombol berkali-kali.',
-            reply_markup=back(data))
+            "Mohon untuk tidak menekan tombol berkali-kali.", reply_markup=back(data)
+        )
     except Exception as e:
         logger.exception(e)
         callback_query.edit_message_text(
-            f'Server error ({e}), '
-            'silahkan coba beberapa saat lagi atau pm @hexatester.',
-            reply_markup=back(data))
+            f"Server error ({e}), "
+            "silahkan coba beberapa saat lagi atau pm @hexatester.",
+            reply_markup=back(data),
+        )
         raise e
     finally:
         return -1
 
 
-modul_pattern = r'^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$'
+modul_pattern = r"^MODUL\|[A-Z]{4}\d+\|\S+\|\d+\|(txt|img)$"

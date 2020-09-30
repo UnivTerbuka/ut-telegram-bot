@@ -23,16 +23,18 @@ def update_completion(update: Update, context: CoreContext):
     cmplt = BaseCompletion(context.moodle)
     res = cmplt.update_activity_completion_status_manually(module_id, 1)
     logger.debug(repr(res))
-    back_data = make_data('COURSE', course_id)
-    keyboard = [[
-        InlineKeyboardButton('< Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup ❌', callback_data='Tutup ❌')
-    ]]
+    back_data = make_data("COURSE", course_id)
+    keyboard = [
+        [
+            InlineKeyboardButton("< Kembali", callback_data=back_data),
+            InlineKeyboardButton("Tutup ❌", callback_data="Tutup ❌"),
+        ]
+    ]
     context.query.edit_message_text(
-        'Berhasil ✅' if res.status else 'Gagal ❌',
+        "Berhasil ✅" if res.status else "Gagal ❌",
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1
 
 
-update_completion_pattern = r'^COMPLETION\|\d+\|\d+$'
+update_completion_pattern = r"^COMPLETION\|\d+\|\d+$"

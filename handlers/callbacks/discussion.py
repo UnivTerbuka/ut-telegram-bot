@@ -32,38 +32,37 @@ def discussion(update: Update, context: CoreContext):
         posts = base_forum.get_discussion_posts(discussion_id)
     except Exception as e:
         logger.exception(e)
-        context.query.edit_message_text('Gagal mendapatkan diskusi.')
+        context.query.edit_message_text("Gagal mendapatkan diskusi.")
         raise e
-    text = 'Diskusi'
+    text = "Diskusi"
     for post in posts:
         if post.isdeleted:
             continue
         subject = post.replysubject or post.subject
-        title = f'{subject} [{post.author.fullname}]'
-        url = f'https://elearning.ut.ac.id/mod/forum/discuss.php?d={post.id}'
-        text += format_html.href(title, url) + '\n'
-        text += clean_html(post.message, **BLEACH_CONFIG) + '\n\n'
+        title = f"{subject} [{post.author.fullname}]"
+        url = f"https://elearning.ut.ac.id/mod/forum/discuss.php?d={post.id}"
+        text += format_html.href(title, url) + "\n"
+        text += clean_html(post.message, **BLEACH_CONFIG) + "\n\n"
     header = list()
     if len(text) > MAX_MESSAGE_LENGTH:
         MESSAGE_LENGTH = len(text)
         if page > 0:
-            data = make_data('DISCUSSION', course_id, forum_id, discussion_id, page - 1)
-            button = InlineKeyboardButton('Sebelumnya', callback_data=data)
+            data = make_data("DISCUSSION", course_id, forum_id, discussion_id, page - 1)
+            button = InlineKeyboardButton("Sebelumnya", callback_data=data)
             header.append(button)
         if MESSAGE_LENGTH >= (page + 1) * MAX_MESSAGE_LENGTH:
-            data = make_data('DISCUSSION', course_id, forum_id, discussion_id, page + 1)
-            button = InlineKeyboardButton('Selanjutnya', callback_data=data)
+            data = make_data("DISCUSSION", course_id, forum_id, discussion_id, page + 1)
+            button = InlineKeyboardButton("Selanjutnya", callback_data=data)
             header.append(button)
-    back_data = make_data('DISCUSSIONS', course_id, forum_id, 1)
+    back_data = make_data("DISCUSSIONS", course_id, forum_id, 1)
     footer = [
-        InlineKeyboardButton('< Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup ❌', callback_data='CLOSE')
+        InlineKeyboardButton("< Kembali", callback_data=back_data),
+        InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     ]
     keyboard = build_menu(header_buttons=header, footer_buttons=footer)
 
-    context.query.edit_message_text(
-        text, reply_markup=InlineKeyboardMarkup(keyboard))
+    context.query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
     return -1
 
 
-discussion_pattern = r'^DISCUSSION\|\d+\|\d+\|\d+\|\d+$'
+discussion_pattern = r"^DISCUSSION\|\d+\|\d+\|\d+\|\d+$"

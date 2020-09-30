@@ -23,18 +23,18 @@ def forward_file(file: File, res: Resource, context: CoreContext):
         return
     except BadRequest:
         pass
-    filename = f'{res.id}-{file.filename}'
+    filename = f"{res.id}-{file.filename}"
     filepath = os.path.join(RES_PATH, filename)
     if os.path.isfile(filepath):
-        context.chat.send_document(document=open(filepath, 'rb'))
+        context.chat.send_document(document=open(filepath, "rb"))
         return
     try:
         with requests.get(file.fileurl, stream=True) as r:
             r.raise_for_status()
-            with open(filepath, 'wb') as f:
+            with open(filepath, "wb") as f:
                 for chunk in r.iter_content(chunk_size=1024):
                     f.write(chunk)
-        context.chat.send_document(document=open(filepath, 'rb'))
+        context.chat.send_document(document=open(filepath, "rb"))
     except Exception as e:
         logger.exception(e)
     return
@@ -43,7 +43,7 @@ def forward_file(file: File, res: Resource, context: CoreContext):
 @message_wrapper
 @assert_token
 def resource(update: Update, context: CoreContext):
-    context.query.answer('Mengirim dokumen...')
+    context.query.answer("Mengirim dokumen...")
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # RESOURCE|course_id|resource_id
     course_id = int(datas[1])
@@ -54,9 +54,9 @@ def resource(update: Update, context: CoreContext):
         resourses = base_res.get_resources_by_courses([course_id])
     except Exception as e:
         logger.exception(e)
-        reply_markup = make_button('Coba lagi', context.query.data)
+        reply_markup = make_button("Coba lagi", context.query.data)
         context.query.edit_message_text(
-            'Gagal mendapatkan informasi dokumen.',
+            "Gagal mendapatkan informasi dokumen.",
             reply_markup=reply_markup,
         )
         raise e
@@ -64,11 +64,11 @@ def resource(update: Update, context: CoreContext):
     if res:
         base_res.view_resource(res.id)
     else:
-        context.query.edit_message_text('Dokumen tidak ditemukan!')
+        context.query.edit_message_text("Dokumen tidak ditemukan!")
         return -1
 
-    text = res.name + '\n'
-    text += clean_html(res.intro, **BLEACH_CONFIG) + '\n\n'
+    text = res.name + "\n"
+    text += clean_html(res.intro, **BLEACH_CONFIG) + "\n\n"
     files = list(res.introfiles)
     files.extend(list(res.contentfiles))
 
@@ -78,13 +78,13 @@ def resource(update: Update, context: CoreContext):
     for file in files:
         url = file.fileurl
         if not file.isexternalfile:
-            url += '?token=' + context.moodle.token
+            url += "?token=" + context.moodle.token
         file.fileurl = url
-        text += format_html.href(file.filename, url) + '\n'
+        text += format_html.href(file.filename, url) + "\n"
     context.bot.send_message(context.chat.id, text)
     for file in files:
         forward_file(file, res, context)
     return -1
 
 
-resource_pattern = r'^RESOURCE\|\d+\|\d+$'
+resource_pattern = r"^RESOURCE\|\d+\|\d+$"

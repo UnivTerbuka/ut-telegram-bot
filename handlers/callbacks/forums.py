@@ -22,23 +22,25 @@ def forums(update: Update, context: CoreContext):
     # FORUMS|course_id
     course_id = int(datas[1])
     try:
-        course = BaseCourse(context.moodle).get_courses_by_field(
-            'id', str(course_id))[0]
+        course = BaseCourse(context.moodle).get_courses_by_field("id", str(course_id))[
+            0
+        ]
         forums_ = BaseForum(context.moodle).get_forums_by_courses([course_id])
         if not forums_:
             context.query.edit_text(
-                text=f'Tidak ada forum untuk {course.shortname}.',
-                reply_markup=make_button('< Kembali', f"COURSE|{course_id}"))
+                text=f"Tidak ada forum untuk {course.shortname}.",
+                reply_markup=make_button("< Kembali", f"COURSE|{course_id}"),
+            )
             return -1
     except Exception as e:
-        logger.debug('Error {}'.format(repr(e)))
-        context.query.edit_message_text('Gagal mendapatkan forum')
+        logger.debug("Error {}".format(repr(e)))
+        context.query.edit_message_text("Gagal mendapatkan forum")
         return -1
     context.query.edit_message_text(
-        text=f'Forum untuk {course.shortname}',
+        text=f"Forum untuk {course.shortname}",
         reply_markup=forum_buttons(forums_),
     )
     return -1
 
 
-forums_pattern = r'^FORUMS\|\d+$'
+forums_pattern = r"^FORUMS\|\d+$"

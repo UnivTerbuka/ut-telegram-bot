@@ -23,16 +23,18 @@ def view_lesson(update: Update, context: CoreContext):
     base_lesson = BaseLesson(context.moodle)
     res = base_lesson.view_lesson(lesson_id)
     logger.debug(repr(res))
-    back_data = make_data('COURSE', course_id)
-    keyboard = [[
-        InlineKeyboardButton('< Kembali', callback_data=back_data),
-        InlineKeyboardButton('Tutup ❌', callback_data='Tutup ❌')
-    ]]
+    back_data = make_data("COURSE", course_id)
+    keyboard = [
+        [
+            InlineKeyboardButton("< Kembali", callback_data=back_data),
+            InlineKeyboardButton("Tutup ❌", callback_data="Tutup ❌"),
+        ]
+    ]
     context.query.edit_message_text(
-        'Berhasil ✅' if res else 'Gagal ❌',
+        "Berhasil ✅" if res else "Gagal ❌",
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1
 
 
-view_lesson_pattern = r'^LESSON\|\d+\|\d+$'
+view_lesson_pattern = r"^LESSON\|\d+\|\d+$"

@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import CallbackContext
 
-MESSAGE = '''
+MESSAGE = """
 Fitur inline dapat Anda gunakan untuk mencari faq, buku, tiket dan pengumuman.
 Untuk mencari buku silahkan gunakan 8 karakter pertama buku yang akan dicari.
 Untuk melihat pengumuman cukup dengan masuk ke inline mode tanpa argumen.
@@ -9,7 +9,7 @@ Untuk melihat pengumuman cukup dengan masuk ke inline mode tanpa argumen.
 Cara masuk inline mode cukup ketik
 <code>@UniversitasTerbukaBot argumen</code>
 Jadi @UniversitasTerbukaBot + spasi
-'''
+"""
 
 
 def inline_help(update: Update, context: CallbackContext):

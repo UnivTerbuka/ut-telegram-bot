@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackContext
 from core.utils import action
 
-MESSAGE = '''
+MESSAGE = """
 Langkah langkah Registrasi Online Calon Mahasiswa UT
 Form yang memiliki tanda * berwarna merah di kanan namanya wajib diisi!
 
@@ -31,7 +31,7 @@ C. Registrasi Data Pribadi
 4. Isi form Informasi Tambahan
 5. Unggah semua Berkas Pendaftaran (dapat berupa foto)
 6. Kemudian Klik Simpan
-'''
+"""
 
 
 @action.typing

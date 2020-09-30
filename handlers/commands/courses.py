@@ -21,36 +21,36 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def courses(update: Update, context: CoreContext):
-    message = context.message.reply_text('Mendapatkan kursus...')
+    message = context.message.reply_text("Mendapatkan kursus...")
     message: Message = message.result() if isinstance(message, Promise) else message
     try:
         courses = BaseCourse(
-            context.moodle).get_enrolled_courses_by_timeline_classification(
-                'all')
+            context.moodle
+        ).get_enrolled_courses_by_timeline_classification("all")
     except Exception:
-        message.edit_text('Gagal mendapatkan kursus.')
+        message.edit_text("Gagal mendapatkan kursus.")
         courses = None
         return -1
     if not courses:
-        message.edit_text('Tidak ada kursus yang sedang diikuti.')
+        message.edit_text("Tidak ada kursus yang sedang diikuti.")
         return -1
     buttons: List[InlineKeyboardButton] = list()
     for course in courses:
         name = course.fullname or course.shortname
         text = name[:30]
         if len(name) > 30:
-            text += '...'
+            text += "..."
         if course.progress:
             text += f" ({course.progress}%)"
-        data = make_data('COURSE', course.id)
+        data = make_data("COURSE", course.id)
         button = InlineKeyboardButton(text, callback_data=data)
         buttons.append(button)
     keyboard = build_menu(
         buttons=buttons,
-        footer_buttons=InlineKeyboardButton('Tutup ❌', callback_data='CLOSE'),
+        footer_buttons=InlineKeyboardButton("Tutup ❌", callback_data="CLOSE"),
     )
     message.edit_text(
-        'Daftar kursus yang diikuti',
+        "Daftar kursus yang diikuti",
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
     return -1

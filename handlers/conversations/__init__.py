@@ -1,6 +1,7 @@
 from typing import List
 from logging import Logger
 from telegram.ext import Dispatcher, ConversationHandler
+
 # Conversations
 from .baca import BACA
 from .buku import BUKU
@@ -22,9 +23,8 @@ class ConversationMixin(object):
         try:
             if self.CONVERSATIONS:
                 for conversation in self.CONVERSATIONS:
-                    dispatcher.add_handler(conversation,
-                                           group=self.CONVERSATIONS_GROUP)
-                self.logger.info('Conversations added!')
+                    dispatcher.add_handler(conversation, group=self.CONVERSATIONS_GROUP)
+                self.logger.info("Conversations added!")
             return True
         except Exception as e:
             self.logger.exception(e)
