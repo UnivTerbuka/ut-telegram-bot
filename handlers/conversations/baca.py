@@ -4,7 +4,6 @@ from dacite import from_dict
 from telegram import Update, Message
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler, Job
 from telegram.utils.promise import Promise
-from core.utils import action
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
 from libs.rbv import Modul, Buku
@@ -49,7 +48,6 @@ def answer(update: Update, code: str, context: CallbackContext = None):
     return -1
 
 
-@action.typing
 def baca(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     if len(msg) > 5:
@@ -63,7 +61,6 @@ def baca(update: Update, context: CallbackContext):
     return GET_BOOK
 
 
-@action.typing
 def get_buku(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
     return answer(update, code, context)
@@ -117,7 +114,6 @@ def start(update: Update, context: CallbackContext):
     return -1
 
 
-@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f"/{COMMAND} telah dibatalkan")
     delete_data(context.user_data)

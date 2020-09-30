@@ -7,7 +7,8 @@ from telegram.error import BadRequest, RetryAfter, TimedOut, Unauthorized, Netwo
 from telegram.ext import CallbackContext
 from typing import Any, Callable, Optional
 from moodle import MoodleException
-from core.context import CoreContext
+
+from . import CoreContext
 from core.db import get_session
 from core.exceptions import RollbackException
 from core.models import User

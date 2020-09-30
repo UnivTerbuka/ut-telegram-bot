@@ -1,7 +1,6 @@
 from telegram import Update, MessageEntity
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler
-from core.utils import action
-from libs import shorten_link
+from libs.short_link import shorten_link
 
 COMMAND = "shortlink"
 
@@ -16,7 +15,6 @@ def valid_link(link: str = ""):
     )
 
 
-@action.typing
 def short(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         "Kirimkan link yang akan dipendekkan...\n"
@@ -26,7 +24,6 @@ def short(update: Update, context: CallbackContext):
     return CREATE
 
 
-@action.typing
 def create(update: Update, context: CallbackContext):
     link: str = update.effective_message.text
     if link and not valid_link(link):
@@ -42,7 +39,6 @@ def create(update: Update, context: CallbackContext):
     return -1
 
 
-@action.typing
 def invalid(update: Update, context: CallbackContext):
     update.effective_message.reply_text("Link tidak valid. :<")
     update.effective_message.reply_text(
@@ -53,7 +49,6 @@ def invalid(update: Update, context: CallbackContext):
     )
 
 
-@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f"/{COMMAND} telah dibatalkan")
     return -1

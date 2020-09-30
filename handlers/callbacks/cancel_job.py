@@ -1,10 +1,8 @@
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext, Job
-from core.utils import action
 from typing import Tuple
 
 
-@action.typing
 def cancel_job(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer()

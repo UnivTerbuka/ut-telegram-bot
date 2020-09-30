@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-from core.utils import action
 
 MESSAGE = """
 <a href="https://www.ut.ac.id/">Universitas Terbuka</a>
@@ -22,6 +21,5 @@ MESSAGE = """
 """
 
 
-@action.typing
 def link(update: Update, context: CallbackContext):
     update.effective_message.reply_text(MESSAGE)

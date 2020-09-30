@@ -1,9 +1,7 @@
 from telegram import Update, CallbackQuery
 from telegram.ext import CallbackContext
-from core.utils import action
 
 
-@action.typing
 def close(update: Update, context: CallbackContext):
     callback_query: CallbackQuery = update.callback_query
     callback_query.answer()

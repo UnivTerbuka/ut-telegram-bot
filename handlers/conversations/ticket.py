@@ -1,6 +1,5 @@
 from telegram import Update
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler
-from core.utils import action
 from libs.ticket import Ticket
 
 COMMAND = "tiket"
@@ -12,7 +11,6 @@ def answer(update: Update, tiket: Ticket):
     update.effective_message.reply_text(str(tiket), reply_markup=tiket.reply_markup)
 
 
-@action.typing
 def ticket(update: Update, context: CallbackContext):
     msg: str = update.effective_message.text
     noticket = msg.split(" ")[1] if len(msg) == 27 else ""
@@ -26,7 +24,6 @@ def ticket(update: Update, context: CallbackContext):
     return GET_TICKET
 
 
-@action.typing
 def get_ticket(update: Update, context: CallbackContext):
     noticket: str = update.effective_message.text
     noticket = noticket.upper()
@@ -35,7 +32,6 @@ def get_ticket(update: Update, context: CallbackContext):
     return -1
 
 
-@action.typing
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f"/{COMMAND} telah dibatalkan")
     return -1

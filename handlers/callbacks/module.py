@@ -4,11 +4,9 @@ from typing import List
 
 from moodle.core.course import BaseCourse
 
-from core.context import CoreContext
-from core.decorator import assert_token
-from core.session import message_wrapper
+from core import CoreContext, assert_token, message_wrapper
 from libs.utils.helpers import build_menu, make_data
-from config import CALLBACK_SEPARATOR
+from config import CALLBACK_SEPARATOR, MOODLE_D
 
 logger = getLogger(__name__)
 
@@ -34,7 +32,7 @@ def module(update: Update, context: CoreContext):
     text += "<i>Fitur masih dikembangkan, tolong tekan tombol Buka di elearning</i>"
     buttons: List[InlineKeyboardButton] = list()
 
-    url = f"https://elearning.ut.ac.id/mod/{course_module.modname}/view.php?id={module_id}"
+    url = MOODLE_D + f"mod/{course_module.modname}/view.php?id={module_id}"
     button = InlineKeyboardButton("Buka di elearning", url)
     buttons.append(button)
 
