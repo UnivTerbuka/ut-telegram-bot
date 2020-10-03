@@ -9,9 +9,14 @@ from telegram.utils.helpers import create_deep_linked_url
 from threading import RLock
 from typing import Optional, Tuple, Union
 from urllib.parse import urlparse, parse_qsl
-from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME
+from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME, PUSTAKA_URL
 from .utils import download, fetch_page_txt, get_max_page
 from ..utils import format_html
+
+PUSTAKA_READER = PUSTAKA_URL + "reader/index.php"
+# http://www.pustaka.ut.ac.id/reader/index.php
+PUSTAKA_SERVICES = PUSTAKA_URL + "reader/services/view.php"
+# http://www.pustaka.ut.ac.id/reader/services/view.php
 
 LOCK = RLock()
 CACHE = TTLCache(50, 10 * 60)
@@ -31,8 +36,8 @@ class Modul:
         self.url = (
             self.url
             if self.url
-            else f"http://www.pustaka.ut.ac.id/reader/index.php?subfolder={self.subfolder}/&doc={self.doc}.pdf"
-        )  # NOQA
+            else PUSTAKA_READER + f"?subfolder={self.subfolder}/&doc={self.doc}.pdf"
+        )
         query = urlparse(self.url).query
         data = dict(parse_qsl(query))
         if not self.subfolder:
@@ -60,7 +65,10 @@ class Modul:
     def get_page(self, page: int) -> str:
         if page < 0 or page > self.end:
             return
-        url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"  # NOQA
+        url = (
+            PUSTAKA_SERVICES
+            + f"?doc={self.doc}&format=jpg&subfolder={self.subfolder}/&page={page}"
+        )
         if download(url, page, self.abspath(page), self.url, self.doc, self.subfolder):
             return self.absurl(page)
         return
