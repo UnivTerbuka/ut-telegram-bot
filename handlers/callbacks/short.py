@@ -41,7 +41,7 @@ def short(update: Update, context: CallbackContext):
     callback_query.answer()
     # SHORT|ABCD1234
     data = str(callback_query.data)
-    modul = data[6:14]
+    modul = data[6:]
 
     url = get_book(modul)
     back = make_button("< Kembali", callback_data="BUKU|" + modul)
