@@ -14,7 +14,7 @@ class InlineMixin(object):
     INLINES_GROUP: int = 0
     INLINES: List[InlineQueryHandler] = [
         InlineQueryHandler(ticket, pattern=r"^[A-Z]\d{10}-\d{8}$"),
-        InlineQueryHandler(bahan_ajar, pattern=r"^[a-zA-Z]{4}\d{4}$"),
+        InlineQueryHandler(bahan_ajar, pattern=r"^[a-zA-Z]{4}\d{4,6}$"),
         InlineQueryHandler(pluginfile, pattern=pluginfile_pattern),
         InlineQueryHandler(search),
     ]

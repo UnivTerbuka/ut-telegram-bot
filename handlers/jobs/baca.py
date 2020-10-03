@@ -15,13 +15,7 @@ def baca(context: CallbackContext):
         if buku:
             context.bot.send_message(chat_id, buku.text, reply_markup=buku.reply_markup)
         else:
-            context.bot.send_message(
-                chat_id,
-                f"Buku {code} tidak ditemukan di rbv\n"
-                "Pastikan kode buku 8 karakter (4 huruf 4 angka)"
-                "Jika kode melebihi 8 karakter,\n"
-                "Maka yang dituliskan adalah 8 karakter pertama.",
-            )
+            context.bot.send_message(chat_id, f"Buku {code} tidak ditemukan di rbv\n")
     except Exception as E:
         logger.exception(E)
         context.bot.send_message(chat_id, "Tidak dapat menghubungi rbv.")

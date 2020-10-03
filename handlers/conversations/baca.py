@@ -69,12 +69,14 @@ def get_buku(update: Update, context: CallbackContext):
 def start(update: Update, context: CallbackContext):
     code: str = update.effective_message.text
     # /start READ-ABCD1234
-    if len(code) == 20:
+    # /start READ-ABCD123456
+    if len(code) == 20 or len(code) == 22:
         code: str = context.args[0][5:]
         return answer(update, code, context)
 
     # /start READ-ABCD1234-DOC-PAGE
-    match = re.match(r"^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$", code)
+    # /start READ-ABCD123456-DOC-PAGE
+    match = re.match(r"^\/start READ-([A-Z]{4}\d{4,6})-([A-Z0-9]+)-(\d+)$", code)
     groups = match.groups()
     if not match or len(groups) != 3:
         update.effective_message.reply_text("Kode buku tidak valid")
@@ -127,18 +129,20 @@ BACA = {
         CommandHandler(
             "start",
             start,
-            filters=Filters.regex(r"^\/start READ-[A-Z]{4}\d{4}$") & Filters.private,
+            filters=Filters.regex(r"^\/start READ-[A-Z]{4}\d{4,6}$") & Filters.private,
         ),
         CommandHandler(
             "start",
             start,
-            filters=Filters.regex(r"^\/start READ-([A-Z]{4}\d{4})-([A-Z0-9]+)-(\d+)$")
+            filters=Filters.regex(r"^\/start READ-([A-Z]{4}\d{4,6})-([A-Z0-9]+)-(\d+)$")
             & Filters.private,
         ),
     ],
     "states": {
         GET_BOOK: [
-            MessageHandler(Filters.text & Filters.regex(r"^[a-zA-Z]{4}\d+$"), get_buku)
+            MessageHandler(
+                Filters.text & Filters.regex(r"^[a-zA-Z]{4}\d{4,6}$"), get_buku
+            )
         ]
     },
     "fallbacks": [CommandHandler("cancel", cancel)],

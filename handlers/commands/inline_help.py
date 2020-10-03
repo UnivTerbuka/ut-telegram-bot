@@ -3,7 +3,7 @@ from telegram.ext import CallbackContext
 
 MESSAGE = """
 Fitur inline dapat Anda gunakan untuk mencari faq, buku, tiket dan pengumuman.
-Untuk mencari buku silahkan gunakan 8 karakter pertama buku yang akan dicari.
+Untuk mencari buku silahkan gunakan kode buku yang akan dicari.
 Untuk melihat pengumuman cukup dengan masuk ke inline mode tanpa argumen.
 
 Cara masuk inline mode cukup ketik

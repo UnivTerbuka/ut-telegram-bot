@@ -3,6 +3,7 @@ from telegram.ext import Dispatcher
 from .callbacks import CallbackMixin
 from .commands import CommandMixin
 from .conversations import ConversationMixin
+from .errors import error_callback  # NOQA
 from .inlines import InlineMixin
 
 
