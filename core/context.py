@@ -3,8 +3,13 @@ from moodle import Mdl
 from sqlalchemy.orm import Session
 from telegram import Bot, Chat, Message, Update, CallbackQuery
 from telegram.ext import CallbackContext, Dispatcher
+from telegram.utils.promise import Promise
+from typing import Type, TypeVar
+
 from core.models import User
 from config import MOODLE_URL
+
+TP = TypeVar("TP")
 
 
 class CoreContext(CallbackContext):
@@ -73,3 +78,7 @@ class CoreContext(CallbackContext):
             if user:
                 self._user_data = context.dispatcher.user_data[user.id]
         return self
+
+    @staticmethod
+    def result(promise: Promise, type: Type[TP]) -> TP:
+        return promise.result()
