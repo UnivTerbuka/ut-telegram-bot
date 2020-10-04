@@ -28,10 +28,11 @@ def only_users(users: List[int], msg: str = ""):
 def assert_token(
     func: Callable[[Update, CoreContext], Any]
 ) -> Callable[[Update, CoreContext], Any]:
+    msg = "Silahkan login di\n" + DOMAIN + "elearning.html"
+
     @wraps(func)
     def wrapper(update: Update, context: CoreContext) -> Any:
         if context.user.token is None:
-            msg = "Silahkan login di\n" + DOMAIN + "elearning.html"
             if context.query:
                 context.query.answer()
                 context.query.edit_message_text(msg)
