@@ -3,11 +3,12 @@ import re
 from dacite import from_dict
 from telegram import Update, Message
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler, Job
-from telegram.utils.promise import Promise
+from core.utils.helpers import resolve
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
 from libs.rbv import Modul, Buku
 from libs.utils.helpers import cancel_markup
+from requests.exceptions import ConnectionError
 
 COMMAND = "baca"
 GET_BOOK = range(1)
@@ -85,7 +86,7 @@ def start(update: Update, context: CallbackContext):
     subfolder, doc, page = groups
     page = int(page)
     message = update.effective_message.reply_text("Mencari halaman...")
-    message: Message = message.result() if isinstance(message, Promise) else message
+    message = resolve(message, Message)
     try:
         buku: Buku = from_dict(Buku, {"id": subfolder})
         if not buku:
@@ -108,7 +109,10 @@ def start(update: Update, context: CallbackContext):
             repeat=False,
         )
         job.run(context.dispatcher)
-
+    except ConnectionError:
+        message.edit_text(
+            "Tidak dapat menghubungi rbv, silahkan coba beberapa saat lagi."
+        )
     except Exception as E:
         logger.exception(E)
         message.edit_text("Terjadi error.")
