@@ -1,7 +1,5 @@
 from telegram import Update
 
-from moodle.core.webservice import BaseWebservice
-
 from core import CoreContext
 from core.session import message_wrapper
 from libs.elearning.utils import is_valid_token
@@ -17,10 +15,5 @@ def start_elearning(update: Update, context: CoreContext):
     context.user.token = token
     # simpan token ke database
     context.save()
-    context.moodle.token = token
-    site_info = BaseWebservice(context.moodle).get_site_info()
-    context.message.reply_text(
-        f"Selamat datang {site_info.fullname}."
-        "\nSekarang Anda bisa menggunakan /elearning",
-    )
+    context.message.reply_text("Sekarang Anda bisa menggunakan /elearning")
     return -1
