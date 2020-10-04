@@ -13,9 +13,6 @@ Source code dari @UniversitasTerbukaBot dibuat untuk memudahkan mahasiswa Univer
 - Cek tiket
 - Shortlink UT
 - Cari buku
-
-## Fitur yang akan datang
-
 - Elearning UT
 - QnA & FAQ
 
