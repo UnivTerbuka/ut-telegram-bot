@@ -1,5 +1,6 @@
 from logging import getLogger
-from telegram import Update
+from re import search as re_search
+from telegram import Update, Message
 
 from moodle.core.webservice import BaseWebservice
 
@@ -24,15 +25,21 @@ Token dijaga kerahasiaannya, dan tidak akan disalahgunakan!
 
 
 def set_token(context: CoreContext):
-    if not context.args:
+    text: str = context.message.text
+    if not bool(re_search(r"^\S+\s+[a-z0-9]{32}$", text)):
+        context.chat.send_message("Token tidak valid!")
         return -1
-    token = context.args[0]
+    token = text.split()[-1]
+    message = context.chat.send_message("Mengecek token...")
     if is_valid_token(token):
         context.user.token = token
         context.save()
-        context.chat.send_message("Sekarang Anda bisa menggunakan /elearning")
+        message: Message = context.result(message, Message)
+        message.edit_text("Token valid!\nSekarang Anda bisa menggunakan /elearning")
     else:
-        context.chat.send_message("Token tidak valid!")
+        message: Message = context.result(message, Message)
+        message.edit_text("Token tidak valid!")
+    return -1
 
 
 @message_wrapper
