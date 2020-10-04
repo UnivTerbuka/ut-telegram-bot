@@ -13,28 +13,19 @@ msg = """
 
 Perintah yang dapat digunakan
 /kursus - Untuk melihat kursus elearning
+/reset_token - Cara reset token elearning
+/reset - Keluar fitur ini
 
-<b>Fitur ini masih dalam proses pengembangan.</b>
-Mohon untuk tidak mem-forward pesan dari fitur ini ke chat lain,
-karena ada kemungkinan pesan mengandung token Anda (khususnya dokumen)!
+Mohon untuk tidak mem-forward pesan dari fitur ini ke chat lain.
 
-Jika token Anda tersebar, segera Set Ulang di
-Elearning > Dasbor > Preferensi > Akun Pengguna > Kunci Keamanan > Set Ulang
-(Kolom Operasi & Baris Moodle mobile web service)
-
-Untuk keluar dari fitur ini : <pre>/elearning reset</pre>
+NIM & Password tidak disimpan oleh bot. Hanya <b>Token</b> yang disimpan.
+Token dijaga kerahasiaannya, dan tidak akan disalahgunakan!
 """
 
 
 @message_wrapper
 @assert_token
 def elearning(update: Update, context: CoreContext):
-    if "reset" in context.message.text:
-        context.user.token = None
-        context.save()
-        context.message.reply_text("Token berhasil direset.")
-        logger.debug("Berhasil mereset token pengguna {}".format(context.user.name))
-        return -1
     info = BaseWebservice(context.moodle).get_site_info()
     text = f"Selamat datang {info.fullname}" + msg
     context.message.reply_text(text)

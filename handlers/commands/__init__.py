@@ -14,6 +14,8 @@ from .eula import eula
 from .about import about
 from .cancel import cancel
 from .inline_help import inline_help
+from .reset import reset
+from .reset_token import reset_token
 from .start_elearning import start_elearning
 from .start import start
 
@@ -32,6 +34,8 @@ class CommandMixin(object):
         CommandHandler("elearning", elearning, private_filter),
         CommandHandler("kursus", courses, private_filter),
         CommandHandler("eula", eula, private_filter),
+        CommandHandler("reset", reset, private_filter),
+        CommandHandler("reset_token", reset_token, private_filter),
         CommandHandler("donasi", donasi, private_filter),
         CommandHandler("cancel", cancel, private_filter),
         CommandHandler(
