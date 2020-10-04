@@ -5,7 +5,6 @@ from telegram import (
     InlineKeyboardMarkup,
     Message,
 )
-from telegram.utils.promise import Promise
 from typing import List
 
 from moodle.core.course import BaseCourse
@@ -13,6 +12,7 @@ from moodle.core.course import BaseCourse
 from core import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
+from core.utils.helpers import resolve
 from libs.utils.helpers import build_menu, make_data
 
 logger = getLogger(__name__)
@@ -22,7 +22,7 @@ logger = getLogger(__name__)
 @assert_token
 def courses(update: Update, context: CoreContext):
     message = context.message.reply_text("Mendapatkan kursus...")
-    message: Message = message.result() if isinstance(message, Promise) else message
+    message = resolve(message, Message)
     try:
         courses = BaseCourse(
             context.moodle
