@@ -40,7 +40,6 @@
         <h1 class="h3 mb-3 font-weight-normal">
           Login Elearning @UniversitasTerbukaBot
         </h1>
-        <p>Password tidak akan disimpan!</p>
         <label for="inputUsername" class="sr-only">NIM</label>
         <input
           type="view"
@@ -48,7 +47,7 @@
           v-model="form.username"
           class="form-control"
           placeholder="NIM"
-          :required="!form.token"
+          required
           autofocus
         />
         <label for="inputPassword" class="sr-only">Password</label>
@@ -57,33 +56,44 @@
           id="inputPassword"
           v-model="form.password"
           class="form-control"
-          placeholder="Password"
-          :required="!form.token"
+          placeholder="Password Elearning"
+          required
         />
-        <p>Atau login dengan token</p>
+        <p>Password tidak akan disimpan!</p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+          Dapatkan token
+        </button>
+      </form>
+      <form
+        style="margin: auto; padding: 15px; max-width: 330px"
+        @submit="onLogin"
+      >
         <label for="inputToken" class="sr-only">Token Elearning</label>
         <input
-        type="view"
-        id="inputToken"
-        v-model="form.token"
+          type="view"
+          id="inputToken"
+          v-model="form.token"
           class="form-control"
           placeholder="Token Elearning"
-          :required="!form.username"
-          />
-          <button class="btn btn-lg btn-primary btn-block" type="submit">
+          required
+        />
+        <p>Token dijaga kerahasiaannya & tidak akan disalahgunakan!</p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
           Login
         </button>
-        <div>
-          Cara mendapatkan token:
-          <br>
-          Buka Elearning
-          <br>
-          Pengaturan saya > Preferensi > Kunci Keamanan > Salin Kunci yang baris <b>Moodle mobile web service</b>
-          <br>
-          <br>
-          Setelah Login > Send Message / Kirim Pesan > START / MULAI
-        </div>
       </form>
+      <div>
+        Setelah Login > Send Message / Kirim Pesan > START / MULAI
+        <br />
+        <br />
+        Cara mendapatkan token manual:
+        <br />
+        Buka Elearning
+        <br />
+        Pengaturan saya > Preferensi > Kunci Keamanan > Salin Kunci yang baris
+        <b>Moodle mobile web service</b>
+        <br />
+      </div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -119,53 +129,54 @@
           };
         },
         methods: {
+          onLogin(evt) {
+            evt.preventDefault();
+            axios
+              .get("https://elearning.ut.ac.id/webservice/rest/server.php", {
+                params: {
+                  wstoken: this.form.token,
+                  wsfunction: "core_webservice_get_site_info",
+                  moodlewsrestformat: "json",
+                },
+              })
+              .then(function (res) {
+                if (
+                  res.data.exception &&
+                  res.data.errorcode == "moodle_exception"
+                ) {
+                  alert("Token tidak valid!");
+                  this.app.form.token = "";
+                  this.app.form.password = "";
+                } else {
+                  login(this.app.form.token);
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
+          },
           onSubmit(evt) {
             evt.preventDefault();
-            if (this.form.token) {
-              axios
-                .get("https://elearning.ut.ac.id/webservice/rest/server.php", {
-                  params: {
-                    wstoken: this.form.token,
-                    wsfunction: "core_webservice_get_site_info",
-                    moodlewsrestformat: "json",
-                  },
-                })
-                .then(function (res) {
-                  if (
-                    res.data.exception &&
-                    res.data.errorcode == "moodle_exception"
-                  ) {
-                    alert("Token tidak valid!");
-                    this.app.form.token = "";
-                  } else {
-                    login(this.app.form.token);
-                  }
-                })
-                .catch(function (error) {
-                  // handle error
-                  console.log(error);
-                });
-            } else {
-              axios
-                .get("https://elearning.ut.ac.id/login/token.php", {
-                  params: {
-                    username: this.form.username,
-                    password: this.form.password,
-                    service: "moodle_mobile_app",
-                  },
-                })
-                .then(function (res) {
-                  if (res.data.token) {
-                    login(res.data.token);
-                  } else {
-                    alert("Nim / password salah!");
-                  }
-                })
-                .catch(function (error) {
-                  // handle error
-                  console.log(error);
-                });
-            }
+            axios
+              .get("https://elearning.ut.ac.id/login/token.php", {
+                params: {
+                  username: this.form.username,
+                  password: this.form.password,
+                  service: "moodle_mobile_app",
+                },
+              })
+              .then(function (res) {
+                if (res.data.token) {
+                  this.app.form.token = res.data.token;
+                } else {
+                  alert("Nim / password salah!");
+                }
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              });
           },
         },
       });
