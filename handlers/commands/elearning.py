@@ -24,13 +24,13 @@ NIM & Password tidak disimpan oleh bot. Hanya <b>Token</b> yang disimpan.
 Token dijaga kerahasiaannya, dan tidak akan disalahgunakan!
 """
 msg2 = "Silahkan login di\n" + DOMAIN + "elearning.html\n"
-msg2 += "Atau kirim /elearning <token-elearning>"
+msg2 += "Atau kirim /elearning <token_elearning>"
 
 
 def set_token(context: CoreContext):
     text: str = context.message.text
     if not bool(re_search(r"^\S+\s+[a-z0-9]{32}$", text)):
-        context.chat.send_message(msg2)
+        context.chat.send_message(msg2, parse_mode=None)
         return -1
     token = text.split()[-1]
     message = context.chat.send_message("Mengecek token...")
