@@ -41,7 +41,7 @@ class CommandMixin(object):
         CommandHandler(
             "start",
             start_elearning,
-            filters=Filters.private & Filters.regex(r"^\/start TOKEN-[a-z0-9]+$"),
+            filters=Filters.private & Filters.regex(r"^\/start TOKEN-[a-z0-9]{32}$"),
         ),
         CommandHandler("start", inline_help, Filters.regex(r"^/start inline-help$")),
         CommandHandler("start", start, private_filter),
