@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # IDE
+.vs/
 .vscode/
 
 # Private tests
