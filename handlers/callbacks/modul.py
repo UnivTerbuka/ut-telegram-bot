@@ -1,7 +1,7 @@
 import logging
 from requests.exceptions import ConnectionError
 from telegram import Update, CallbackQuery
-from telegram.ext import CallbackContext, Job
+from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from libs.utils.helpers import make_button
 from handlers.jobs.modul import modul as job_modul
@@ -20,17 +20,19 @@ def modul(update: Update, context: CallbackContext):
     message_id: int = callback_query.message.message_id
 
     job_name = f"{chat_id}|{data}"
-    callback_query.answer()
+    if context.job_queue.get_jobs_by_name(job_name):
+        callback_query.answer("Masih menghubungi rbv...")
+        return -1
+    else:
+        callback_query.answer()
+
     try:
-        logger.debug("Job masuk {}".format(job_name))
-        job = Job(
+        context.job_queue.run_once(
             callback=job_modul,
+            when=0.25,
             context=(chat_id, message_id, data),
             name=job_name,
-            repeat=False,
         )
-        job.run(context.dispatcher)
-        logger.debug("Job sukses {}".format(job_name))
     except ConnectionError:
         callback_query.edit_message_text(
             "Tidak dapat menghubungi rbv, mohon coba beberapa saat lagi.",

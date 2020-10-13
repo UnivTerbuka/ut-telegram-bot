@@ -1,9 +1,8 @@
 import logging
 import re
 from dacite import from_dict
-from telegram import Update, Message
+from telegram import Update
 from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler, Job
-from core.utils.helpers import resolve
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
 from libs.rbv import Modul, Buku
@@ -31,21 +30,20 @@ def get_data(data: dict):
 
 def answer(update: Update, code: str, context: CallbackContext = None):
     if Modul.is_valid(code):
-        message: Message = update.effective_message
+        message = update.effective_message
         chat_id = message.chat_id
         job_name = f"{chat_id}|BACA|{code}"
         if context.job_queue.get_jobs_by_name(job_name):
-            update.effective_message.reply_text(
+            message.reply_text(
                 "Sedang mencari buku...", reply_markup=cancel_markup(job_name)
             )
             return -1
-        update.effective_message.reply_text("Mencari buku...")
-        job = Job(
-            callback=job_baca, context=(chat_id, code), name=job_name, repeat=False
+        message = message.reply_text("Mencari buku...")
+        context.job_queue.run_once(
+            callback=job_baca, context=(chat_id, code, message), when=0.5, name=job_name
         )
-        job.run(context.dispatcher)
     else:
-        update.effective_message.reply_text("Kode buku tidak valid")
+        message.reply_text("Kode buku tidak valid")
     return -1
 
 
@@ -86,7 +84,6 @@ def start(update: Update, context: CallbackContext):
     subfolder, doc, page = groups
     page = int(page)
     message = update.effective_message.reply_text("Mencari halaman...")
-    message = resolve(message, Message)
     try:
         buku: Buku = from_dict(Buku, {"id": subfolder})
         if not buku:
