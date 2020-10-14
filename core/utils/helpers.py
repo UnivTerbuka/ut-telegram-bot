@@ -1,4 +1,5 @@
 from telegram import Bot, Message, ReplyMarkup
+from telegram.error import BadRequest
 from telegram.utils.promise import Promise
 from typing import Callable, Optional, Type, TypeVar, Union
 
@@ -31,14 +32,24 @@ def editor(
         disable_web_page_preview: bool = None,
         reply_markup: ReplyMarkup = None,
     ) -> Message:
-        return bot.edit_message_text(
-            text,
-            chat,
-            message_id,
-            inline_message,
-            parse_mode=parse_mode,
-            disable_web_page_preview=disable_web_page_preview,
-            reply_markup=reply_markup,
-        )
+        try:
+            msg = bot.edit_message_text(
+                text,
+                chat,
+                message_id,
+                inline_message,
+                parse_mode=parse_mode,
+                disable_web_page_preview=disable_web_page_preview,
+                reply_markup=reply_markup,
+            )
+        except BadRequest:
+            msg = bot.send_message(
+                chat,
+                text,
+                parse_mode=parse_mode,
+                disable_web_page_preview=disable_web_page_preview,
+                reply_markup=reply_markup,
+            )
+        return msg
 
     return wrapper

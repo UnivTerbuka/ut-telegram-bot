@@ -27,12 +27,7 @@ def modul(update: Update, context: CallbackContext):
         callback_query.answer()
 
     try:
-        context.job_queue.run_once(
-            callback=job_modul,
-            when=0.25,
-            context=(chat_id, message_id, data),
-            name=job_name,
-        )
+        job_modul(context, chat_id, message_id, data)
     except ConnectionError:
         callback_query.edit_message_text(
             "Tidak dapat menghubungi rbv, mohon coba beberapa saat lagi.",

@@ -1,24 +1,11 @@
-from requests.exceptions import ConnectionError
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, Job
+from telegram.ext import CallbackContext
 from libs.rbv import Modul
-from libs.utils.helpers import build_menu, make_button
+from libs.utils.helpers import build_menu
 
 
-def modul(context: CallbackContext):
-    job: Job = context.job
-    # context = (chat_id, message_id, data)
-    chat_id, message_id, data = job.context
-    try:
-        modul_, page = Modul.from_data(data)
-    except ConnectionError:
-        context.bot.edit_message_text(
-            "Gagal meghubungi rbv.",
-            chat_id,
-            message_id,
-            reply_markup=make_button("Ulangi", data),
-        )
-        return -1
+def modul(context: CallbackContext, chat_id, message_id, data):
+    modul_, page = Modul.from_data(data)
     txt = data.endswith("txt")
     keyboard = []
     if page > 1:

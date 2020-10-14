@@ -2,11 +2,10 @@ import logging
 import re
 from dacite import from_dict
 from telegram import Update
-from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler, Job
+from telegram.ext import CallbackContext, Filters, CommandHandler, MessageHandler
 from handlers.jobs.baca import baca as job_baca
 from handlers.jobs.modul import modul as job_modul
 from libs.rbv import Modul, Buku
-from libs.utils.helpers import cancel_markup
 from requests.exceptions import ConnectionError
 
 COMMAND = "baca"
@@ -30,20 +29,14 @@ def get_data(data: dict):
 
 def answer(update: Update, code: str, context: CallbackContext = None):
     if Modul.is_valid(code):
-        message = update.effective_message
-        chat_id = message.chat_id
-        job_name = f"{chat_id}|BACA|{code}"
-        if context.job_queue.get_jobs_by_name(job_name):
-            message.reply_text(
-                "Sedang mencari buku...", reply_markup=cancel_markup(job_name)
-            )
-            return -1
-        message = message.reply_text("Mencari buku...")
-        context.job_queue.run_once(
-            callback=job_baca, context=(chat_id, code, message), when=0.5, name=job_name
+        job_baca(
+            context,
+            update.effective_message.chat_id,
+            update.effective_message.message_id,
+            code,
         )
     else:
-        message.reply_text("Kode buku tidak valid")
+        update.effective_message.reply_text("Kode buku tidak valid")
     return -1
 
 
@@ -97,15 +90,8 @@ def start(update: Update, context: CallbackContext):
 
         chat_id = update.effective_message.chat.id
         data = f"MODUL|{subfolder}|{doc}|{modul.end}|{page}"
-        job_name = f"{chat_id}|{data}"
 
-        job = Job(
-            callback=job_modul,
-            context=(chat_id, message.message_id, data),
-            name=job_name,
-            repeat=False,
-        )
-        job.run(context.dispatcher)
+        job_modul(context, chat_id, message.message_id, data)
     except ConnectionError:
         message.edit_text(
             "Tidak dapat menghubungi rbv, silahkan coba beberapa saat lagi."
