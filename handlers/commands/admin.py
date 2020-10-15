@@ -1,4 +1,4 @@
-from telegram import Update, Message
+from telegram import Update
 
 from core import CoreContext
 from core.models import User
@@ -6,7 +6,7 @@ from core.session import message_wrapper
 
 from config import DEVS
 
-MESSAGE = """Selamat datang admin!
+msg = """Selamat datang admin!
 /admin ban userid untuk banned user
 /admin status untuk menampilkan status
 """
@@ -16,11 +16,17 @@ MESSAGE = """Selamat datang admin!
 def admin(update: Update, context: CoreContext):
     if context.user.id not in DEVS:
         return
-    message: Message = update.message
+    message = update.effective_message
     args = message.text.split(" ")
     if "status" in args:
-        count = context.session.query(User).count()
-        message.reply_text(f"Pengguna aktif saat ini <code>{count}</code>")
+        all_count = context.session.query(User).count()
+        elearning_count = (
+            context.session.query(User).filter(User.token is not None).count()
+        )
+        message.reply_text(
+            f"Pengguna elearning <code>{elearning_count}</code>\n"
+            f"Total pengguna <code>{all_count}</code>\n"
+        )
     elif "ban" in args:
         ids = int(args[-1])
         session = context.session
@@ -31,3 +37,6 @@ def admin(update: Update, context: CoreContext):
             message.reply_text(f"{ids} dibanned")
         else:
             message.reply_text(f"{ids} tidak ditemukan")
+    else:
+        message.reply_text(msg)
+    return -1
