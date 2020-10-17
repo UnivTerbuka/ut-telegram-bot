@@ -1,13 +1,14 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackContext
+from typing import List
 from libs.rbv import Modul
 from libs.utils.helpers import build_menu
 
 
-def modul(context: CallbackContext, chat_id, message_id, data):
+def modul(context: CallbackContext, chat_id: int, message_id: int, data: str):
     modul_, page = Modul.from_data(data)
     txt = data.endswith("txt")
-    keyboard = []
+    keyboard: List[InlineKeyboardButton] = []
     if page > 1:
         keyboard.append(
             InlineKeyboardButton(
