@@ -17,7 +17,7 @@ from libs.utils.format_html import href
 URL = "https://www.ut.ac.id/pengumuman/rss.xml"
 
 
-def add_domain(text: str) -> str:
+def fix_domain(text: str) -> str:
     return text.replace('href="', 'href="https://www.ut.ac.id')
 
 
@@ -33,19 +33,22 @@ class Pengumuman:
         self.link = self.link.strip()
         self.title = bleach.clean(self.title, tags=[], strip=True)
         self.description = bleach.clean(text=self.description, **BLEACH_CONFIG)
-        self.description = add_domain(self.description)
-        if type(self.pubdate) == str:
+        self.description = fix_domain(self.description)
+        if type(self.pubdate) is str:
             self.pubdate = datetime.strptime(
                 self.pubdate,
                 "%a, %d %b %Y %H:%M:%S %z",
             )
         self.date_str = self.pubdate.strftime("%d/%m/%Y")
+
+    @property
+    def text(self) -> str:
         texts = [
             href(self.title, self.link),
-            f"Pengumuman tanggal {self.date_str}",
+            f"Pengumuman tanggal {self.date_str} oleh {self.creator}",
             self.description,
         ]
-        self.text = "\n".join(texts).strip()
+        return "\n".join(texts).strip()
 
     @property
     def reply_markup(self) -> InlineKeyboardMarkup:
