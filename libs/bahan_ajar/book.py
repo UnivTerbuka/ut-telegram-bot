@@ -1,6 +1,5 @@
-from logging import getLogger
-
-from bs4 import BeautifulSoup
+from __future__ import annotations
+from bs4 import Tag
 from dacite import from_dict
 from dataclasses import dataclass
 from typing import Optional
@@ -10,8 +9,6 @@ from telegram.utils.helpers import create_deep_linked_url
 from config import URL_LOGO, BOT_USERNAME
 from ..rbv import Modul
 from ..utils import format_html
-
-logger = getLogger(__name__)
 
 
 @dataclass
@@ -28,8 +25,7 @@ class Book:
     def __post_init__(self):
         try:
             self.modul = self.modul if self.modul else self.title.split("-")[0].strip()
-        except Exception as E:
-            logger.exception(E)
+        except Exception:
             self.modul = ""
         self.rbv_url = (
             self.rbv_url
@@ -37,35 +33,28 @@ class Book:
             else f"http://www.pustaka.ut.ac.id/reader/index.php?modul={self.modul}"
             if self.modul
             else None
-        )  # NOQA
-        self.epub_url = (
-            self.epub_url
-            if self.epub_url
-            else f"http://bahanajar.ut.ac.id/epub/cbc_files/{self.id}.epub"
-        )  # NOQA
+        )
         self.bookimages_url = (
             self.bookimages_url
             if self.bookimages_url
             else f"http://bahanajar.ut.ac.id/bookimages/{self.id}.jpg"
-        )  # NOQA
+        )
         self.bookdetail_url = (
             self.bookdetail_url
             if self.bookdetail_url
             else f"http://bahanajar.ut.ac.id/books/bookdetail/{self.id}"
-        )  # NOQA
+        )
         try:
             kode = Modul.validate(self.modul)
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, f"READ-{kode}")
-        except Exception as E:
-            logger.exception(E)
+        except Exception:
             self.depp_link_url = create_deep_linked_url(BOT_USERNAME, "READ")
-        logger.debug("Berhasil membuat {}".format(repr(self)))
 
     def __str__(self) -> str:
         return self.text
 
     @classmethod
-    def from_bkthumb(cls, bkthumb: BeautifulSoup):
+    def from_bkthumb(cls, bkthumb: Tag) -> Book:
         data = {
             "id": int(str(bkthumb.find("a")["href"]).split("/")[-1]),
             "title": bkthumb.find("h6").text,
@@ -74,7 +63,7 @@ class Book:
         return from_dict(cls, data)
 
     @classmethod
-    def from_newb_bg(cls, newb_bg: BeautifulSoup):
+    def from_newb_bg(cls, newb_bg: Tag) -> Book:
         data = {
             "id": int(newb_bg.find("img")["src"].split("/")[-1].split(".")[0]),
             "title": newb_bg.find("span", class_="book_name").text,
@@ -83,19 +72,17 @@ class Book:
         return from_dict(cls, data)
 
     @property
-    def text(self):
-        texts = [
-            f"Buku : {format_html.code(self.title)}",
-            f"Penulis : {format_html.code(self.author)}",
-            f"Kode : {format_html.code(self.modul)}"
-            + format_html.href("\u200c", self.bookimages_url),
-            format_html.href("Baca di rbv", self.rbv_url),
-            format_html.href("Baca di telegram", self.depp_link_url),
-        ]
-        return "\n".join(texts)
+    def text(self) -> str:
+        thumb = format_html.href("\u200c", self.bookimages_url)
+        texts = f"Penulis : {format_html.code(self.author)}"
+        texts += f"Buku : {format_html.code(self.title)}"
+        texts += f"Kode : {format_html.code(self.modul)} " + thumb
+        texts += format_html.href("Baca di rbv", self.rbv_url)
+        texts += format_html.href("Baca di telegram", self.depp_link_url)
+        return texts
 
     @property
-    def reply_markup(self):
+    def reply_markup(self) -> InlineKeyboardMarkup:
         keyboard = [
             [InlineKeyboardButton("Detail", url=self.bookdetail_url)],
             [InlineKeyboardButton("Baca Sekarang", url=self.depp_link_url)],
@@ -104,7 +91,7 @@ class Book:
         return InlineKeyboardMarkup(keyboard)
 
     @property
-    def inline_query_article(self):
+    def inline_query_article(self) -> InlineQueryResultArticle:
         return InlineQueryResultArticle(
             id=f"{self.id}|{self.modul}",
             title=self.title,
