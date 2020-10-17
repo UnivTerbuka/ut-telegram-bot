@@ -1,11 +1,8 @@
-import logging
 from dacite import from_dict
 from requests.exceptions import ConnectionError
 from telegram.ext import CallbackContext
 from core.utils.helpers import editor
 from libs.rbv import Buku
-
-logger = logging.getLogger(__name__)
 
 
 def baca(context: CallbackContext, chat_id, message_id, code):
@@ -20,6 +17,7 @@ def baca(context: CallbackContext, chat_id, message_id, code):
     except ConnectionError:
         edit_text("Tidak dapat menghubungi rbv.")
     except Exception as E:
-        logger.exception(E)
-        edit_text(f"Error : {repr(E)}")
-    return -1
+        edit_text(f"Terjadi error!\n{E}")
+        raise E
+    finally:
+        return -1
