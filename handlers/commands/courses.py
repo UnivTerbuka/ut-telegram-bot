@@ -1,4 +1,4 @@
-from logging import getLogger
+from requests.exceptions import ConnectionError
 from telegram import (
     Update,
     InlineKeyboardButton,
@@ -15,8 +15,6 @@ from core.session import message_wrapper
 from core.utils.helpers import resolve
 from libs.utils.helpers import build_menu, make_data
 
-logger = getLogger(__name__)
-
 
 @message_wrapper
 @assert_token
@@ -27,10 +25,12 @@ def courses(update: Update, context: CoreContext):
         courses = BaseCourse(
             context.moodle
         ).get_enrolled_courses_by_timeline_classification("all")
-    except Exception:
-        message.edit_text("Gagal mendapatkan kursus.")
-        courses = None
+    except ConnectionError:
+        message.edit_text("Elearning tidak merespon, coba beberapa saat lagi...")
         return -1
+    except Exception as e:
+        message.edit_text("Gagal mendapatkan kursus.")
+        raise e
     if not courses:
         message.edit_text("Tidak ada kursus yang sedang diikuti.")
         return -1
