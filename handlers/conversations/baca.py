@@ -13,20 +13,6 @@ GET_BOOK = range(1)
 logger = logging.getLogger(__name__)
 
 
-def delete_data(data: dict):
-    if data and COMMAND in data:
-        del data[COMMAND]
-
-
-def set_data(data: dict, value):
-    if data:
-        data[COMMAND] = value
-
-
-def get_data(data: dict):
-    return data.get(COMMAND) if data else None
-
-
 def answer(update: Update, code: str, context: CallbackContext = None):
     if Modul.is_valid(code):
         job_baca(
@@ -105,7 +91,6 @@ def start(update: Update, context: CallbackContext):
 
 def cancel(update: Update, context: CallbackContext):
     update.effective_message.reply_text(f"/{COMMAND} telah dibatalkan")
-    delete_data(context.user_data)
     return -1
 
 
