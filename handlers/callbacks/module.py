@@ -21,10 +21,7 @@ def module(update: Update, context: CoreContext):
     # MODULE|module_id
     module_id = int(datas[1])
     cm = None
-    try:
-        cm = BaseCourse(context.moodle).get_course_module(module_id)
-    except Exception:
-        pass
+    cm = BaseCourse(context.moodle).get_course_module(module_id)
     if not cm:
         context.query.edit_message_text("Data tidak ditemukan.")
         return -1

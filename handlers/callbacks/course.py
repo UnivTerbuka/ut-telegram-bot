@@ -7,7 +7,7 @@ from core import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
 from libs.elearning.course import course_text
-from libs.utils.helpers import build_menu, make_data, make_button
+from libs.utils.helpers import build_menu, make_data
 from config import CALLBACK_SEPARATOR
 
 logger = getLogger(__name__)
@@ -22,16 +22,7 @@ def course(update: Update, context: CoreContext):
     course_id = int(datas[-1])
 
     moodle_course = BaseCourse(context.moodle)
-    try:
-        courses = moodle_course.get_courses_by_field("id", course_id)
-    except Exception as e:
-        logger.exception(e)
-        reply_markup = make_button("Coba lagi", context.query.data)
-        context.query.edit_message_text(
-            "Gagal mendapatkan kursus.",
-            reply_markup=reply_markup,
-        )
-        raise e
+    courses = moodle_course.get_courses_by_field("id", course_id)
     if not courses:
         context.query.edit_message_text("Kursus tidak ditemukan.")
         return -1

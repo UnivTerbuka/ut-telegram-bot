@@ -11,7 +11,6 @@ from core import CoreContext
 from core.decorator import assert_token
 from core.session import message_wrapper
 from libs.utils import format_html
-from libs.utils.helpers import make_button
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG, RES_PATH
 
 logger = getLogger(__name__)
@@ -50,16 +49,7 @@ def resource(update: Update, context: CoreContext):
     resource_id = int(datas[2])
     base_res = BaseResource(context.moodle)
 
-    try:
-        resourses = base_res.get_resources_by_courses([course_id])
-    except Exception as e:
-        logger.exception(e)
-        reply_markup = make_button("Coba lagi", context.query.data)
-        context.query.edit_message_text(
-            "Gagal mendapatkan informasi dokumen.",
-            reply_markup=reply_markup,
-        )
-        raise e
+    resourses = base_res.get_resources_by_courses([course_id])
     res = resourses.get(resource_id)
     if res:
         base_res.view_resource(res.id)

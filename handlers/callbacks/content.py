@@ -5,7 +5,6 @@ from telegram.constants import MAX_MESSAGE_LENGTH
 from typing import List
 from urllib.parse import unquote
 
-from moodle import MoodleException
 from moodle.core.course import BaseCourse, ContentOption
 
 from core import CoreContext
@@ -21,18 +20,14 @@ SUPPORTED_MOD = ["forum", "resource", "lesson", "url"]
 @message_wrapper
 @assert_token
 def content(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # CONTENT|course_id|section_id|page
     course_id = int(datas[1])
     section_id = int(datas[2])
     page = int(datas[3])
-    try:
-        options = [ContentOption("sectionid", str(section_id))]
-        sections = BaseCourse(context.moodle).get_contents(course_id, options)
-    except MoodleException as me:
-        logger.exception(me.message)
-        return -1
+    options = [ContentOption("sectionid", str(section_id))]
+    sections = BaseCourse(context.moodle).get_contents(course_id, options)
+    context.query.answer()
     num = 0
     text = ""
     completions: List[InlineKeyboardButton] = list()

@@ -28,12 +28,7 @@ def discussion(update: Update, context: CoreContext):
 
     base_forum = BaseForum(context.moodle)
     posts = []
-    try:
-        posts = base_forum.get_discussion_posts(discussion_id)
-    except Exception as e:
-        logger.exception(e)
-        context.query.edit_message_text("Gagal mendapatkan diskusi.")
-        raise e
+    posts = base_forum.get_discussion_posts(discussion_id)
     text = "Diskusi"
     for post in posts:
         if post.isdeleted:
