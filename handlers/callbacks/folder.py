@@ -16,13 +16,13 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def folder(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # FOLDER|course_id|folder_id
     course_id = int(datas[1])
     folder_id = int(datas[2])
     base_folder = BaseFolder(context.moodle)
     folders = base_folder.get_folders_by_courses([course_id])
+    context.query.answer()
     if not folders:
         context.query.edit_message_text("Data tidak ditemukan!")
         return -1

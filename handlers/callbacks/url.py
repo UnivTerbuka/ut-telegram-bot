@@ -18,13 +18,13 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def url(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # URL|course_id|url_id
     course_id = int(datas[1])
     url_id = int(datas[2])
     base_url = BaseUrl(context.moodle)
     urls = base_url.get_urls_by_courses([course_id])
+    context.query.answer()
     url_ = None
     for url in urls.urls:
         if url.id == url_id:

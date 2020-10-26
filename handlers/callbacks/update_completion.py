@@ -15,13 +15,13 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def update_completion(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # COMPLETION|course_id|module_id
     course_id = int(datas[1])
     module_id = int(datas[2])
     cmplt = BaseCompletion(context.moodle)
     res = cmplt.update_activity_completion_status_manually(module_id, 1)
+    context.query.answer()
     logger.debug(repr(res))
     back_data = make_data("COURSE", course_id)
     keyboard = [

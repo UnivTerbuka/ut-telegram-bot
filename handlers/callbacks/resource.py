@@ -42,7 +42,6 @@ def forward_file(file: File, res: Resource, context: CoreContext):
 @message_wrapper
 @assert_token
 def resource(update: Update, context: CoreContext):
-    context.query.answer("Mengirim dokumen...")
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # RESOURCE|course_id|resource_id
     course_id = int(datas[1])
@@ -50,6 +49,7 @@ def resource(update: Update, context: CoreContext):
     base_res = BaseResource(context.moodle)
 
     resourses = base_res.get_resources_by_courses([course_id])
+    context.query.answer("Mengirim dokumen...")
     res = resourses.get(resource_id)
     if res:
         base_res.view_resource(res.id)

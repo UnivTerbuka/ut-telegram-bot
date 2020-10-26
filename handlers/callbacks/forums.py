@@ -17,12 +17,12 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def forums(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # FORUMS|course_id
     course_id = int(datas[1])
     course = BaseCourse(context.moodle).get_courses_by_field("id", str(course_id))[0]
     forums_ = BaseForum(context.moodle).get_forums_by_courses([course_id])
+    context.query.answer()
     if not forums_:
         context.query.edit_text(
             text=f"Tidak ada forum untuk {course.shortname}.",

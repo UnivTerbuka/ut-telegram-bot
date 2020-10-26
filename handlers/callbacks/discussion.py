@@ -18,7 +18,6 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def discussion(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # DISCUSSION|course_id|forum_id|discussion_id|page
     course_id = int(datas[1])
@@ -29,6 +28,7 @@ def discussion(update: Update, context: CoreContext):
     base_forum = BaseForum(context.moodle)
     posts = []
     posts = base_forum.get_discussion_posts(discussion_id)
+    context.query.answer()
     text = "Diskusi"
     for post in posts:
         if post.isdeleted:

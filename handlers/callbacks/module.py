@@ -16,12 +16,12 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def module(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # MODULE|module_id
     module_id = int(datas[1])
     cm = None
     cm = BaseCourse(context.moodle).get_course_module(module_id)
+    context.query.answer()
     if not cm:
         context.query.edit_message_text("Data tidak ditemukan.")
         return -1

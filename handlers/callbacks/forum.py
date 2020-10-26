@@ -16,12 +16,12 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def forum(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # FORUM|course_id|forum_id
     course_id = int(datas[1])
     base_forum = BaseForum(context.moodle)
     forums = base_forum.get_forums_by_courses([course_id])
+    context.query.answer()
     if not forums:
         context.query.edit_message_text("Forum tidak ditemukan.")
         return -1

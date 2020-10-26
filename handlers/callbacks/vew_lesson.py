@@ -15,13 +15,13 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def view_lesson(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # LESSON|course_id|lesson_id
     course_id = int(datas[1])
     lesson_id = int(datas[2])
     base_lesson = BaseLesson(context.moodle)
     res = base_lesson.view_lesson(lesson_id)
+    context.query.answer()
     logger.debug(repr(res))
     back_data = make_data("COURSE", course_id)
     keyboard = [

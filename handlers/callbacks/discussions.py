@@ -15,7 +15,6 @@ logger = getLogger(__name__)
 @message_wrapper
 @assert_token
 def discussions(update: Update, context: CoreContext):
-    context.query.answer()
     datas = context.query.data.split(CALLBACK_SEPARATOR)
     # DISCUSSIONS|course_id|forum_id|page
     course_id = int(datas[1])
@@ -28,6 +27,7 @@ def discussions(update: Update, context: CoreContext):
         sortorder=1,
         page=page,
     )
+    context.query.answer()
 
     buttons = list()
     for discussion in discussions:
