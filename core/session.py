@@ -7,6 +7,7 @@ from telegram.error import BadRequest, RetryAfter, TimedOut, Unauthorized, Netwo
 from telegram.ext import CallbackContext
 from typing import Any, Callable, Optional
 from moodle import MoodleException
+from moodle.exception import BaseException
 
 from . import CoreContext
 from core.db import get_session
@@ -51,9 +52,18 @@ def message_wrapper(
                 return result
             core_context = CoreContext.from_data(update, context, session, user)
             result = func(update, core_context)
+        except BaseException:
+            msg = "Gagal menghubungi elearning! Coba beberapa saat lagi."
+            if update.callback_query:
+                update.callback_query.answer(msg, show_alert=True)
+            else:
+                update.effective_message.reply_text(msg)
         except RollbackException as e:
             session.rollback()
-            update.callback_query.answer(e.message)
+            if update.callback_query:
+                update.callback_query.answer(e.message)
+            else:
+                update.effective_message.reply_text(e.message)
         except Exception as e:
             if not ignore_exception(e):
                 allert_devs(update, context)
