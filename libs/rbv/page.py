@@ -27,7 +27,6 @@ class Page:
 
     @classmethod
     def from_jsonp(cls, jsonp: str) -> List[Page]:
-        jsonp = jsonp[1:-1]
         pages_data = json.loads(jsonp)
         return (
             [from_dict(cls, page_data) for page_data in pages_data]

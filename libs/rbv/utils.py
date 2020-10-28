@@ -97,21 +97,32 @@ def get_txt(filepath: str) -> str:
     return val
 
 
-def fetch_page_txt(page_number: int, module_url: str, doc: str, subfolder: str) -> str:
-    if Page.exist(subfolder, doc, page_number):
-        return get_txt(Page.get_filepath(subfolder, doc, page_number))
+def fetch_page_json(
+    page_number: int, module_url: str, doc: str, subfolder: str, retry: int = 0
+) -> str:
     headers = {"Referer": module_url}
     page = (page_number // 10 + 1) * 10
     jsonp_url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}"  # NOQA
     res = SESSION.get(jsonp_url, headers=headers)
     if not res.ok or not res.text:
+        if retry > 10:
+            raise ValueError("Buku / halaman tidak ditemukan.")
         return ""
     if res.text == "Don't waste your time trying to access this file":
+        if retry > 10:
+            raise ValueError("Buku / halaman tidak ditemukan.")
         res = fetch_page(module_url, 10)
         if not res or not res.ok:
             return ""
-        return fetch_page_txt(page_number, module_url, doc, subfolder)
-    pages = Page.from_jsonp(res.text)
+        return fetch_page_json(page_number, module_url, doc, subfolder, retry + 1)
+    return res.text[1:-1]
+
+
+def fetch_page_txt(page_number: int, module_url: str, doc: str, subfolder: str) -> str:
+    if Page.exist(subfolder, doc, page_number):
+        return get_txt(Page.get_filepath(subfolder, doc, page_number))
+    jsonp = fetch_page_json(page_number, module_url, doc, subfolder)
+    pages = Page.from_jsonp(jsonp)
     out = None
     for page in pages:
         page.save(subfolder, doc)
