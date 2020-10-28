@@ -7,10 +7,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from telegram.utils.helpers import create_deep_linked_url
 from threading import RLock
-from typing import Optional, Tuple, Union
+from typing import Any, Optional, Tuple, Union
 from urllib.parse import urlparse, parse_qsl
 from config import IMG_PATH, IMG_URL, CALLBACK_SEPARATOR, BOT_USERNAME, PUSTAKA_URL
-from .utils import download, fetch_page_txt, get_max_page
+from .utils import download, fetch_page_txt, get_max_page, fetch_page_json
 from ..utils import format_html
 
 PUSTAKA_READER = PUSTAKA_URL + "reader/index.php"
@@ -25,11 +25,11 @@ logger = getLogger(__name__)
 
 @dataclass
 class Modul:
-    nama: Optional[str]
-    url: Optional[str]
-    subfolder: Optional[str]
-    doc: Optional[str]
-    end: Optional[int]
+    nama: Optional[str] = None
+    url: Optional[str] = None
+    subfolder: Optional[str] = None
+    doc: Optional[str] = None
+    end: Optional[int] = None
     form: Optional[str] = "img"
 
     def __post_init__(self):
@@ -73,12 +73,20 @@ class Modul:
             return self.absurl(page)
         return
 
-    def get_page_text(self, page: int) -> str:
-        header = "Buku {} Modul {} Halaman {}\n".format(self.subfolder, self.doc, page)
-        header += "Klik kanan / tahan {}, untuk membagikan halaman\n".format(
-            format_html.href("Share", self.deep_linked_page(page))
-        )
-        return header + fetch_page_txt(page, self.url, self.doc, self.subfolder)
+    def get_page_text(self, page: int, header: bool = True) -> str:
+        content = fetch_page_txt(page, self.url, self.doc, self.subfolder)
+        if header:
+            header = "Buku {} Modul {} Halaman {}\n".format(
+                self.subfolder, self.doc, page
+            )
+            header += "Klik kanan / tahan {}, untuk membagikan halaman\n".format(
+                format_html.href("Share", self.deep_linked_page(page))
+            )
+            return header + content
+        return content
+
+    def get_page_json(self, page: int) -> Any:
+        return fetch_page_json(page, self.url, self.doc, self.subfolder)
 
     def abspath(self, page: int, ext: str = "jpg") -> str:
         # /BUKU/MODUL-HALAMAN.jpg
