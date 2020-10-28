@@ -4,7 +4,7 @@ from logging import getLogger
 
 from bs4 import BeautifulSoup, Tag
 from dacite import from_dict
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.utils.helpers import create_deep_linked_url
 from typing import List, Optional
@@ -25,8 +25,8 @@ def parse_th(th: Tag):
 @dataclass
 class Buku:
     id: str
-    modul: Optional[List[Modul]]
-    initial: bool = True
+    modul: List[Modul] = field(default_factory=list)
+    initial: bool = field(default=True)
 
     def __post_init__(self):
         self.id = self.id.upper()
