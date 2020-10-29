@@ -1,6 +1,7 @@
 import logging
 from dotenv import load_dotenv
 from flask import Flask, redirect, request
+from flask_cors import CORS
 from werkzeug.routing import BaseConverter
 
 from libs.pustaka import pustaka
@@ -15,6 +16,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__, static_url_path="", static_folder="static")
+CORS(app, methods=["GET"])
 
 
 class RegexConverter(BaseConverter):
