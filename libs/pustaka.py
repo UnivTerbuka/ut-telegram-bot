@@ -1,9 +1,11 @@
 from dataclasses import asdict
 from flask import Blueprint, abort, jsonify, make_response, redirect
+from flask_cors import CORS
 from libs.rbv.buku import Buku
 from libs.rbv.modul import Modul
 
 pustaka = Blueprint("pustaka", __name__)
+CORS(pustaka)
 
 
 @pustaka.route('/book/<regex("[A-Z]{4}[0-9]{4,6}"):book>', methods=["GET"])
