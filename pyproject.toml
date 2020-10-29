@@ -25,6 +25,7 @@ psycopg2-binary = "^2.8.6"
 sqlalchemy_utils = "^0.36.8"
 moodlepy = "^0.14.2"
 python-telegram-bot = "^13.0"
+Flask-Cors = "^3.0.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
