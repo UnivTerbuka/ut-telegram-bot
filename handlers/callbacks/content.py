@@ -14,7 +14,7 @@ from libs.utils.helpers import make_data
 from config import CALLBACK_SEPARATOR, BLEACH_CONFIG, MOODLE_D
 
 logger = getLogger(__name__)
-SUPPORTED_MOD = ["forum", "resource", "lesson", "url"]
+SUPPORTED_MOD = ["forum", "resource", "url"]
 
 
 @message_wrapper
