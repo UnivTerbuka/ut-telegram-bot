@@ -1,5 +1,6 @@
 from dataclasses import asdict
 from flask import Blueprint, abort, jsonify, make_response, redirect
+from ujson import loads
 from libs.rbv.buku import Buku
 from libs.rbv.modul import Modul
 
@@ -52,4 +53,4 @@ def pustaka_json(book: str, modul: str, page: int):
     if not Modul.is_valid(book):
         abort(404)
     m = Modul(subfolder=book, doc=modul)
-    return jsonify(m.get_page_json(page))
+    return jsonify(loads(m.get_page_json(page)))
