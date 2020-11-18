@@ -5,6 +5,7 @@ from flask_cors import CORS
 from werkzeug.routing import BaseConverter
 
 from libs.pustaka import pustaka
+from libs.covid import covid
 
 from core import UniversitasTerbukaBot
 from config import NAME, TOKEN
@@ -28,6 +29,7 @@ class RegexConverter(BaseConverter):
 app.url_map.converters["regex"] = RegexConverter
 
 app.register_blueprint(pustaka, url_prefix="/pustaka")
+app.register_blueprint(covid, url_prefix="/covid")
 
 bot = UniversitasTerbukaBot(TOKEN, NAME)
 bot.start_dispatcher_thread()
