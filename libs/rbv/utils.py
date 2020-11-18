@@ -2,6 +2,7 @@ import os
 from bs4 import BeautifulSoup, Tag
 from logging import getLogger
 from requests import Response
+from config import IMG_PATH
 from .base import SESSION, USERNAME, PASSWORD
 from .page import Page
 
@@ -97,11 +98,20 @@ def get_txt(filepath: str) -> str:
     return val
 
 
+def store_txt(filepath: str, txt: str) -> str:
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(txt)
+    return txt
+
+
 def fetch_page_json(
     page_number: int, module_url: str, doc: str, subfolder: str, retry: int = 0
 ) -> str:
-    headers = {"Referer": module_url}
     page = (page_number // 10 + 1) * 10
+    cache_filepath = os.path.join(IMG_PATH, f"{subfolder}-{doc}-{page}.txt")
+    if os.path.isfile(cache_filepath):
+        return get_txt(cache_filepath)
+    headers = {"Referer": module_url}
     jsonp_url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}"  # NOQA
     res = SESSION.get(jsonp_url, headers=headers)
     if not res.ok or not res.text:
@@ -115,7 +125,7 @@ def fetch_page_json(
         if not res or not res.ok:
             return ""
         return fetch_page_json(page_number, module_url, doc, subfolder, retry + 1)
-    return res.text[1:-1]
+    return store_txt(cache_filepath, res.text[1:-1])
 
 
 def fetch_page_txt(page_number: int, module_url: str, doc: str, subfolder: str) -> str:
