@@ -1,6 +1,5 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, Boolean, DateTime, String, func
-from sqlalchemy_utils import JSONType
 from core.db import Base
 
 
@@ -13,7 +12,6 @@ class User(Base):
 
     # Data
     token: str = Column(String, nullable=True)
-    data: dict = Column(JSONType)
 
     # Debug time
     created_at: datetime = Column(DateTime, server_default=func.now(), nullable=False)
@@ -32,10 +30,10 @@ class User(Base):
     # Chat logic
     expected_input: str = Column(String)
 
-    def __init__(self, user_id: int, name: str, data=None, admin=False):
+    def __init__(self, user_id: int, name: str, admin=False):
         self.id = user_id
         self.name = name
-        self.data = data or {}
+        # self.data = data or {}
         self.admin = admin
 
     def __repr__(self):
