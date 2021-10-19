@@ -1,5 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, Integer, Boolean, DateTime, String, func
+from sqlalchemy_utils import JSONType
 from core.db import Base
 
 
@@ -12,6 +13,7 @@ class User(Base):
 
     # Data
     token: str = Column(String, nullable=True)
+    data: dict = Column(JSONType)
 
     # Debug time
     created_at: datetime = Column(DateTime, server_default=func.now(), nullable=False)
