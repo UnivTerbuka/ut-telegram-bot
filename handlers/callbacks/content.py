@@ -40,7 +40,7 @@ def content(update: Update, context: CoreContext):
             num += 1
             button_text = ""
             buttons: List[InlineKeyboardButton] = list()
-            if module.completion and module.completion != 0:
+            if module.completion and module.completion != 0 and module.completiondata:
                 state = module.completiondata.state
                 if state == 0:
                     # incomplete
