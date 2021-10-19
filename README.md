@@ -1,7 +1,7 @@
 # ut-telegram-bot
 
 [![Group Telegram](https://img.shields.io/badge/Telegram-Group-blue.svg)](https://t.me/UniversitasTerbuka)
-[![Donasi DANA](https://img.shields.io/badge/Donasi-DANA-blue)](https://link.dana.id/qr/1lw2r12r)
+[![Donasi Saweria](https://img.shields.io/badge/Donasi-Saweria-blue)](https://saweria.co/hexatester)
 [![LISENSI](https://img.shields.io/github/license/UnivTerbuka/ut-telegram-bot)](https://github.com/UnivTerbuka/ut-telegram-bot/blob/master/LISENSI)
 [![GitHub Actions](https://github.com/UnivTerbuka/ut-telegram-bot/workflows/GitHub%20Actions/badge.svg)](https://github.com/UnivTerbuka/ut-telegram-bot/actions?query=workflow%3AGithub%3AActions)
 
