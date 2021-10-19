@@ -32,10 +32,10 @@ class User(Base):
     # Chat logic
     expected_input: str = Column(String)
 
-    def __init__(self, user_id: int, name: str, admin=False):
+    def __init__(self, user_id: int, name: str, data: dict = None, admin=False):
         self.id = user_id
         self.name = name
-        # self.data = data or {}
+        self.data = data or {}
         self.admin = admin
 
     def __repr__(self):
