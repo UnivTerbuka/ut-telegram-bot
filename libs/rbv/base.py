@@ -8,3 +8,4 @@ SESSION: Session = BaseRequests()
 USERNAME = "mahasiswa"
 PASSWORD = "utpeduli"
 RETRY = 10
+VERIVY = False

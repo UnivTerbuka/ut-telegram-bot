@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup, Tag
 from logging import getLogger
 from requests import Response
 from config import IMG_PATH
-from .base import SESSION, USERNAME, PASSWORD
+from .base import SESSION, USERNAME, PASSWORD, VERIVY
 from .page import Page
 
 logger = getLogger(__name__)
@@ -40,7 +40,7 @@ def fetch_page(
     password: str = PASSWORD,
 ) -> Response:
     if not res:
-        res = SESSION.get(url)
+        res = SESSION.get(url, verify=VERIVY)
         if not res.ok or not res.text:
             if retry > 0:
                 retry -= 1
@@ -55,7 +55,7 @@ def fetch_page(
         "ccaptcha": captcha,
         "submit": "Submit",
     }
-    res = SESSION.post(url, data=data)
+    res = SESSION.post(url, data=data, verify=VERIVY)
     if not res.ok or "Kode Captcha tidak sesuai!" in res.text:
         if retry > 0:
             retry -= 1
@@ -65,7 +65,7 @@ def fetch_page(
 
 
 def get_file(url, filepath, headers=None):
-    res: Response = SESSION.get(url, headers=headers)
+    res: Response = SESSION.get(url, headers=headers, verify=VERIVY)
     if not res.ok or res.encoding == "UTF-8":
         return False
     with open(filepath, "wb") as f:
@@ -85,7 +85,7 @@ def download(url, page, filepath, module_url, doc, subfolder):
         return False
     page = (page // 10 + 1) * 10
     jsonp_url = f"http://www.pustaka.ut.ac.id/reader/services/view.php?doc={doc}&format=jsonp&subfolder={subfolder}/&page={page}"  # NOQA
-    res = SESSION.get(jsonp_url, headers=headers)
+    res = SESSION.get(jsonp_url, headers=headers, verify=VERIVY)
     if res.ok and get_file(url, filepath, headers) and os.path.isfile(filepath):
         return True
     return False

@@ -37,8 +37,10 @@ class Modul:
             self.url = (
                 PUSTAKA_READER + f"?subfolder={self.subfolder}/&doc={self.doc}.pdf"
             )
-        query = urlparse(self.url).query
-        data = dict(parse_qsl(query))
+        data: Optional[dict] = None
+        if not self.subfolder or not self.doc:
+            query = urlparse(self.url).query
+            data = dict(parse_qsl(query))
         if not self.subfolder:
             self.subfolder = data.get("subfolder", "DUMP")
         self.subfolder = self.subfolder.upper()
