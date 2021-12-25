@@ -14,9 +14,9 @@ from .utils import download, fetch_page_txt, get_max_page, fetch_page_json
 from ..utils import format_html
 
 PUSTAKA_READER = PUSTAKA_URL + "reader/index.php"
-# http://www.pustaka.ut.ac.id/reader/index.php
+# https://pustaka.ut.ac.id/reader/index.php
 PUSTAKA_SERVICES = PUSTAKA_URL + "reader/services/view.php"
-# http://www.pustaka.ut.ac.id/reader/services/view.php
+# https://pustaka.ut.ac.id/reader/services/view.php
 
 LOCK = RLock()
 CACHE = TTLCache(50, 10 * 60)
@@ -33,11 +33,10 @@ class Modul:
     form: Optional[str] = "img"
 
     def __post_init__(self):
-        self.url = (
-            self.url
-            if self.url
-            else PUSTAKA_READER + f"?subfolder={self.subfolder}/&doc={self.doc}.pdf"
-        )
+        if not self.url:
+            self.url = (
+                PUSTAKA_READER + f"?subfolder={self.subfolder}/&doc={self.doc}.pdf"
+            )
         query = urlparse(self.url).query
         data = dict(parse_qsl(query))
         if not self.subfolder:
